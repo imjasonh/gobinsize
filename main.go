@@ -17,20 +17,20 @@ import (
 
 func main() {
 	flag.Parse()
-	
+
 	if flag.NArg() < 1 {
 		fmt.Fprintf(os.Stderr, "Usage: %s <binary>\n", os.Args[0])
 		os.Exit(1)
 	}
-	
+
 	binaryPath := flag.Arg(0)
-	
+
 	report, err := analyzeBinary(binaryPath)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error analyzing binary: %v\n", err)
 		os.Exit(1)
 	}
-	
+
 	printReport(report)
 }
 
@@ -46,7 +46,7 @@ func analyzeBinary(path string) (*DependencyReport, error) {
 		return nil, fmt.Errorf("failed to open binary: %w", err)
 	}
 	defer f.Close()
-	
+
 	// Extract BuildInfo to get module dependencies
 	buildInfo, err := buildinfo.ReadFile(path)
 	moduleMap := make(map[string]string)
@@ -85,7 +85,7 @@ func analyzeELF(r io.ReaderAt, moduleMap map[string]string) (*DependencyReport, 
 		return nil, err
 	}
 	defer elfFile.Close()
-	
+
 	return analyzeSymbols(elfFile, moduleMap)
 }
 
@@ -95,7 +95,7 @@ func analyzeMachO(r io.ReaderAt, moduleMap map[string]string) (*DependencyReport
 		return nil, err
 	}
 	defer machoFile.Close()
-	
+
 	return analyzeSymbolsMachO(machoFile, moduleMap)
 }
 
@@ -105,7 +105,7 @@ func analyzePE(r io.ReaderAt, moduleMap map[string]string) (*DependencyReport, e
 		return nil, err
 	}
 	defer peFile.Close()
-	
+
 	return analyzeSymbolsPE(peFile, moduleMap)
 }
 
@@ -114,18 +114,18 @@ func analyzeSymbols(elfFile *elf.File, moduleMap map[string]string) (*Dependency
 		Packages: make(map[string]int64),
 		Modules:  moduleMap,
 	}
-	
+
 	// Get the Go symbol table
 	pclntab := elfFile.Section(".gopclntab")
 	if pclntab == nil {
 		return nil, fmt.Errorf("no .gopclntab section found")
 	}
-	
+
 	pclntabData, err := pclntab.Data()
 	if err != nil {
 		return nil, fmt.Errorf("failed to read .gopclntab: %w", err)
 	}
-	
+
 	// Get the symtab section
 	symtabSection := elfFile.Section(".gosymtab")
 	if symtabSection == nil {
@@ -133,26 +133,26 @@ func analyzeSymbols(elfFile *elf.File, moduleMap map[string]string) (*Dependency
 		pcln := gosym.NewLineTable(pclntabData, elfFile.Section(".text").Addr)
 		return analyzeLineTable(pcln, report)
 	}
-	
+
 	symtabData, err := symtabSection.Data()
 	if err != nil {
 		return nil, fmt.Errorf("failed to read .gosymtab: %w", err)
 	}
-	
+
 	textSection := elfFile.Section(".text")
 	if textSection == nil {
 		return nil, fmt.Errorf("no .text section found")
 	}
-	
+
 	pcln := gosym.NewLineTable(pclntabData, textSection.Addr)
 	table, err := gosym.NewTable(symtabData, pcln)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse symbol table: %w", err)
 	}
-	
+
 	// Analyze functions and their sizes
 	processSymbolTable(table, moduleMap, report)
-	
+
 	return report, nil
 }
 
@@ -179,11 +179,11 @@ func analyzeSymbolsMachO(machoFile *macho.File, moduleMap map[string]string) (*D
 		Packages: make(map[string]int64),
 		Modules:  moduleMap,
 	}
-	
+
 	// Find the __gopclntab section
 	var pclntabData []byte
 	var textAddr uint64
-	
+
 	for _, section := range machoFile.Sections {
 		if section.Name == "__gopclntab" {
 			data, err := section.Data()
@@ -196,13 +196,13 @@ func analyzeSymbolsMachO(machoFile *macho.File, moduleMap map[string]string) (*D
 			textAddr = section.Addr
 		}
 	}
-	
+
 	if pclntabData == nil {
 		return nil, fmt.Errorf("no __gopclntab section found")
 	}
-	
+
 	pcln := gosym.NewLineTable(pclntabData, textAddr)
-	
+
 	// Try to find symbol table
 	var symtabData []byte
 	for _, section := range machoFile.Sections {
@@ -214,7 +214,7 @@ func analyzeSymbolsMachO(machoFile *macho.File, moduleMap map[string]string) (*D
 			break
 		}
 	}
-	
+
 	if symtabData == nil {
 		return nil, fmt.Errorf("no __gosymtab section found")
 	}
@@ -223,7 +223,7 @@ func analyzeSymbolsMachO(machoFile *macho.File, moduleMap map[string]string) (*D
 	if err == nil {
 		processSymbolTable(table, moduleMap, report)
 	}
-	
+
 	return report, nil
 }
 
@@ -232,7 +232,7 @@ func analyzeSymbolsPE(peFile *pe.File, moduleMap map[string]string) (*Dependency
 		Packages: make(map[string]int64),
 		Modules:  moduleMap,
 	}
-	
+
 	// Get the image base from the PE optional header
 	var imageBase uint64
 	switch oh := peFile.OptionalHeader.(type) {
@@ -241,7 +241,7 @@ func analyzeSymbolsPE(peFile *pe.File, moduleMap map[string]string) (*Dependency
 	case *pe.OptionalHeader64:
 		imageBase = oh.ImageBase
 	}
-	
+
 	// Find the .text section address (RVA) and add image base to get VMA
 	var textAddr uint64
 	for _, section := range peFile.Sections {
@@ -250,11 +250,11 @@ func analyzeSymbolsPE(peFile *pe.File, moduleMap map[string]string) (*Dependency
 			break
 		}
 	}
-	
+
 	// Try to find .gopclntab and .gosymtab as separate sections (old Go versions)
 	var pclntabData []byte
 	var symtabData []byte
-	
+
 	for _, section := range peFile.Sections {
 		if section.Name == ".gopclntab" || section.Name == "gopclntab" {
 			data, err := section.Data()
@@ -270,7 +270,7 @@ func analyzeSymbolsPE(peFile *pe.File, moduleMap map[string]string) (*Dependency
 			}
 		}
 	}
-	
+
 	// If not found as separate sections, try to extract from runtime symbols (Go 1.16+)
 	if pclntabData == nil {
 		var err error
@@ -279,13 +279,13 @@ func analyzeSymbolsPE(peFile *pe.File, moduleMap map[string]string) (*Dependency
 			return nil, fmt.Errorf("failed to extract runtime tables: %w", err)
 		}
 	}
-	
+
 	if pclntabData == nil {
 		return nil, fmt.Errorf("no pclntab data found")
 	}
-	
+
 	pcln := gosym.NewLineTable(pclntabData, textAddr)
-	
+
 	// symtabData may be nil or empty for newer Go versions - gosym.NewTable can handle this
 	if symtabData == nil {
 		symtabData = []byte{}
@@ -295,7 +295,7 @@ func analyzeSymbolsPE(peFile *pe.File, moduleMap map[string]string) (*Dependency
 	if err != nil {
 		return nil, fmt.Errorf("failed to create symbol table: %w", err)
 	}
-	
+
 	processSymbolTable(table, moduleMap, report)
 	return report, nil
 }
@@ -308,7 +308,7 @@ const (
 // extractTablesFromSymbols extracts pclntab and symtab from runtime symbols in PE files (Go 1.16+)
 func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err error) {
 	var pclntabRVA, epclntabRVA, symtabRVA, esymtabRVA uint32
-	
+
 	// Find the runtime.pclntab, runtime.epclntab, runtime.symtab, runtime.esymtab symbols
 	// Symbol values in PE are section-relative offsets, not RVAs
 	// We need to add the section's VirtualAddress to get the RVA
@@ -320,7 +320,7 @@ func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err erro
 		} else {
 			continue
 		}
-		
+
 		switch sym.Name {
 		case "runtime.pclntab":
 			pclntabRVA = rva
@@ -332,26 +332,26 @@ func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err erro
 			esymtabRVA = rva
 		}
 	}
-	
+
 	if pclntabRVA == 0 || epclntabRVA == 0 {
 		return nil, nil, fmt.Errorf("runtime.pclntab or runtime.epclntab symbols not found")
 	}
-	
+
 	// symtabRVA and esymtabRVA may be 0 or equal for modern Go binaries that don't have symtab
 	// This is acceptable as gosym.NewTable can work with an empty symtab
-	
+
 	// Helper function to extract data from RVA range
 	extractRVARange := func(startRVA, endRVA uint32) ([]byte, error) {
 		var result []byte
 		currentRVA := startRVA
-		
+
 		for currentRVA < endRVA {
 			// Find section containing currentRVA or the next section if we're in a gap
 			// We need to check against actual data availability, not just VirtualSize
 			var section *pe.Section
 			var sectionData []byte
 			var nextSectionRVA uint32 = noNextSectionRVA
-			
+
 			for _, s := range peFile.Sections {
 				data, err := s.Data()
 				if err != nil {
@@ -369,7 +369,7 @@ func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err erro
 					nextSectionRVA = s.VirtualAddress
 				}
 			}
-			
+
 			// If no section found, we might be in a gap between sections
 			if section == nil {
 				if nextSectionRVA != noNextSectionRVA && nextSectionRVA < endRVA {
@@ -379,7 +379,7 @@ func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err erro
 				}
 				return nil, fmt.Errorf("no section found for RVA 0x%x and no next section available", currentRVA)
 			}
-			
+
 			// Calculate how much to copy from this section
 			offsetInSection := currentRVA - section.VirtualAddress
 			sectionEnd := section.VirtualAddress + uint32(len(sectionData))
@@ -388,33 +388,33 @@ func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err erro
 				copyEnd = sectionEnd
 			}
 			copySize := copyEnd - currentRVA
-			
+
 			// Bounds check
 			if offsetInSection >= uint32(len(sectionData)) {
 				return nil, fmt.Errorf("offset 0x%x beyond section %s data length 0x%x",
 					offsetInSection, section.Name, len(sectionData))
 			}
-			
+
 			endOffset := offsetInSection + copySize
 			if endOffset > uint32(len(sectionData)) {
 				endOffset = uint32(len(sectionData))
 				copySize = endOffset - offsetInSection
 			}
-			
+
 			// Copy data
 			result = append(result, sectionData[offsetInSection:endOffset]...)
 			currentRVA += copySize
 		}
-		
+
 		return result, nil
 	}
-	
+
 	// Extract pclntab and symtab
 	pclntab, err = extractRVARange(pclntabRVA, epclntabRVA)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to extract pclntab: %w", err)
 	}
-	
+
 	// Extract symtab if symbols exist and have a valid range
 	if symtabRVA != 0 && esymtabRVA != 0 && symtabRVA != esymtabRVA {
 		symtab, err = extractRVARange(symtabRVA, esymtabRVA)
@@ -427,19 +427,19 @@ func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err erro
 		// No symtab or empty symtab - this is normal for modern Go binaries
 		symtab = []byte{}
 	}
-	
+
 	return pclntab, symtab, nil
 }
 
 func getPackageName(funcName string) string {
 	// Function names in Go are typically in the form "package/path.FuncName"
 	// or "package/path.(*Type).Method"
-	
+
 	// Skip type information completely
 	if strings.HasPrefix(funcName, "type:") {
 		return ""
 	}
-	
+
 	// Handle method receivers like "pkg.(*Type).Method"
 	if strings.Contains(funcName, "(*") {
 		// Find the package path before (*Type)
@@ -453,15 +453,15 @@ func getPackageName(funcName string) string {
 			return pkgName
 		}
 	}
-	
+
 	// Split by last dot to separate package from function/method
 	lastDot := strings.LastIndex(funcName, ".")
 	if lastDot == -1 {
 		return ""
 	}
-	
+
 	pkgName := funcName[:lastDot]
-	
+
 	// Remove .init suffix if present (e.g., "github.com/user/pkg.init" -> "github.com/user/pkg")
 	if strings.HasSuffix(pkgName, ".init") {
 		pkgName = strings.TrimSuffix(pkgName, ".init")
@@ -470,7 +470,7 @@ func getPackageName(funcName string) string {
 	if idx := strings.LastIndex(pkgName, ".init."); idx != -1 {
 		pkgName = pkgName[:idx]
 	}
-	
+
 	// URL decode the package name
 	if decoded, err := url.QueryUnescape(pkgName); err == nil {
 		return decoded
@@ -485,7 +485,7 @@ func isExternalDependency(pkgName string) bool {
 		strings.HasPrefix(pkgName, "unique.") {
 		return false
 	}
-	
+
 	// Include everything else: stdlib, external deps, golang.org/x, type info, etc.
 	return pkgName != ""
 }
@@ -495,7 +495,7 @@ func getModuleName(pkgName string, moduleMap map[string]string) string {
 	if modulePath, ok := moduleMap[pkgName]; ok {
 		return modulePath
 	}
-	
+
 	// Try to find the longest prefix match in the module map
 	longestMatch := ""
 	for modPath := range moduleMap {
@@ -506,18 +506,18 @@ func getModuleName(pkgName string, moduleMap map[string]string) string {
 	if longestMatch != "" {
 		return longestMatch
 	}
-	
+
 	// Fallback to heuristic approach for packages not in module map
 	// For standard library packages (no dots in first component), keep only first path component
 	// For external modules (domain-like), keep first 3 components for typical github.com/user/repo pattern
-	
+
 	parts := strings.Split(pkgName, "/")
 	if len(parts) == 0 {
 		return pkgName
 	}
-	
+
 	firstPart := parts[0]
-	
+
 	// Check if it's a domain-based module (contains a dot)
 	if strings.Contains(firstPart, ".") {
 		// For github.com/user/repo/..., golang.org/x/package/..., etc.
@@ -527,7 +527,7 @@ func getModuleName(pkgName string, moduleMap map[string]string) string {
 		}
 		return pkgName
 	}
-	
+
 	// For stdlib or simple packages, return just the first component
 	return firstPart
 }
@@ -537,26 +537,26 @@ func printReport(report *DependencyReport) {
 		fmt.Println("No dependencies found in binary")
 		return
 	}
-	
+
 	// Sort packages by size (descending)
 	type pkgSize struct {
 		name string
 		size int64
 	}
-	
+
 	packages := make([]pkgSize, 0, len(report.Packages))
 	for name, size := range report.Packages {
 		packages = append(packages, pkgSize{name, size})
 	}
-	
+
 	sort.Slice(packages, func(i, j int) bool {
 		return packages[i].size > packages[j].size
 	})
-	
+
 	fmt.Println("Dependency Size Report")
 	fmt.Println("======================")
 	fmt.Println()
-	
+
 	for _, pkg := range packages {
 		var percentage float64
 		if report.TotalSize == 0 {
@@ -564,12 +564,12 @@ func printReport(report *DependencyReport) {
 		} else {
 			percentage = float64(pkg.size) / float64(report.TotalSize) * 100
 		}
-		fmt.Printf("%-50s %10s (%5.1f%%)\n", 
-			truncatePackageName(pkg.name, 50), 
-			formatSize(pkg.size), 
+		fmt.Printf("%-50s %10s (%5.1f%%)\n",
+			truncatePackageName(pkg.name, 50),
+			formatSize(pkg.size),
 			percentage)
 	}
-	
+
 	fmt.Println()
 	fmt.Printf("Total size: %s\n", formatSize(report.TotalSize))
 }
@@ -594,7 +594,7 @@ func formatSize(size int64) string {
 		KB = 1024
 		MB = 1024 * KB
 	)
-	
+
 	if size >= MB {
 		return fmt.Sprintf("%.2f MB", float64(size)/float64(MB))
 	} else if size >= KB {

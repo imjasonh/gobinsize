@@ -55,9 +55,9 @@ func TestIsExternalDependency(t *testing.T) {
 		{"go.shape.string", false}, // Filtered out
 		{"vendor/golang.org/x/sys/cpu", true},
 		{"slices", true},
-		{"weak.pointer", false}, // Filtered out
+		{"weak.pointer", false},  // Filtered out
 		{"unique.handle", false}, // Filtered out
-		{"", false}, // Empty string
+		{"", false},              // Empty string
 	}
 
 	for _, tt := range tests {

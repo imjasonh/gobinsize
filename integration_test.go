@@ -42,13 +42,15 @@ func TestNotableBinaries(t *testing.T) {
 		},
 	}
 
+	// GOOS values to test
+	gooses := []string{"linux", "darwin", "windows"}
+
 	for _, proj := range projects {
 		proj := proj // capture range variable
 		t.Run(proj.name, func(t *testing.T) {
-			t.Parallel()
 			projectDir := filepath.Join(binDir, proj.name+"-src")
 
-			// Clone the repository
+			// Clone the repository (once per project, not per GOOS)
 			t.Logf("Cloning %s...", proj.name)
 			cloneCmd := exec.Command("git", "clone", "--depth", "1", proj.repo, projectDir)
 			if output, err := cloneCmd.CombinedOutput(); err != nil {
@@ -57,36 +59,57 @@ func TestNotableBinaries(t *testing.T) {
 				return
 			}
 
-			// Build the binary
-			t.Logf("Building %s...", proj.name)
-			buildCmd := exec.Command(proj.buildCmd[0], proj.buildCmd[1:]...)
-			buildCmd.Dir = projectDir
-			if output, err := buildCmd.CombinedOutput(); err != nil {
-				t.Logf("Build output: %s", output)
-				t.Skipf("Failed to build %s: %v", proj.name, err)
-				return
-			}
+			// Run tests for each GOOS in parallel
+			for _, goos := range gooses {
+				goos := goos // capture range variable
+				t.Run(goos, func(t *testing.T) {
+					t.Parallel()
 
-			binaryPath := filepath.Join(projectDir, proj.binaryLoc)
-			if _, err := os.Stat(binaryPath); err != nil {
-				t.Fatalf("Binary not found at %s: %v", binaryPath, err)
-			}
+					// Determine binary name based on GOOS
+					binaryName := proj.binaryLoc + "-" + goos
+					if goos == "windows" {
+						binaryName += ".exe"
+					}
 
-			// Analyze with gobinsize
-			t.Logf("Analyzing %s with gobinsize...", proj.name)
-			analyzeCmd := exec.Command("./gobinsize", binaryPath)
-			output, err := analyzeCmd.CombinedOutput()
-			if err != nil {
-				t.Fatalf("Failed to analyze %s: %v\nOutput: %s", proj.name, err, output)
-			}
+					// Build the binary for specific GOOS
+					t.Logf("Building %s for %s...", proj.name, goos)
+					buildCmd := exec.Command(proj.buildCmd[0], proj.buildCmd[1:]...)
+					buildCmd.Dir = projectDir
+					buildCmd.Env = append(os.Environ(), "GOOS="+goos)
+					// Update the output binary name to include GOOS
+					for i, arg := range buildCmd.Args {
+						if arg == "-o" && i+1 < len(buildCmd.Args) {
+							buildCmd.Args[i+1] = binaryName
+						}
+					}
+					if output, err := buildCmd.CombinedOutput(); err != nil {
+						t.Logf("Build output: %s", output)
+						t.Skipf("Failed to build %s for %s: %v", proj.name, goos, err)
+						return
+					}
 
-			// Log the output
-			t.Logf("\n=== %s Dependency Size Report ===\n%s", proj.name, output)
+					binaryPath := filepath.Join(projectDir, binaryName)
+					if _, err := os.Stat(binaryPath); err != nil {
+						t.Fatalf("Binary not found at %s: %v", binaryPath, err)
+					}
 
-			// Verify output contains expected content
-			outputStr := string(output)
-			if outputStr == "" {
-				t.Errorf("Empty output from gobinsize for %s", proj.name)
+					// Analyze with gobinsize
+					t.Logf("Analyzing %s (%s) with gobinsize...", proj.name, goos)
+					analyzeCmd := exec.Command("./gobinsize", binaryPath)
+					output, err := analyzeCmd.CombinedOutput()
+					if err != nil {
+						t.Fatalf("Failed to analyze %s (%s): %v\nOutput: %s", proj.name, goos, err, output)
+					}
+
+					// Log the output
+					t.Logf("\n=== %s (%s) Dependency Size Report ===\n%s", proj.name, goos, output)
+
+					// Verify output contains expected content
+					outputStr := string(output)
+					if outputStr == "" {
+						t.Errorf("Empty output from gobinsize for %s (%s)", proj.name, goos)
+					}
+				})
 			}
 		})
 	}
