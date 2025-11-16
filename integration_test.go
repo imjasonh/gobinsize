@@ -66,11 +66,10 @@ func TestNotableBinaries(t *testing.T) {
 					t.Parallel()
 
 					// Determine binary name based on GOOS
-					binaryName := proj.binaryLoc
+					binaryName := proj.binaryLoc + "-" + goos
 					if goos == "windows" {
 						binaryName += ".exe"
 					}
-					binaryName += "-" + goos
 
 					// Build the binary for specific GOOS
 					t.Logf("Building %s for %s...", proj.name, goos)
