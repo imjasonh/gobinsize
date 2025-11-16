@@ -403,7 +403,12 @@ func printReport(report *DependencyReport) {
 	fmt.Println()
 	
 	for _, pkg := range packages {
-		percentage := float64(pkg.size) / float64(report.TotalSize) * 100
+		var percentage float64
+		if report.TotalSize == 0 {
+			percentage = 0
+		} else {
+			percentage = float64(pkg.size) / float64(report.TotalSize) * 100
+		}
 		fmt.Printf("%-50s %10s (%5.1f%%)\n", 
 			truncatePackageName(pkg.name, 50), 
 			formatSize(pkg.size), 
