@@ -58,31 +58,24 @@ func analyzeBinary(path string) (*DependencyReport, error) {
 			}
 		}
 	}
-	
-	// Try to parse as ELF
-	report, err := analyzeELF(f, moduleMap)
-	if err == nil {
-		return report, nil
+
+	// Try all supported binary formats in order
+	return tryParsers(f, moduleMap)
+}
+
+// tryParsers attempts to analyze the binary using all supported formats in order.
+func tryParsers(r io.ReaderAt, moduleMap map[string]string) (*DependencyReport, error) {
+	parsers := []func(io.ReaderAt, map[string]string) (*DependencyReport, error){
+		analyzeELF,
+		analyzeMachO,
+		analyzePE,
 	}
-	
-	// Try to parse as Mach-O
-	if _, err := f.Seek(0, 0); err != nil {
-		return nil, fmt.Errorf("failed to seek to beginning of file for Mach-O parsing: %w", err)
+	for _, parser := range parsers {
+		report, err := parser(r, moduleMap)
+		if err == nil {
+			return report, nil
+		}
 	}
-	report, err = analyzeMachO(f, moduleMap)
-	if err == nil {
-		return report, nil
-	}
-	
-	// Try to parse as PE
-	if _, err := f.Seek(0, 0); err != nil {
-		return nil, fmt.Errorf("failed to seek to beginning of file for PE parsing: %w", err)
-	}
-	report, err = analyzePE(f, moduleMap)
-	if err == nil {
-		return report, nil
-	}
-	
 	return nil, fmt.Errorf("unsupported binary format (not ELF, Mach-O, or PE)")
 }
 
