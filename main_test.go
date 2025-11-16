@@ -44,6 +44,14 @@ func TestGetPackageName(t *testing.T) {
 		{"github.com/gorilla/websocket.newConn", "github.com/gorilla/websocket"},
 		{"github.com/muesli/smartcrop.analyse", "github.com/muesli/smartcrop"},
 		{"github.com/spf13/afero.byName", "github.com/spf13/afero"},
+		// Test Type.method patterns with lowercase type names
+		{"github.com/spf13/pflag.timeValue.Add", "github.com/spf13/pflag"},
+		{"github.com/muesli/smartcrop.smartcropAnalyzer.scoreEdgeDetect", "github.com/muesli/smartcrop"},
+		{"gopkg.in/yaml.v3.keyList.Append", "gopkg.in/yaml.v3"},
+		{"github.com/kr/pretty.formatter.format", "github.com/kr/pretty"},
+		{"github.com/gorilla/websocket.prepareConn.read", "github.com/gorilla/websocket"},
+		// Test nested closures with (*Type).method
+		{"github.com/muesli/smartcrop.smartcropAnalyzer.FindBestCrop.(*Logger).Printf.func3", "github.com/muesli/smartcrop"},
 	}
 
 	for _, tt := range tests {

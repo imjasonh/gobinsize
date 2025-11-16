@@ -483,23 +483,54 @@ func getPackageName(funcName string) string {
 	}
 
 	// Handle method receivers like "pkg.(*Type).Method"
+	// First extract the part before (*Type) so we can process it further
+	hadMethodReceiver := false
 	if strings.Contains(funcName, "(*") {
 		// Find the package path before (*Type)
 		idx := strings.Index(funcName, ".(")
 		if idx != -1 {
-			pkgName := funcName[:idx]
-			// URL decode the package name
-			if decoded, err := url.QueryUnescape(pkgName); err == nil {
-				return decoded
-			}
-			return pkgName
+			funcName = funcName[:idx]
+			hadMethodReceiver = true
+			// Continue processing to handle Type.method patterns that might be before the (*Type)
+			// e.g., "pkg.type.method.(*Type).Method" should extract "pkg"
 		}
+	}
+
+	// Handle .init functions specially - they should be attributed to the package
+	// MUST be done BEFORE Type.method detection to avoid issues with .init.N.funcM patterns
+	// e.g., "github.com/user/pkg.init" or "github.com/user/pkg.init.0.func1"
+	if strings.HasSuffix(funcName, ".init") {
+		// Remove the .init suffix and return
+		pkgName := strings.TrimSuffix(funcName, ".init")
+		if decoded, err := url.QueryUnescape(pkgName); err == nil {
+			return decoded
+		}
+		return pkgName
+	}
+	// Also handle .init.N suffixes (e.g., "github.com/user/pkg.init.0.func1")
+	if idx := strings.LastIndex(funcName, ".init."); idx != -1 {
+		pkgName := funcName[:idx]
+		if decoded, err := url.QueryUnescape(pkgName); err == nil {
+			return decoded
+		}
+		return pkgName
 	}
 
 	// Handle type methods like "pkg.Type.Method" or "strings.Builder.grow"
 	// We need to extract the package before the type name
 	// Split by dots and check if we have Type.Method pattern
 	parts := strings.Split(funcName, ".")
+	
+	// If we just processed a (*Type).Method and have only 2 parts like ["github", "com/user/pkg"],
+	// this is already a valid package path, so don't process it further
+	if hadMethodReceiver && len(parts) == 2 && strings.Contains(parts[1], "/") {
+		// URL decode the package name
+		if decoded, err := url.QueryUnescape(funcName); err == nil {
+			return decoded
+		}
+		return funcName
+	}
+	
 	if len(parts) >= 3 {
 		// For "strings.Builder.grow", we want "strings"
 		// For "github.com/user/pkg.MyType.Method", we want "github.com/user/pkg"
@@ -520,20 +551,18 @@ func getPackageName(funcName string) string {
 			return pkgName
 		}
 		
-		// For non-stdlib packages, check if the second-to-last part looks like a Type (starts with uppercase)
-		secondToLast := parts[len(parts)-2]
-		if len(secondToLast) > 0 && (secondToLast[0] >= 'A' && secondToLast[0] <= 'Z') {
-			// This might be a Type.method pattern
-			// Remove the last part (method) and the second-to-last part (Type)
+		// For non-stdlib packages with domain paths (e.g., github.com/user/pkg.Type.Method)
+		// Check if we have at least 4 parts and the pattern looks like a Type.method
+		if len(parts) >= 4 {
+			// The second-to-last part should be the Type name
+			// Remove both the Type and method to get the package path
 			pkgParts := parts[:len(parts)-2]
-			if len(pkgParts) > 0 {
-				pkgName := strings.Join(pkgParts, ".")
-				// URL decode the package name
-				if decoded, err := url.QueryUnescape(pkgName); err == nil {
-					return decoded
-				}
-				return pkgName
+			pkgName := strings.Join(pkgParts, ".")
+			// URL decode the package name
+			if decoded, err := url.QueryUnescape(pkgName); err == nil {
+				return decoded
 			}
+			return pkgName
 		}
 	}
 
@@ -544,15 +573,6 @@ func getPackageName(funcName string) string {
 	}
 
 	pkgName := funcName[:lastDot]
-
-	// Remove .init suffix if present (e.g., "github.com/user/pkg.init" -> "github.com/user/pkg")
-	if strings.HasSuffix(pkgName, ".init") {
-		pkgName = strings.TrimSuffix(pkgName, ".init")
-	}
-	// Also handle .init.N suffixes (e.g., "github.com/user/pkg.init.0")
-	if idx := strings.LastIndex(pkgName, ".init."); idx != -1 {
-		pkgName = pkgName[:idx]
-	}
 
 	// URL decode the package name
 	if decoded, err := url.QueryUnescape(pkgName); err == nil {
