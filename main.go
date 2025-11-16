@@ -233,9 +233,18 @@ func analyzeSymbolsPE(peFile *pe.File, moduleMap map[string]string) (*Dependency
 		Modules:  moduleMap,
 	}
 	
-	// Find the .gopclntab section
-	var pclntabData []byte
+	// Find the .text section address
 	var textAddr uint64
+	for _, section := range peFile.Sections {
+		if section.Name == ".text" || section.Name == "text" {
+			textAddr = uint64(section.VirtualAddress)
+			break
+		}
+	}
+	
+	// Try to find .gopclntab and .gosymtab as separate sections (old Go versions)
+	var pclntabData []byte
+	var symtabData []byte
 	
 	for _, section := range peFile.Sections {
 		if section.Name == ".gopclntab" || section.Name == "gopclntab" {
@@ -245,38 +254,135 @@ func analyzeSymbolsPE(peFile *pe.File, moduleMap map[string]string) (*Dependency
 			}
 			pclntabData = data
 		}
-		if section.Name == ".text" || section.Name == "text" {
-			textAddr = uint64(section.VirtualAddress)
-		}
-	}
-	
-	if pclntabData == nil {
-		return nil, fmt.Errorf("no .gopclntab section found")
-	}
-	
-	pcln := gosym.NewLineTable(pclntabData, textAddr)
-	
-	// Try to find symbol table
-	var symtabData []byte
-	for _, section := range peFile.Sections {
 		if section.Name == ".gosymtab" || section.Name == "gosymtab" {
 			data, err := section.Data()
 			if err == nil {
 				symtabData = data
 			}
-			break
 		}
 	}
 	
+	// If not found as separate sections, try to extract from runtime symbols (Go 1.16+)
+	if pclntabData == nil {
+		var err error
+		pclntabData, symtabData, err = extractTablesFromSymbols(peFile)
+		if err != nil {
+			return nil, fmt.Errorf("failed to extract runtime tables: %w", err)
+		}
+	}
+	
+	if pclntabData == nil {
+		return nil, fmt.Errorf("no pclntab data found")
+	}
+	
+	pcln := gosym.NewLineTable(pclntabData, textAddr)
+	
 	if symtabData == nil {
-		return nil, fmt.Errorf("no .gosymtab section found")
+		return nil, fmt.Errorf("no symtab data found")
 	}
 
 	table, err := gosym.NewTable(symtabData, pcln)
-	if err == nil {
-		processSymbolTable(table, moduleMap, report)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create symbol table: %w", err)
 	}
+	
+	processSymbolTable(table, moduleMap, report)
 	return report, nil
+}
+
+// extractTablesFromSymbols extracts pclntab and symtab from runtime symbols in PE files (Go 1.16+)
+func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err error) {
+	var pclntabRVA, epclntabRVA, symtabRVA, esymtabRVA uint32
+	
+	// Find the runtime.pclntab, runtime.epclntab, runtime.symtab, runtime.esymtab symbols
+	// Symbol values are RVAs (relative virtual addresses)
+	for _, sym := range peFile.Symbols {
+		switch sym.Name {
+		case "runtime.pclntab":
+			pclntabRVA = sym.Value
+		case "runtime.epclntab":
+			epclntabRVA = sym.Value
+		case "runtime.symtab":
+			symtabRVA = sym.Value
+		case "runtime.esymtab":
+			esymtabRVA = sym.Value
+		}
+	}
+	
+	if pclntabRVA == 0 || epclntabRVA == 0 {
+		return nil, nil, fmt.Errorf("runtime.pclntab or runtime.epclntab symbols not found")
+	}
+	
+	if symtabRVA == 0 || esymtabRVA == 0 {
+		return nil, nil, fmt.Errorf("runtime.symtab or runtime.esymtab symbols not found")
+	}
+	
+	// Helper function to extract data from RVA range
+	extractRVARange := func(startRVA, endRVA uint32) ([]byte, error) {
+		var result []byte
+		currentRVA := startRVA
+		
+		for currentRVA < endRVA {
+			// Find section containing currentRVA
+			var section *pe.Section
+			for _, s := range peFile.Sections {
+				if currentRVA >= s.VirtualAddress && currentRVA < s.VirtualAddress+s.VirtualSize {
+					section = s
+					break
+				}
+			}
+			
+			if section == nil {
+				return nil, fmt.Errorf("no section found for RVA 0x%x", currentRVA)
+			}
+			
+			// Read section data
+			data, err := section.Data()
+			if err != nil {
+				return nil, fmt.Errorf("failed to read section %s: %w", section.Name, err)
+			}
+			
+			// Calculate how much to copy from this section
+			offsetInSection := currentRVA - section.VirtualAddress
+			sectionEnd := section.VirtualAddress + uint32(len(data))
+			copyEnd := endRVA
+			if copyEnd > sectionEnd {
+				copyEnd = sectionEnd
+			}
+			copySize := copyEnd - currentRVA
+			
+			// Bounds check
+			if offsetInSection >= uint32(len(data)) {
+				return nil, fmt.Errorf("offset 0x%x beyond section %s data length 0x%x",
+					offsetInSection, section.Name, len(data))
+			}
+			
+			endOffset := offsetInSection + copySize
+			if endOffset > uint32(len(data)) {
+				endOffset = uint32(len(data))
+				copySize = endOffset - offsetInSection
+			}
+			
+			// Copy data
+			result = append(result, data[offsetInSection:endOffset]...)
+			currentRVA += copySize
+		}
+		
+		return result, nil
+	}
+	
+	// Extract pclntab and symtab
+	pclntab, err = extractRVARange(pclntabRVA, epclntabRVA)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to extract pclntab: %w", err)
+	}
+	
+	symtab, err = extractRVARange(symtabRVA, esymtabRVA)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to extract symtab: %w", err)
+	}
+	
+	return pclntab, symtab, nil
 }
 
 func getPackageName(funcName string) string {
