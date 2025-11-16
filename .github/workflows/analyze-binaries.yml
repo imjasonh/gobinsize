@@ -49,6 +49,17 @@ jobs:
           $GITHUB_WORKSPACE/gobinsize /tmp/binaries/hugo-darwin
           echo "::endgroup::"
       
+      - name: Build and analyze hugo (Windows)
+        run: |
+          echo "::group::Building hugo (Windows)"
+          cd /tmp/hugo
+          GOOS=windows go build -o /tmp/binaries/hugo-windows.exe
+          echo "::endgroup::"
+          
+          echo "::group::Analyzing hugo (Windows)"
+          $GITHUB_WORKSPACE/gobinsize /tmp/binaries/hugo-windows.exe
+          echo "::endgroup::"
+      
       - name: Build and analyze terraform (Linux)
         run: |
           echo "::group::Building terraform (Linux)"
@@ -71,6 +82,17 @@ jobs:
           
           echo "::group::Analyzing terraform (Darwin)"
           $GITHUB_WORKSPACE/gobinsize /tmp/binaries/terraform-darwin
+          echo "::endgroup::"
+      
+      - name: Build and analyze terraform (Windows)
+        run: |
+          echo "::group::Building terraform (Windows)"
+          cd /tmp/terraform
+          GOOS=windows go build -o /tmp/binaries/terraform-windows.exe
+          echo "::endgroup::"
+          
+          echo "::group::Analyzing terraform (Windows)"
+          $GITHUB_WORKSPACE/gobinsize /tmp/binaries/terraform-windows.exe
           echo "::endgroup::"
       
       - name: Build and analyze kubectl (Linux)
@@ -96,4 +118,15 @@ jobs:
           
           echo "::group::Analyzing kubectl (Darwin)"
           $GITHUB_WORKSPACE/gobinsize /tmp/binaries/kubectl-darwin
+          echo "::endgroup::"
+      
+      - name: Build and analyze kubectl (Windows)
+        run: |
+          echo "::group::Building kubectl (Windows)"
+          cd /tmp/kubernetes
+          GOOS=windows go build -o /tmp/binaries/kubectl-windows.exe ./cmd/kubectl
+          echo "::endgroup::"
+          
+          echo "::group::Analyzing kubectl (Windows)"
+          $GITHUB_WORKSPACE/gobinsize /tmp/binaries/kubectl-windows.exe
           echo "::endgroup::"

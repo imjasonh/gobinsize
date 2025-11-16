@@ -233,11 +233,20 @@ func analyzeSymbolsPE(peFile *pe.File, moduleMap map[string]string) (*Dependency
 		Modules:  moduleMap,
 	}
 	
-	// Find the .text section address
+	// Get the image base from the PE optional header
+	var imageBase uint64
+	switch oh := peFile.OptionalHeader.(type) {
+	case *pe.OptionalHeader32:
+		imageBase = uint64(oh.ImageBase)
+	case *pe.OptionalHeader64:
+		imageBase = oh.ImageBase
+	}
+	
+	// Find the .text section address (RVA) and add image base to get VMA
 	var textAddr uint64
 	for _, section := range peFile.Sections {
 		if section.Name == ".text" || section.Name == "text" {
-			textAddr = uint64(section.VirtualAddress)
+			textAddr = imageBase + uint64(section.VirtualAddress)
 			break
 		}
 	}
@@ -277,8 +286,9 @@ func analyzeSymbolsPE(peFile *pe.File, moduleMap map[string]string) (*Dependency
 	
 	pcln := gosym.NewLineTable(pclntabData, textAddr)
 	
+	// symtabData may be nil or empty for newer Go versions - gosym.NewTable can handle this
 	if symtabData == nil {
-		return nil, fmt.Errorf("no symtab data found")
+		symtabData = []byte{}
 	}
 
 	table, err := gosym.NewTable(symtabData, pcln)
@@ -295,17 +305,26 @@ func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err erro
 	var pclntabRVA, epclntabRVA, symtabRVA, esymtabRVA uint32
 	
 	// Find the runtime.pclntab, runtime.epclntab, runtime.symtab, runtime.esymtab symbols
-	// Symbol values are RVAs (relative virtual addresses)
+	// Symbol values in PE are section-relative offsets, not RVAs
+	// We need to add the section's VirtualAddress to get the RVA
 	for _, sym := range peFile.Symbols {
+		var rva uint32
+		if sym.SectionNumber > 0 && int(sym.SectionNumber) <= len(peFile.Sections) {
+			section := peFile.Sections[sym.SectionNumber-1]
+			rva = section.VirtualAddress + sym.Value
+		} else {
+			continue
+		}
+		
 		switch sym.Name {
 		case "runtime.pclntab":
-			pclntabRVA = sym.Value
+			pclntabRVA = rva
 		case "runtime.epclntab":
-			epclntabRVA = sym.Value
+			epclntabRVA = rva
 		case "runtime.symtab":
-			symtabRVA = sym.Value
+			symtabRVA = rva
 		case "runtime.esymtab":
-			esymtabRVA = sym.Value
+			esymtabRVA = rva
 		}
 	}
 	
@@ -323,28 +342,43 @@ func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err erro
 		currentRVA := startRVA
 		
 		for currentRVA < endRVA {
-			// Find section containing currentRVA
+			// Find section containing currentRVA or the next section if we're in a gap
+			// We need to check against actual data availability, not just VirtualSize
 			var section *pe.Section
+			var sectionData []byte
+			var nextSectionRVA uint32 = 0xFFFFFFFF
+			
 			for _, s := range peFile.Sections {
-				if currentRVA >= s.VirtualAddress && currentRVA < s.VirtualAddress+s.VirtualSize {
+				data, err := s.Data()
+				if err != nil {
+					continue
+				}
+				// Check if RVA is within the section's data range
+				sectionDataEnd := s.VirtualAddress + uint32(len(data))
+				if currentRVA >= s.VirtualAddress && currentRVA < sectionDataEnd {
 					section = s
+					sectionData = data
 					break
+				}
+				// Track the next section after currentRVA for gap handling
+				if s.VirtualAddress > currentRVA && s.VirtualAddress < nextSectionRVA {
+					nextSectionRVA = s.VirtualAddress
 				}
 			}
 			
+			// If no section found, we might be in a gap between sections
 			if section == nil {
-				return nil, fmt.Errorf("no section found for RVA 0x%x", currentRVA)
-			}
-			
-			// Read section data
-			data, err := section.Data()
-			if err != nil {
-				return nil, fmt.Errorf("failed to read section %s: %w", section.Name, err)
+				if nextSectionRVA != 0xFFFFFFFF && nextSectionRVA < endRVA {
+					// Skip the gap to the next section
+					currentRVA = nextSectionRVA
+					continue
+				}
+				return nil, fmt.Errorf("no section found for RVA 0x%x and no next section available", currentRVA)
 			}
 			
 			// Calculate how much to copy from this section
 			offsetInSection := currentRVA - section.VirtualAddress
-			sectionEnd := section.VirtualAddress + uint32(len(data))
+			sectionEnd := section.VirtualAddress + uint32(len(sectionData))
 			copyEnd := endRVA
 			if copyEnd > sectionEnd {
 				copyEnd = sectionEnd
@@ -352,19 +386,19 @@ func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err erro
 			copySize := copyEnd - currentRVA
 			
 			// Bounds check
-			if offsetInSection >= uint32(len(data)) {
+			if offsetInSection >= uint32(len(sectionData)) {
 				return nil, fmt.Errorf("offset 0x%x beyond section %s data length 0x%x",
-					offsetInSection, section.Name, len(data))
+					offsetInSection, section.Name, len(sectionData))
 			}
 			
 			endOffset := offsetInSection + copySize
-			if endOffset > uint32(len(data)) {
-				endOffset = uint32(len(data))
+			if endOffset > uint32(len(sectionData)) {
+				endOffset = uint32(len(sectionData))
 				copySize = endOffset - offsetInSection
 			}
 			
 			// Copy data
-			result = append(result, data[offsetInSection:endOffset]...)
+			result = append(result, sectionData[offsetInSection:endOffset]...)
 			currentRVA += copySize
 		}
 		
