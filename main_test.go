@@ -123,24 +123,26 @@ func TestFormatSize(t *testing.T) {
 }
 
 func TestGetModuleName(t *testing.T) {
-	// Test without module map (heuristic-based)
+	// Test without module map (should return stdlib or other)
 	t.Run("without module map", func(t *testing.T) {
 		tests := []struct {
 			pkgName  string
 			expected string
 		}{
-			{"github.com/gorilla/mux", "github.com/gorilla/mux"},
-			{"github.com/gorilla/mux/subpkg", "github.com/gorilla/mux"},
-			{"github.com/user/repo/internal/pkg", "github.com/user/repo"},
-			{"golang.org/x/crypto", "golang.org/x/crypto"},
-			{"golang.org/x/crypto/ssh", "golang.org/x/crypto"},
-			{"gopkg.in/yaml.v2", "gopkg.in/yaml.v2"},
-			{"runtime", "runtime"},
-			{"net/http", "net"},
-			{"crypto/tls", "crypto"},
-			{"encoding/json", "encoding"},
-			{"type:.eq.net/http", "type:.eq.net/http"}, // type info keeps full name
-			{"main", "main"},
+			// Without moduleMap, domain-based packages go to "other"
+			{"github.com/gorilla/mux", "other"},
+			{"github.com/gorilla/mux/subpkg", "other"},
+			{"github.com/user/repo/internal/pkg", "other"},
+			{"golang.org/x/crypto", "other"},
+			{"golang.org/x/crypto/ssh", "other"},
+			{"gopkg.in/yaml.v2", "other"},
+			// Stdlib packages go to "stdlib"
+			{"runtime", "stdlib"},
+			{"net/http", "stdlib"},
+			{"crypto/tls", "stdlib"},
+			{"encoding/json", "stdlib"},
+			{"type:.eq.net/http", "other"}, // type info with domain
+			{"main", "stdlib"},
 		}
 
 		emptyModuleMap := make(map[string]string)
@@ -170,7 +172,7 @@ func TestGetModuleName(t *testing.T) {
 			{"github.com/gohugoio/localescompressed/internal", "github.com/gohugoio/localescompressed"},
 			{"github.com/evanw/esbuild/pkg/api", "github.com/evanw/esbuild"},
 			{"golang.org/x/text/unicode", "golang.org/x/text"},
-			{"unknown/package", "unknown"},
+			{"unknown/package", "stdlib"}, // Packages not in moduleMap and without domain go to stdlib
 		}
 
 		for _, tt := range tests {

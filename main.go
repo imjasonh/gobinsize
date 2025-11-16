@@ -610,29 +610,35 @@ func getModuleName(pkgName string, moduleMap map[string]string) string {
 		return longestMatch
 	}
 
-	// Fallback to heuristic approach for packages not in module map
-	// For standard library packages (no dots in first component), keep only first path component
-	// For external modules (domain-like), keep first 3 components for typical github.com/user/repo pattern
-
+	// If not in module map, check if it's a standard library package
+	// Standard library packages don't have a domain (no dots in first component before /)
 	parts := strings.Split(pkgName, "/")
 	if len(parts) == 0 {
-		return pkgName
+		return "other"
 	}
 
 	firstPart := parts[0]
 
 	// Check if it's a domain-based module (contains a dot)
 	if strings.Contains(firstPart, ".") {
-		// For github.com/user/repo/..., golang.org/x/package/..., etc.
+		// For domain-based packages not in moduleMap, try heuristic
 		// Keep first 3 parts: github.com/user/repo or golang.org/x/package
 		if len(parts) >= 3 {
-			return strings.Join(parts[:3], "/")
+			heuristicModule := strings.Join(parts[:3], "/")
+			// Verify this heuristic module is actually in the moduleMap
+			for modPath := range moduleMap {
+				if modPath == heuristicModule || strings.HasPrefix(modPath, heuristicModule+"/") {
+					return modPath
+				}
+			}
+			// If not found in moduleMap, it's unknown
+			return "other"
 		}
-		return pkgName
+		return "other"
 	}
 
-	// For stdlib or simple packages, return just the first component
-	return firstPart
+	// For stdlib packages (no domain), return "stdlib"
+	return "stdlib"
 }
 
 func printReport(report *DependencyReport) {
