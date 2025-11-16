@@ -101,7 +101,7 @@ jobs:
           cd /tmp
           git clone --depth 1 https://github.com/kubernetes/kubernetes.git
           cd kubernetes
-          make WHAT=cmd/kubectl
+          GOOS=linux make WHAT=cmd/kubectl
           cp _output/bin/kubectl /tmp/binaries/kubectl-linux
           echo "::endgroup::"
           
