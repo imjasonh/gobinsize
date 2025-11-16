@@ -440,8 +440,36 @@ func getPackageName(funcName string) string {
 		return ""
 	}
 
-	// Skip go: special patterns (like go:struct, go:itab, etc.)
+	// Handle go: special patterns (like go:struct, go:itab, etc.)
+	// These contain package information that should be extracted
 	if strings.HasPrefix(funcName, "go:") {
+		// go:struct { <package> - extract package after "go:struct { "
+		if strings.HasPrefix(funcName, "go:struct {") {
+			rest := strings.TrimPrefix(funcName, "go:struct {")
+			rest = strings.TrimSpace(rest)
+			// Extract package name (could be github.com/user/pkg or just pkg)
+			parts := strings.Fields(rest)
+			if len(parts) > 0 {
+				return parts[0]
+			}
+		}
+		
+		// go:itab.*pkg.Type,interface - extract package from type
+		if strings.HasPrefix(funcName, "go:itab.") {
+			rest := strings.TrimPrefix(funcName, "go:itab.")
+			// Skip leading * if present
+			rest = strings.TrimPrefix(rest, "*")
+			// Extract up to comma
+			if idx := strings.Index(rest, ","); idx != -1 {
+				rest = rest[:idx]
+			}
+			// Extract package from Type reference (pkg.Type)
+			if idx := strings.LastIndex(rest, "."); idx != -1 {
+				return rest[:idx]
+			}
+		}
+		
+		// For other go: patterns we don't recognize, skip them
 		return ""
 	}
 

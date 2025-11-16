@@ -27,8 +27,11 @@ func TestGetPackageName(t *testing.T) {
 		{"strings.Builder[go.shape.string]", "strings"},
 		{"maps.Clone[go.shape.int,go.shape.string]", "maps"},
 		// Test go: prefix patterns
-		{"go:struct { github.com/gohugoio/hugo", ""},
-		{"go:itab.*os.File,io.Writer", ""},
+		{"go:struct { github.com/gohugoio/hugo", "github.com/gohugoio/hugo"},
+		{"go:itab.*os.File,io.Writer", "os"},
+		{"go:itab.*bytes.Buffer,io.Writer", "bytes"},
+		{"go:struct { runtime", "runtime"},
+		{"go:struct { strings", "strings"},
 		// Test type methods like Type.method
 		{"strings.Builder.grow", "strings"},
 		{"bytes.Buffer.WriteByte", "bytes"},
