@@ -15,11 +15,13 @@ import (
 	"strings"
 )
 
+var verbose = flag.Bool("verbose", false, "enable verbose logging for debugging attribution")
+
 func main() {
 	flag.Parse()
 
 	if flag.NArg() < 1 {
-		fmt.Fprintf(os.Stderr, "Usage: %s <binary>\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Usage: %s [-verbose] <binary>\n", os.Args[0])
 		os.Exit(1)
 	}
 
@@ -614,6 +616,9 @@ func getModuleName(pkgName string, moduleMap map[string]string) string {
 	// Standard library packages don't have a domain (no dots in first component before /)
 	parts := strings.Split(pkgName, "/")
 	if len(parts) == 0 {
+		if *verbose {
+			fmt.Fprintf(os.Stderr, "[verbose] Attributing empty package name to 'other'\n")
+		}
 		return "other"
 	}
 
@@ -632,13 +637,19 @@ func getModuleName(pkgName string, moduleMap map[string]string) string {
 				}
 			}
 			// If not found in moduleMap, it's unknown
+			if *verbose {
+				fmt.Fprintf(os.Stderr, "[verbose] Package %q not in BuildInfo, attributing to 'other'\n", pkgName)
+			}
 			return "other"
+		}
+		if *verbose {
+			fmt.Fprintf(os.Stderr, "[verbose] Package %q not in BuildInfo, attributing to 'other'\n", pkgName)
 		}
 		return "other"
 	}
 
-	// For stdlib packages (no domain), return "stdlib"
-	return "stdlib"
+	// For stdlib packages (no domain), return the first component (e.g., "runtime", "net", "encoding")
+	return firstPart
 }
 
 func printReport(report *DependencyReport) {

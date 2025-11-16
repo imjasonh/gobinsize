@@ -123,7 +123,7 @@ func TestFormatSize(t *testing.T) {
 }
 
 func TestGetModuleName(t *testing.T) {
-	// Test without module map (should return stdlib or other)
+	// Test without module map (should return first component for stdlib, "other" for unknown)
 	t.Run("without module map", func(t *testing.T) {
 		tests := []struct {
 			pkgName  string
@@ -136,13 +136,13 @@ func TestGetModuleName(t *testing.T) {
 			{"golang.org/x/crypto", "other"},
 			{"golang.org/x/crypto/ssh", "other"},
 			{"gopkg.in/yaml.v2", "other"},
-			// Stdlib packages go to "stdlib"
-			{"runtime", "stdlib"},
-			{"net/http", "stdlib"},
-			{"crypto/tls", "stdlib"},
-			{"encoding/json", "stdlib"},
+			// Stdlib packages return the first component
+			{"runtime", "runtime"},
+			{"net/http", "net"},
+			{"crypto/tls", "crypto"},
+			{"encoding/json", "encoding"},
 			{"type:.eq.net/http", "other"}, // type info with domain
-			{"main", "stdlib"},
+			{"main", "main"},
 		}
 
 		emptyModuleMap := make(map[string]string)
@@ -172,7 +172,7 @@ func TestGetModuleName(t *testing.T) {
 			{"github.com/gohugoio/localescompressed/internal", "github.com/gohugoio/localescompressed"},
 			{"github.com/evanw/esbuild/pkg/api", "github.com/evanw/esbuild"},
 			{"golang.org/x/text/unicode", "golang.org/x/text"},
-			{"unknown/package", "stdlib"}, // Packages not in moduleMap and without domain go to stdlib
+			{"unknown/package", "unknown"}, // Packages not in moduleMap and without domain return first component
 		}
 
 		for _, tt := range tests {
