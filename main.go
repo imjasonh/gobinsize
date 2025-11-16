@@ -142,7 +142,8 @@ func analyzeSymbols(elfFile *elf.File) (*DependencyReport, error) {
 	for _, fn := range table.Funcs {
 		pkgName := getPackageName(fn.Name)
 		if pkgName != "" && isExternalDependency(pkgName) {
-			report.Packages[pkgName] += int64(fn.End - fn.Entry)
+			moduleName := getModuleName(pkgName)
+			report.Packages[moduleName] += int64(fn.End - fn.Entry)
 			report.TotalSize += int64(fn.End - fn.Entry)
 		}
 	}
@@ -203,7 +204,8 @@ func analyzeSymbolsMachO(machoFile *macho.File) (*DependencyReport, error) {
 			for _, fn := range table.Funcs {
 				pkgName := getPackageName(fn.Name)
 				if pkgName != "" && isExternalDependency(pkgName) {
-					report.Packages[pkgName] += int64(fn.End - fn.Entry)
+					moduleName := getModuleName(pkgName)
+					report.Packages[moduleName] += int64(fn.End - fn.Entry)
 					report.TotalSize += int64(fn.End - fn.Entry)
 				}
 			}
@@ -259,7 +261,8 @@ func analyzeSymbolsPE(peFile *pe.File) (*DependencyReport, error) {
 			for _, fn := range table.Funcs {
 				pkgName := getPackageName(fn.Name)
 				if pkgName != "" && isExternalDependency(pkgName) {
-					report.Packages[pkgName] += int64(fn.End - fn.Entry)
+					moduleName := getModuleName(pkgName)
+					report.Packages[moduleName] += int64(fn.End - fn.Entry)
 					report.TotalSize += int64(fn.End - fn.Entry)
 				}
 			}
@@ -307,54 +310,45 @@ func getPackageName(funcName string) string {
 }
 
 func isExternalDependency(pkgName string) bool {
-	// Filter out type information
-	if strings.HasPrefix(pkgName, "type") ||
-		strings.HasPrefix(pkgName, "go.shape") ||
+	// Skip only these special compiler-generated patterns
+	if strings.HasPrefix(pkgName, "go.shape") ||
 		strings.HasPrefix(pkgName, "weak.") ||
 		strings.HasPrefix(pkgName, "unique.") {
 		return false
 	}
 	
-	// Exclude standard library packages
-	if !strings.Contains(pkgName, "/") {
-		return false
-	}
+	// Include everything else: stdlib, external deps, golang.org/x, type info, etc.
+	return pkgName != ""
+}
+
+func getModuleName(pkgName string) string {
+	// For standard library packages (no dots in first component), keep only first path component
+	// For external modules (domain-like), keep first 3 components for typical github.com/user/repo pattern
 	
-	// Exclude standard library and internal packages
-	if strings.HasPrefix(pkgName, "runtime") ||
-		strings.HasPrefix(pkgName, "internal/") ||
-		strings.HasPrefix(pkgName, "reflect") ||
-		strings.HasPrefix(pkgName, "sync") ||
-		strings.HasPrefix(pkgName, "syscall") ||
-		strings.HasPrefix(pkgName, "debug/") ||
-		strings.HasPrefix(pkgName, "compress/") ||
-		strings.HasPrefix(pkgName, "encoding/") ||
-		strings.HasPrefix(pkgName, "crypto/") ||
-		strings.HasPrefix(pkgName, "net/") ||
-		strings.HasPrefix(pkgName, "io/") ||
-		strings.HasPrefix(pkgName, "os/") ||
-		strings.HasPrefix(pkgName, "fmt") ||
-		strings.HasPrefix(pkgName, "slices") ||
-		strings.HasPrefix(pkgName, "vendor/golang.org/x/") {
-		return false
-	}
-	
-	// Check if it looks like an external dependency (has domain-like prefix)
 	parts := strings.Split(pkgName, "/")
-	if len(parts) > 0 {
-		firstPart := parts[0]
-		// External packages typically have a domain as the first part
-		if strings.Contains(firstPart, ".") {
-			return true
-		}
+	if len(parts) == 0 {
+		return pkgName
 	}
 	
-	return false
+	firstPart := parts[0]
+	
+	// Check if it's a domain-based module (contains a dot)
+	if strings.Contains(firstPart, ".") {
+		// For github.com/user/repo/..., golang.org/x/package/..., etc.
+		// Keep first 3 parts: github.com/user/repo or golang.org/x/package
+		if len(parts) >= 3 {
+			return strings.Join(parts[:3], "/")
+		}
+		return pkgName
+	}
+	
+	// For stdlib or simple packages, return just the first component
+	return firstPart
 }
 
 func printReport(report *DependencyReport) {
 	if len(report.Packages) == 0 {
-		fmt.Println("No external dependencies found in binary")
+		fmt.Println("No dependencies found in binary")
 		return
 	}
 	
@@ -373,8 +367,8 @@ func printReport(report *DependencyReport) {
 		return packages[i].size > packages[j].size
 	})
 	
-	fmt.Println("External Dependency Size Report")
-	fmt.Println("================================")
+	fmt.Println("Dependency Size Report")
+	fmt.Println("======================")
 	fmt.Println()
 	
 	for _, pkg := range packages {
@@ -386,7 +380,7 @@ func printReport(report *DependencyReport) {
 	}
 	
 	fmt.Println()
-	fmt.Printf("Total external dependency size: %s\n", formatSize(report.TotalSize))
+	fmt.Printf("Total size: %s\n", formatSize(report.TotalSize))
 }
 
 func truncatePackageName(name string, maxLen int) string {
