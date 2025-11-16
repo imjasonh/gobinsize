@@ -1,0 +1,66 @@
+name: Analyze Notable Binaries
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+      
+      - name: Build gobinsize
+        run: go build -o gobinsize .
+      
+      - name: Build and analyze hugo
+        run: |
+          echo "::group::Building hugo"
+          mkdir -p /tmp/binaries
+          cd /tmp
+          git clone --depth 1 https://github.com/gohugoio/hugo.git
+          cd hugo
+          go build -o /tmp/binaries/hugo
+          echo "::endgroup::"
+          
+          echo "::group::Analyzing hugo"
+          $GITHUB_WORKSPACE/gobinsize /tmp/binaries/hugo
+          echo "::endgroup::"
+      
+      - name: Build and analyze terraform
+        run: |
+          echo "::group::Building terraform"
+          cd /tmp
+          git clone --depth 1 https://github.com/hashicorp/terraform.git
+          cd terraform
+          go build -o /tmp/binaries/terraform
+          echo "::endgroup::"
+          
+          echo "::group::Analyzing terraform"
+          $GITHUB_WORKSPACE/gobinsize /tmp/binaries/terraform
+          echo "::endgroup::"
+      
+      - name: Build and analyze kubectl
+        run: |
+          echo "::group::Building kubectl"
+          cd /tmp
+          git clone --depth 1 https://github.com/kubernetes/kubernetes.git
+          cd kubernetes
+          make WHAT=cmd/kubectl
+          cp _output/bin/kubectl /tmp/binaries/
+          echo "::endgroup::"
+          
+          echo "::group::Analyzing kubectl"
+          $GITHUB_WORKSPACE/gobinsize /tmp/binaries/kubectl
+          echo "::endgroup::"
