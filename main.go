@@ -300,6 +300,11 @@ func analyzeSymbolsPE(peFile *pe.File, moduleMap map[string]string) (*Dependency
 	return report, nil
 }
 
+const (
+	// noNextSectionRVA is a sentinel value indicating no next section was found
+	noNextSectionRVA uint32 = 0xFFFFFFFF
+)
+
 // extractTablesFromSymbols extracts pclntab and symtab from runtime symbols in PE files (Go 1.16+)
 func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err error) {
 	var pclntabRVA, epclntabRVA, symtabRVA, esymtabRVA uint32
@@ -332,9 +337,8 @@ func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err erro
 		return nil, nil, fmt.Errorf("runtime.pclntab or runtime.epclntab symbols not found")
 	}
 	
-	if symtabRVA == 0 || esymtabRVA == 0 {
-		return nil, nil, fmt.Errorf("runtime.symtab or runtime.esymtab symbols not found")
-	}
+	// symtabRVA and esymtabRVA may be 0 or equal for modern Go binaries that don't have symtab
+	// This is acceptable as gosym.NewTable can work with an empty symtab
 	
 	// Helper function to extract data from RVA range
 	extractRVARange := func(startRVA, endRVA uint32) ([]byte, error) {
@@ -346,7 +350,7 @@ func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err erro
 			// We need to check against actual data availability, not just VirtualSize
 			var section *pe.Section
 			var sectionData []byte
-			var nextSectionRVA uint32 = 0xFFFFFFFF
+			var nextSectionRVA uint32 = noNextSectionRVA
 			
 			for _, s := range peFile.Sections {
 				data, err := s.Data()
@@ -368,7 +372,7 @@ func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err erro
 			
 			// If no section found, we might be in a gap between sections
 			if section == nil {
-				if nextSectionRVA != 0xFFFFFFFF && nextSectionRVA < endRVA {
+				if nextSectionRVA != noNextSectionRVA && nextSectionRVA < endRVA {
 					// Skip the gap to the next section
 					currentRVA = nextSectionRVA
 					continue
@@ -411,9 +415,17 @@ func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err erro
 		return nil, nil, fmt.Errorf("failed to extract pclntab: %w", err)
 	}
 	
-	symtab, err = extractRVARange(symtabRVA, esymtabRVA)
-	if err != nil {
-		return nil, nil, fmt.Errorf("failed to extract symtab: %w", err)
+	// Extract symtab if symbols exist and have a valid range
+	if symtabRVA != 0 && esymtabRVA != 0 && symtabRVA != esymtabRVA {
+		symtab, err = extractRVARange(symtabRVA, esymtabRVA)
+		if err != nil {
+			// Symtab extraction failure is not fatal for modern Go binaries
+			// Return empty symtab instead of failing
+			symtab = []byte{}
+		}
+	} else {
+		// No symtab or empty symtab - this is normal for modern Go binaries
+		symtab = []byte{}
 	}
 	
 	return pclntab, symtab, nil
