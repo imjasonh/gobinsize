@@ -1,6 +1,7 @@
 package main
 
 import (
+	"debug/buildinfo"
 	"debug/elf"
 	"debug/gosym"
 	"debug/macho"
@@ -36,6 +37,7 @@ func main() {
 type DependencyReport struct {
 	TotalSize int64
 	Packages  map[string]int64
+	Modules   map[string]string // map from package path to module path
 }
 
 func analyzeBinary(path string) (*DependencyReport, error) {
@@ -45,62 +47,79 @@ func analyzeBinary(path string) (*DependencyReport, error) {
 	}
 	defer f.Close()
 	
+	// Extract BuildInfo to get module dependencies
+	buildInfo, err := buildinfo.ReadFile(path)
+	moduleMap := make(map[string]string)
+	if err == nil && buildInfo != nil {
+		// Map package paths to their module paths
+		for _, dep := range buildInfo.Deps {
+			if dep != nil {
+				moduleMap[dep.Path] = dep.Path
+			}
+		}
+	}
+	
 	// Try to parse as ELF
-	report, err := analyzeELF(f)
+	report, err := analyzeELF(f, moduleMap)
 	if err == nil {
 		return report, nil
 	}
 	
 	// Try to parse as Mach-O
-	f.Seek(0, 0)
-	report, err = analyzeMachO(f)
+	if _, err := f.Seek(0, 0); err != nil {
+		return nil, fmt.Errorf("failed to seek to beginning of file for Mach-O parsing: %w", err)
+	}
+	report, err = analyzeMachO(f, moduleMap)
 	if err == nil {
 		return report, nil
 	}
 	
 	// Try to parse as PE
-	f.Seek(0, 0)
-	report, err = analyzePE(f)
+	if _, err := f.Seek(0, 0); err != nil {
+		return nil, fmt.Errorf("failed to seek to beginning of file for PE parsing: %w", err)
+	}
+	report, err = analyzePE(f, moduleMap)
 	if err == nil {
 		return report, nil
 	}
 	
-	return nil, fmt.Errorf("unsupported binary format")
+	return nil, fmt.Errorf("unsupported binary format (not ELF, Mach-O, or PE)")
 }
 
-func analyzeELF(r io.ReaderAt) (*DependencyReport, error) {
+func analyzeELF(r io.ReaderAt, moduleMap map[string]string) (*DependencyReport, error) {
 	elfFile, err := elf.NewFile(r)
 	if err != nil {
 		return nil, err
 	}
 	defer elfFile.Close()
 	
-	return analyzeSymbols(elfFile)
+	return analyzeSymbols(elfFile, moduleMap)
 }
 
-func analyzeMachO(r io.ReaderAt) (*DependencyReport, error) {
+func analyzeMachO(r io.ReaderAt, moduleMap map[string]string) (*DependencyReport, error) {
 	machoFile, err := macho.NewFile(r)
 	if err != nil {
 		return nil, err
 	}
 	defer machoFile.Close()
 	
-	return analyzeSymbolsMachO(machoFile)
+	return analyzeSymbolsMachO(machoFile, moduleMap)
 }
 
-func analyzePE(r io.ReaderAt) (*DependencyReport, error) {
+func analyzePE(r io.ReaderAt, moduleMap map[string]string) (*DependencyReport, error) {
 	peFile, err := pe.NewFile(r)
 	if err != nil {
 		return nil, err
 	}
 	defer peFile.Close()
 	
-	return analyzeSymbolsPE(peFile)
+	return analyzeSymbolsPE(peFile, moduleMap)
 }
 
-func analyzeSymbols(elfFile *elf.File) (*DependencyReport, error) {
+func analyzeSymbols(elfFile *elf.File, moduleMap map[string]string) (*DependencyReport, error) {
 	report := &DependencyReport{
 		Packages: make(map[string]int64),
+		Modules:  moduleMap,
 	}
 	
 	// Get the Go symbol table
@@ -142,7 +161,7 @@ func analyzeSymbols(elfFile *elf.File) (*DependencyReport, error) {
 	for _, fn := range table.Funcs {
 		pkgName := getPackageName(fn.Name)
 		if pkgName != "" && isExternalDependency(pkgName) {
-			moduleName := getModuleName(pkgName)
+			moduleName := getModuleName(pkgName, moduleMap)
 			report.Packages[moduleName] += int64(fn.End - fn.Entry)
 			report.TotalSize += int64(fn.End - fn.Entry)
 		}
@@ -152,15 +171,15 @@ func analyzeSymbols(elfFile *elf.File) (*DependencyReport, error) {
 }
 
 func analyzeLineTable(pcln *gosym.LineTable, report *DependencyReport) (*DependencyReport, error) {
-	// For newer Go versions without .gosymtab
-	// This is a simplified analysis based on the PC/line table
-	// We can't get as much detail without the full symbol table
-	return report, nil
+	// For newer Go versions without .gosymtab, we cannot perform detailed analysis
+	// as we lack the function symbol information needed to attribute sizes
+	return nil, fmt.Errorf("analysis not supported for binaries without .gosymtab (Go symbol table)")
 }
 
-func analyzeSymbolsMachO(machoFile *macho.File) (*DependencyReport, error) {
+func analyzeSymbolsMachO(machoFile *macho.File, moduleMap map[string]string) (*DependencyReport, error) {
 	report := &DependencyReport{
 		Packages: make(map[string]int64),
+		Modules:  moduleMap,
 	}
 	
 	// Find the __gopclntab section
@@ -204,7 +223,7 @@ func analyzeSymbolsMachO(machoFile *macho.File) (*DependencyReport, error) {
 			for _, fn := range table.Funcs {
 				pkgName := getPackageName(fn.Name)
 				if pkgName != "" && isExternalDependency(pkgName) {
-					moduleName := getModuleName(pkgName)
+					moduleName := getModuleName(pkgName, moduleMap)
 					report.Packages[moduleName] += int64(fn.End - fn.Entry)
 					report.TotalSize += int64(fn.End - fn.Entry)
 				}
@@ -215,9 +234,10 @@ func analyzeSymbolsMachO(machoFile *macho.File) (*DependencyReport, error) {
 	return report, nil
 }
 
-func analyzeSymbolsPE(peFile *pe.File) (*DependencyReport, error) {
+func analyzeSymbolsPE(peFile *pe.File, moduleMap map[string]string) (*DependencyReport, error) {
 	report := &DependencyReport{
 		Packages: make(map[string]int64),
+		Modules:  moduleMap,
 	}
 	
 	// Find the .gopclntab section
@@ -261,7 +281,7 @@ func analyzeSymbolsPE(peFile *pe.File) (*DependencyReport, error) {
 			for _, fn := range table.Funcs {
 				pkgName := getPackageName(fn.Name)
 				if pkgName != "" && isExternalDependency(pkgName) {
-					moduleName := getModuleName(pkgName)
+					moduleName := getModuleName(pkgName, moduleMap)
 					report.Packages[moduleName] += int64(fn.End - fn.Entry)
 					report.TotalSize += int64(fn.End - fn.Entry)
 				}
@@ -302,6 +322,16 @@ func getPackageName(funcName string) string {
 	}
 	
 	pkgName := funcName[:lastDot]
+	
+	// Remove .init suffix if present (e.g., "github.com/user/pkg.init" -> "github.com/user/pkg")
+	if strings.HasSuffix(pkgName, ".init") {
+		pkgName = strings.TrimSuffix(pkgName, ".init")
+	}
+	// Also handle .init.N suffixes (e.g., "github.com/user/pkg.init.0")
+	if idx := strings.LastIndex(pkgName, ".init."); idx != -1 {
+		pkgName = pkgName[:idx]
+	}
+	
 	// URL decode the package name
 	if decoded, err := url.QueryUnescape(pkgName); err == nil {
 		return decoded
@@ -321,7 +351,24 @@ func isExternalDependency(pkgName string) bool {
 	return pkgName != ""
 }
 
-func getModuleName(pkgName string) string {
+func getModuleName(pkgName string, moduleMap map[string]string) string {
+	// First, try to find an exact match in the module map
+	if modulePath, ok := moduleMap[pkgName]; ok {
+		return modulePath
+	}
+	
+	// Try to find the longest prefix match in the module map
+	longestMatch := ""
+	for modPath := range moduleMap {
+		if strings.HasPrefix(pkgName, modPath+"/") && len(modPath) > len(longestMatch) {
+			longestMatch = modPath
+		}
+	}
+	if longestMatch != "" {
+		return longestMatch
+	}
+	
+	// Fallback to heuristic approach for packages not in module map
 	// For standard library packages (no dots in first component), keep only first path component
 	// For external modules (domain-like), keep first 3 components for typical github.com/user/repo pattern
 	
@@ -383,14 +430,19 @@ func printReport(report *DependencyReport) {
 	fmt.Printf("Total size: %s\n", formatSize(report.TotalSize))
 }
 
+const (
+	truncationSuffix    = "...."
+	truncationSuffixLen = len(truncationSuffix)
+)
+
 func truncatePackageName(name string, maxLen int) string {
 	if len(name) <= maxLen {
 		return name
 	}
-	if maxLen < 4 {
+	if maxLen < truncationSuffixLen {
 		return name[:maxLen]
 	}
-	return name[:maxLen-4] + "...."
+	return name[:maxLen-truncationSuffixLen] + truncationSuffix
 }
 
 func formatSize(size int64) string {

@@ -16,6 +16,11 @@ func TestGetPackageName(t *testing.T) {
 		{"main.main", "main"},
 		{"github.com/user/pkg/subpkg.Function", "github.com/user/pkg/subpkg"},
 		{"go.shape.string", "go.shape"},
+		// Test .init suffix removal
+		{"github.com/gohugoio/localescompressed.init", "github.com/gohugoio/localescompressed"},
+		{"github.com/gohugoio/localescompressed.init.0", "github.com/gohugoio/localescompressed"},
+		{"github.com/gohugoio/localescompressed.init.1", "github.com/gohugoio/localescompressed"},
+		{"some/package.init", "some/package"},
 	}
 
 	for _, tt := range tests {
@@ -87,32 +92,65 @@ func TestFormatSize(t *testing.T) {
 }
 
 func TestGetModuleName(t *testing.T) {
-	tests := []struct {
-		pkgName  string
-		expected string
-	}{
-		{"github.com/gorilla/mux", "github.com/gorilla/mux"},
-		{"github.com/gorilla/mux/subpkg", "github.com/gorilla/mux"},
-		{"github.com/user/repo/internal/pkg", "github.com/user/repo"},
-		{"golang.org/x/crypto", "golang.org/x/crypto"},
-		{"golang.org/x/crypto/ssh", "golang.org/x/crypto"},
-		{"gopkg.in/yaml.v2", "gopkg.in/yaml.v2"},
-		{"runtime", "runtime"},
-		{"net/http", "net"},
-		{"crypto/tls", "crypto"},
-		{"encoding/json", "encoding"},
-		{"type:.eq.net/http", "type:.eq.net/http"}, // type info keeps full name
-		{"main", "main"},
-	}
+	// Test without module map (heuristic-based)
+	t.Run("without module map", func(t *testing.T) {
+		tests := []struct {
+			pkgName  string
+			expected string
+		}{
+			{"github.com/gorilla/mux", "github.com/gorilla/mux"},
+			{"github.com/gorilla/mux/subpkg", "github.com/gorilla/mux"},
+			{"github.com/user/repo/internal/pkg", "github.com/user/repo"},
+			{"golang.org/x/crypto", "golang.org/x/crypto"},
+			{"golang.org/x/crypto/ssh", "golang.org/x/crypto"},
+			{"gopkg.in/yaml.v2", "gopkg.in/yaml.v2"},
+			{"runtime", "runtime"},
+			{"net/http", "net"},
+			{"crypto/tls", "crypto"},
+			{"encoding/json", "encoding"},
+			{"type:.eq.net/http", "type:.eq.net/http"}, // type info keeps full name
+			{"main", "main"},
+		}
 
-	for _, tt := range tests {
-		t.Run(tt.pkgName, func(t *testing.T) {
-			result := getModuleName(tt.pkgName)
-			if result != tt.expected {
-				t.Errorf("getModuleName(%q) = %q, want %q", tt.pkgName, result, tt.expected)
-			}
-		})
-	}
+		emptyModuleMap := make(map[string]string)
+		for _, tt := range tests {
+			t.Run(tt.pkgName, func(t *testing.T) {
+				result := getModuleName(tt.pkgName, emptyModuleMap)
+				if result != tt.expected {
+					t.Errorf("getModuleName(%q, emptyMap) = %q, want %q", tt.pkgName, result, tt.expected)
+				}
+			})
+		}
+	})
+
+	// Test with module map (BuildInfo-based)
+	t.Run("with module map", func(t *testing.T) {
+		moduleMap := map[string]string{
+			"github.com/gohugoio/localescompressed": "github.com/gohugoio/localescompressed",
+			"github.com/evanw/esbuild":              "github.com/evanw/esbuild",
+			"golang.org/x/text":                     "golang.org/x/text",
+		}
+
+		tests := []struct {
+			pkgName  string
+			expected string
+		}{
+			{"github.com/gohugoio/localescompressed", "github.com/gohugoio/localescompressed"},
+			{"github.com/gohugoio/localescompressed/internal", "github.com/gohugoio/localescompressed"},
+			{"github.com/evanw/esbuild/pkg/api", "github.com/evanw/esbuild"},
+			{"golang.org/x/text/unicode", "golang.org/x/text"},
+			{"unknown/package", "unknown"},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.pkgName, func(t *testing.T) {
+				result := getModuleName(tt.pkgName, moduleMap)
+				if result != tt.expected {
+					t.Errorf("getModuleName(%q, moduleMap) = %q, want %q", tt.pkgName, result, tt.expected)
+				}
+			})
+		}
+	})
 }
 
 func TestTruncatePackageName(t *testing.T) {

@@ -1,3 +1,3 @@
 module github.com/imjasonh/gobinsize
 
-go 1.24.10
+go 1.21
