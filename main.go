@@ -158,14 +158,7 @@ func analyzeSymbols(elfFile *elf.File, moduleMap map[string]string) (*Dependency
 	}
 	
 	// Analyze functions and their sizes
-	for _, fn := range table.Funcs {
-		pkgName := getPackageName(fn.Name)
-		if pkgName != "" && isExternalDependency(pkgName) {
-			moduleName := getModuleName(pkgName, moduleMap)
-			report.Packages[moduleName] += int64(fn.End - fn.Entry)
-			report.TotalSize += int64(fn.End - fn.Entry)
-		}
-	}
+	processSymbolTable(table, moduleMap, report)
 	
 	return report, nil
 }
@@ -174,6 +167,18 @@ func analyzeLineTable(pcln *gosym.LineTable, report *DependencyReport) (*Depende
 	// For newer Go versions without .gosymtab, we cannot perform detailed analysis
 	// as we lack the function symbol information needed to attribute sizes
 	return nil, fmt.Errorf("analysis not supported for binaries without .gosymtab (Go symbol table)")
+}
+
+// processSymbolTable analyzes function symbols and attributes their sizes to modules
+func processSymbolTable(table *gosym.Table, moduleMap map[string]string, report *DependencyReport) {
+	for _, fn := range table.Funcs {
+		pkgName := getPackageName(fn.Name)
+		if pkgName != "" && isExternalDependency(pkgName) {
+			moduleName := getModuleName(pkgName, moduleMap)
+			report.Packages[moduleName] += int64(fn.End - fn.Entry)
+			report.TotalSize += int64(fn.End - fn.Entry)
+		}
+	}
 }
 
 func analyzeSymbolsMachO(machoFile *macho.File, moduleMap map[string]string) (*DependencyReport, error) {
@@ -220,14 +225,7 @@ func analyzeSymbolsMachO(machoFile *macho.File, moduleMap map[string]string) (*D
 	if symtabData != nil {
 		table, err := gosym.NewTable(symtabData, pcln)
 		if err == nil {
-			for _, fn := range table.Funcs {
-				pkgName := getPackageName(fn.Name)
-				if pkgName != "" && isExternalDependency(pkgName) {
-					moduleName := getModuleName(pkgName, moduleMap)
-					report.Packages[moduleName] += int64(fn.End - fn.Entry)
-					report.TotalSize += int64(fn.End - fn.Entry)
-				}
-			}
+			processSymbolTable(table, moduleMap, report)
 		}
 	}
 	
@@ -278,14 +276,7 @@ func analyzeSymbolsPE(peFile *pe.File, moduleMap map[string]string) (*Dependency
 	if symtabData != nil {
 		table, err := gosym.NewTable(symtabData, pcln)
 		if err == nil {
-			for _, fn := range table.Funcs {
-				pkgName := getPackageName(fn.Name)
-				if pkgName != "" && isExternalDependency(pkgName) {
-					moduleName := getModuleName(pkgName, moduleMap)
-					report.Packages[moduleName] += int64(fn.End - fn.Entry)
-					report.TotalSize += int64(fn.End - fn.Entry)
-				}
-			}
+			processSymbolTable(table, moduleMap, report)
 		}
 	}
 	
