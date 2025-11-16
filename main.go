@@ -440,6 +440,17 @@ func getPackageName(funcName string) string {
 		return ""
 	}
 
+	// Skip go: special patterns (like go:struct, go:itab, etc.)
+	if strings.HasPrefix(funcName, "go:") {
+		return ""
+	}
+
+	// Strip generic instantiation suffixes: anything from [ onwards
+	// e.g., "slices.partitionCmpFunc[go.shape" -> "slices.partitionCmpFunc"
+	if idx := strings.Index(funcName, "["); idx != -1 {
+		funcName = funcName[:idx]
+	}
+
 	// Handle method receivers like "pkg.(*Type).Method"
 	if strings.Contains(funcName, "(*") {
 		// Find the package path before (*Type)
@@ -451,6 +462,47 @@ func getPackageName(funcName string) string {
 				return decoded
 			}
 			return pkgName
+		}
+	}
+
+	// Handle type methods like "pkg.Type.Method" or "strings.Builder.grow"
+	// We need to extract the package before the type name
+	// Split by dots and check if we have Type.Method pattern
+	parts := strings.Split(funcName, ".")
+	if len(parts) >= 3 {
+		// For "strings.Builder.grow", we want "strings"
+		// For "github.com/user/pkg.MyType.Method", we want "github.com/user/pkg"
+		// For "runtime.traceLocker.Lock", we want "runtime"
+		
+		// Check if this looks like a stdlib package (first component has no slash)
+		// AND the full package path has no slashes
+		firstPart := parts[0]
+		fullPkgBeforeLastDot := strings.Join(parts[:len(parts)-1], ".")
+		if !strings.Contains(firstPart, "/") && !strings.Contains(fullPkgBeforeLastDot, "/") {
+			// For stdlib packages with 3+ parts, assume pkg.type.method pattern
+			// and extract just the first part
+			pkgName := firstPart
+			// URL decode the package name
+			if decoded, err := url.QueryUnescape(pkgName); err == nil {
+				return decoded
+			}
+			return pkgName
+		}
+		
+		// For non-stdlib packages, check if the second-to-last part looks like a Type (starts with uppercase)
+		secondToLast := parts[len(parts)-2]
+		if len(secondToLast) > 0 && (secondToLast[0] >= 'A' && secondToLast[0] <= 'Z') {
+			// This might be a Type.method pattern
+			// Remove the last part (method) and the second-to-last part (Type)
+			pkgParts := parts[:len(parts)-2]
+			if len(pkgParts) > 0 {
+				pkgName := strings.Join(pkgParts, ".")
+				// URL decode the package name
+				if decoded, err := url.QueryUnescape(pkgName); err == nil {
+					return decoded
+				}
+				return pkgName
+			}
 		}
 	}
 

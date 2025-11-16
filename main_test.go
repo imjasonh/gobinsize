@@ -15,12 +15,27 @@ func TestGetPackageName(t *testing.T) {
 		{"type:.eq.debug/elf", ""},
 		{"main.main", "main"},
 		{"github.com/user/pkg/subpkg.Function", "github.com/user/pkg/subpkg"},
-		{"go.shape.string", "go.shape"},
+		{"go.shape.string", "go"}, // go.shape is special; would be filtered by isExternalDependency anyway
 		// Test .init suffix removal
 		{"github.com/gohugoio/localescompressed.init", "github.com/gohugoio/localescompressed"},
 		{"github.com/gohugoio/localescompressed.init.0", "github.com/gohugoio/localescompressed"},
 		{"github.com/gohugoio/localescompressed.init.1", "github.com/gohugoio/localescompressed"},
 		{"some/package.init", "some/package"},
+		// Test generic instantiations with [go.shape suffix
+		{"slices.partitionCmpFunc[go.shape", "slices"},
+		{"github.com/spf13/cast.toUnsignedNumberE[go.shape", "github.com/spf13/cast"},
+		{"strings.Builder[go.shape.string]", "strings"},
+		{"maps.Clone[go.shape.int,go.shape.string]", "maps"},
+		// Test go: prefix patterns
+		{"go:struct { github.com/gohugoio/hugo", ""},
+		{"go:itab.*os.File,io.Writer", ""},
+		// Test type methods like Type.method
+		{"strings.Builder.grow", "strings"},
+		{"bytes.Buffer.WriteByte", "bytes"},
+		{"github.com/user/pkg.MyType.Method", "github.com/user/pkg"},
+		// Test runtime special cases
+		{"runtime.boundsError", "runtime"},
+		{"runtime.panicIndex", "runtime"},
 	}
 
 	for _, tt := range tests {
@@ -171,4 +186,26 @@ func TestTruncatePackageName(t *testing.T) {
 			t.Errorf("truncatePackageName(%q, %d) = %q, want %q", tt.name, tt.maxLen, result, tt.expected)
 		}
 	}
+}
+
+func TestGetPackageNameRuntimeTypes(t *testing.T) {
+tests := []struct {
+input    string
+expected string
+}{
+{"runtime.traceLocker.Lock", "runtime"},
+{"runtime.traceLocker.Unlock", "runtime"},
+{"runtime.initMetrics.compute", "runtime"},
+{"runtime.traceWriter.flush", "runtime"},
+{"runtime.traceAdvance.forEachP", "runtime"},
+}
+
+for _, tt := range tests {
+t.Run(tt.input, func(t *testing.T) {
+result := getPackageName(tt.input)
+if result != tt.expected {
+t.Errorf("getPackageName(%q) = %q, want %q", tt.input, result, tt.expected)
+}
+})
+}
 }
