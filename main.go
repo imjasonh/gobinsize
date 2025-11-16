@@ -266,13 +266,14 @@ func analyzeSymbolsPE(peFile *pe.File, moduleMap map[string]string) (*Dependency
 		}
 	}
 	
-	if symtabData != nil {
-		table, err := gosym.NewTable(symtabData, pcln)
-		if err == nil {
-			processSymbolTable(table, moduleMap, report)
-		}
+	if symtabData == nil {
+		return nil, fmt.Errorf("no .gosymtab section found")
 	}
-	
+
+	table, err := gosym.NewTable(symtabData, pcln)
+	if err == nil {
+		processSymbolTable(table, moduleMap, report)
+	}
 	return report, nil
 }
 
