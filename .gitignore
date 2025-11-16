@@ -1,0 +1,15 @@
+# Binaries
+gobinsize
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test binaries
+*.test
+
+# Output of go build
+/bin/
+
+# Temporary files
+/tmp/

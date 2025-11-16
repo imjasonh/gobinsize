@@ -277,9 +277,14 @@ func getPackageName(funcName string) string {
 		return ""
 	}
 	
-	// Remove receiver information
-	funcName = strings.Replace(funcName, "(*", "", 1)
-	funcName = strings.Replace(funcName, ")", "", 1)
+	// Handle method receivers like "pkg.(*Type).Method"
+	if strings.Contains(funcName, "(*") {
+		// Find the package path before (*Type)
+		idx := strings.Index(funcName, ".(")
+		if idx != -1 {
+			return funcName[:idx]
+		}
+	}
 	
 	// Split by last dot to separate package from function/method
 	lastDot := strings.LastIndex(funcName, ".")
@@ -287,19 +292,12 @@ func getPackageName(funcName string) string {
 		return ""
 	}
 	
-	pkgPath := funcName[:lastDot]
-	
-	// Remove method receiver if present
-	if idx := strings.Index(pkgPath, ".("); idx != -1 {
-		pkgPath = pkgPath[:idx]
-	}
-	
-	return pkgPath
+	return funcName[:lastDot]
 }
 
 func isExternalDependency(pkgName string) bool {
 	// Filter out type information
-	if strings.HasPrefix(pkgName, "type.") ||
+	if strings.HasPrefix(pkgName, "type") ||
 		strings.HasPrefix(pkgName, "go.shape") ||
 		strings.HasPrefix(pkgName, "weak.") ||
 		strings.HasPrefix(pkgName, "unique.") {
@@ -384,7 +382,10 @@ func truncatePackageName(name string, maxLen int) string {
 	if len(name) <= maxLen {
 		return name
 	}
-	return name[:maxLen-3] + "..."
+	if maxLen < 4 {
+		return name[:maxLen]
+	}
+	return name[:maxLen-4] + "...."
 }
 
 func formatSize(size int64) string {
