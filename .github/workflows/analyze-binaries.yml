@@ -51,20 +51,6 @@ jobs:
           $GITHUB_WORKSPACE/gobinsize /tmp/binaries/terraform
           echo "::endgroup::"
       
-      - name: Build and analyze docker CLI
-        run: |
-          echo "::group::Building docker CLI"
-          cd /tmp
-          git clone --depth 1 https://github.com/docker/cli.git docker-cli
-          cd docker-cli
-          make binary
-          cp build/docker-linux-amd64 /tmp/binaries/docker
-          echo "::endgroup::"
-          
-          echo "::group::Analyzing docker CLI"
-          $GITHUB_WORKSPACE/gobinsize /tmp/binaries/docker
-          echo "::endgroup::"
-      
       - name: Build and analyze kubectl
         run: |
           echo "::group::Building kubectl"
