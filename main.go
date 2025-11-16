@@ -8,6 +8,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"net/url"
 	"os"
 	"sort"
 	"strings"
@@ -282,7 +283,12 @@ func getPackageName(funcName string) string {
 		// Find the package path before (*Type)
 		idx := strings.Index(funcName, ".(")
 		if idx != -1 {
-			return funcName[:idx]
+			pkgName := funcName[:idx]
+			// URL decode the package name
+			if decoded, err := url.QueryUnescape(pkgName); err == nil {
+				return decoded
+			}
+			return pkgName
 		}
 	}
 	
@@ -292,7 +298,12 @@ func getPackageName(funcName string) string {
 		return ""
 	}
 	
-	return funcName[:lastDot]
+	pkgName := funcName[:lastDot]
+	// URL decode the package name
+	if decoded, err := url.QueryUnescape(pkgName); err == nil {
+		return decoded
+	}
+	return pkgName
 }
 
 func isExternalDependency(pkgName string) bool {
