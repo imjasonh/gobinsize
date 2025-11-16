@@ -43,7 +43,9 @@ func TestNotableBinaries(t *testing.T) {
 	}
 
 	for _, proj := range projects {
+		proj := proj // capture range variable
 		t.Run(proj.name, func(t *testing.T) {
+			t.Parallel()
 			projectDir := filepath.Join(binDir, proj.name+"-src")
 
 			// Clone the repository
