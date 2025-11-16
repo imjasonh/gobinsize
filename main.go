@@ -435,6 +435,9 @@ func getPackageName(funcName string) string {
 	// Function names in Go are typically in the form "package/path.FuncName"
 	// or "package/path.(*Type).Method"
 
+	// Strip trailing semicolons and other special characters
+	funcName = strings.TrimRight(funcName, ";")
+
 	// Skip type information completely
 	if strings.HasPrefix(funcName, "type:") {
 		return ""

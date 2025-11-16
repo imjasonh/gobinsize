@@ -39,6 +39,11 @@ func TestGetPackageName(t *testing.T) {
 		// Test runtime special cases
 		{"runtime.boundsError", "runtime"},
 		{"runtime.panicIndex", "runtime"},
+		// Test trailing semicolons and special characters
+		{"io.Reader;", "io"},
+		{"github.com/gorilla/websocket.newConn", "github.com/gorilla/websocket"},
+		{"github.com/muesli/smartcrop.analyse", "github.com/muesli/smartcrop"},
+		{"github.com/spf13/afero.byName", "github.com/spf13/afero"},
 	}
 
 	for _, tt := range tests {
