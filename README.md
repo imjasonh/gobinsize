@@ -50,7 +50,7 @@ gobinsize analyzes Go binaries by:
 ## Supported Platforms
 
 - Linux (ELF binaries)
-- macOS (Mach-O binaries)  
+- macOS (Mach-O binaries)
 - Windows (PE binaries)
 
 ## Notes
