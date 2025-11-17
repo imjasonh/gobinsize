@@ -631,61 +631,31 @@ func getModuleName(pkgName string, modulePaths []string) string {
 		return "other"
 	}
 
+	// If not in module dependencies, check if it's a standard library package
+	// Stdlib packages don't contain dots in the first path component
+	// (e.g., "runtime", "net/http", "encoding/json")
 	firstPart := parts[0]
-
-	// Check if it's a domain-based package
-	// Domains typically have:
-	// - Multiple path components (e.g., github.com/user/repo)
-	// - OR a TLD-like pattern (e.g., gopkg.in)
-	isDomain := len(parts) > 1 && strings.Contains(firstPart, ".")
-
-	if isDomain {
-		// Not from stdlib and not in BuildInfo - attribute to "other"
-		if *verbose {
-			fmt.Fprintf(os.Stderr, "[verbose] Package %q not in BuildInfo and not stdlib, attributing to 'other'\n", pkgName)
-		}
-		return "other"
+	
+	if !strings.Contains(firstPart, ".") {
+		// No dot in first component - stdlib package
+		return firstPart
 	}
 
-	// From stdlib - return the first component (e.g., "runtime", "net", "encoding")
-	// For packages like "unicode.map" (single component with dot), we need to determine
-	// if it's a stdlib package with suffix or a partial domain name
-	if strings.Contains(firstPart, ".") {
-		// Check if the base (before dot) looks like a stdlib package
-		// Common stdlib packages that might have .map/.init suffixes
+	// First component contains a dot
+	// If it's a single component (no /), treat as stdlib with suffix and extract base
+	// (e.g., "unicode.map" → "unicode")
+	// If multiple components, it's a domain-based package not in BuildInfo
+	if len(parts) == 1 {
+		// Single component with dot - extract base before first dot
 		base := strings.Split(firstPart, ".")[0]
-		// If it looks like a partial domain (contains common TLDs or vendor names),
-		// attribute to "other"
-		if isLikelyPartialDomain(firstPart) {
-			if *verbose {
-				fmt.Fprintf(os.Stderr, "[verbose] Package %q looks like partial domain, attributing to 'other'\n", pkgName)
-			}
-			return "other"
-		}
-		// Otherwise treat as stdlib with suffix
 		return base
 	}
 
-	return firstPart
-}
-
-// isLikelyPartialDomain checks if a package name looks like a partial domain
-// e.g., "go.uber", "github.com" (without path), etc.
-func isLikelyPartialDomain(pkg string) bool {
-	// Known domain patterns that indicate this is a partial reference
-	partialDomains := []string{
-		"go.uber",      // go.uber.org/...
-		"github.com",   // github.com/...
-		"golang.org",   // golang.org/...
-		"google.golang", // google.golang.org/...
-		"gopkg.in",     // gopkg.in/...
+	// Multiple components with dot in first - not in BuildInfo
+	if *verbose {
+		fmt.Fprintf(os.Stderr, "[verbose] Package %q not in BuildInfo and not stdlib, attributing to 'other'\n", pkgName)
 	}
-	for _, partial := range partialDomains {
-		if strings.HasPrefix(pkg, partial) {
-			return true
-		}
-	}
-	return false
+	return "other"
 }
 
 func printReport(report *DependencyReport) {

@@ -179,7 +179,7 @@ func TestGetModuleName(t *testing.T) {
 			{"github.com/evanw/esbuild/pkg/api", "github.com/evanw/esbuild"},
 			{"golang.org/x/text/unicode", "golang.org/x/text"},
 			{"go.uber.org/automaxprocs", "go.uber.org/automaxprocs"},
-			{"go.uber", "other"}, // Partial name, not in BuildInfo
+			{"go.uber", "go"}, // Single component with dot - extracts base
 			{"unknown/package", "unknown"}, // Packages not in BuildInfo and without domain return first component
 			{"unicode.map", "unicode"}, // Stdlib with .map suffix
 		}
