@@ -9,25 +9,48 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"net/url"
 	"os"
+	"os/exec"
 	"sort"
 	"strings"
+	"sync"
 )
 
 var verbose = flag.Bool("verbose", false, "enable verbose logging for debugging attribution")
 
-var stdlibPackages = map[string]bool{
-	// Common stdlib top-level packages
-	"archive": true, "bufio": true, "bytes": true, "cmp": true, "compress": true,
-	"container": true, "context": true, "crypto": true, "database": true, "debug": true,
-	"embed": true, "encoding": true, "errors": true, "expvar": true, "flag": true,
-	"fmt": true, "go": true, "hash": true, "html": true, "image": true, "index": true,
-	"internal": true, "io": true, "log": true, "maps": true, "math": true, "mime": true,
-	"net": true, "os": true, "path": true, "plugin": true, "reflect": true, "regexp": true,
-	"runtime": true, "slices": true, "sort": true, "strconv": true, "strings": true,
-	"sync": true, "syscall": true, "testing": true, "text": true, "time": true,
-	"unicode": true, "unique": true, "unsafe": true, "vendor": true, "main": true,
+var (
+	stdlibPackages     []string
+	stdlibPackagesOnce sync.Once
+)
+
+// getStdlibPackages returns the list of standard library packages
+func getStdlibPackages() []string {
+	stdlibPackagesOnce.Do(func() {
+		cmd := exec.Command("go", "list", "std")
+		output, err := cmd.Output()
+		if err != nil {
+			// Fallback to empty list if go list fails
+			fmt.Fprintf(os.Stderr, "Warning: failed to get stdlib packages: %v\n", err)
+			stdlibPackages = []string{}
+			return
+		}
+		
+		// Parse the output - one package per line
+		lines := strings.Split(strings.TrimSpace(string(output)), "\n")
+		stdlibPackages = make([]string, 0, len(lines))
+		for _, line := range lines {
+			line = strings.TrimSpace(line)
+			if line != "" && line != "main" {
+				stdlibPackages = append(stdlibPackages, line)
+			}
+		}
+		
+		// Sort by length (longest first) for better matching
+		sort.Slice(stdlibPackages, func(i, j int) bool {
+			return len(stdlibPackages[i]) > len(stdlibPackages[j])
+		})
+	})
+	return stdlibPackages
 }
 
 func main() {
@@ -470,10 +493,11 @@ func findModuleForSymbol(symbolName string, modulePaths []string) string {
 		}
 	}
 	
-	// Check stdlib packages
-	for stdPkg := range stdlibPackages {
-		// For stdlib, check if the symbol starts with the package name followed by . or /
-		if strings.HasPrefix(symbolName, stdPkg+".") || strings.HasPrefix(symbolName, stdPkg+"/") {
+	// Check stdlib packages (sorted by length, longest first)
+	// Stdlib packages can include slashes (e.g., encoding/json)
+	for _, stdPkg := range getStdlibPackages() {
+		// Check if the symbol starts with the package name followed by .
+		if strings.HasPrefix(symbolName, stdPkg+".") {
 			return stdPkg
 		}
 	}
@@ -490,183 +514,7 @@ func findModuleForSymbol(symbolName string, modulePaths []string) string {
 	return "other"
 }
 
-// getPackageName is kept for backward compatibility but is now deprecated
-// Use findModuleForSymbol instead
-func getPackageName(funcName string) string {
-	// Function names in Go are typically in the form "package/path.FuncName"
-	// or "package/path.(*Type).Method"
 
-	// Strip trailing semicolons and other special characters
-	funcName = strings.TrimRight(funcName, ";")
-
-	// Skip type information completely
-	if strings.HasPrefix(funcName, "type:") {
-		return ""
-	}
-
-	// Handle go: special patterns (like go:struct, go:itab, etc.)
-	// These contain package information that should be extracted
-	if strings.HasPrefix(funcName, "go:") {
-		// go:struct { <package> - extract package after "go:struct { "
-		if strings.HasPrefix(funcName, "go:struct {") {
-			rest := strings.TrimPrefix(funcName, "go:struct {")
-			rest = strings.TrimSpace(rest)
-			// Extract package name (could be github.com/user/pkg or just pkg)
-			parts := strings.Fields(rest)
-			if len(parts) > 0 {
-				return parts[0]
-			}
-		}
-		
-		// go:itab.*pkg.Type,interface - extract package from type
-		if strings.HasPrefix(funcName, "go:itab.") {
-			rest := strings.TrimPrefix(funcName, "go:itab.")
-			// Skip leading * if present
-			rest = strings.TrimPrefix(rest, "*")
-			// Extract up to comma
-			if idx := strings.Index(rest, ","); idx != -1 {
-				rest = rest[:idx]
-			}
-			// Extract package from Type reference (pkg.Type)
-			if idx := strings.LastIndex(rest, "."); idx != -1 {
-				return rest[:idx]
-			}
-		}
-		
-		// For other go: patterns we don't recognize, skip them
-		return ""
-	}
-
-	// Strip generic instantiation suffixes: anything from [ onwards
-	// e.g., "slices.partitionCmpFunc[go.shape" -> "slices.partitionCmpFunc"
-	if idx := strings.Index(funcName, "["); idx != -1 {
-		funcName = funcName[:idx]
-	}
-
-	// Handle method receivers like "pkg.(*Type).Method"
-	// The part before (*Type) is the package path
-	if strings.Contains(funcName, "(*") {
-		idx := strings.Index(funcName, ".(")
-		if idx != -1 {
-			pkgName := funcName[:idx]
-			// URL decode and return immediately
-			if decoded, err := url.QueryUnescape(pkgName); err == nil {
-				return decoded
-			}
-			return pkgName
-		}
-	}
-
-	// Handle .init functions specially - the package name is everything before .init
-	// e.g., "github.com/user/pkg.init" → "github.com/user/pkg"
-	if strings.HasSuffix(funcName, ".init") {
-		pkgName := strings.TrimSuffix(funcName, ".init")
-		if decoded, err := url.QueryUnescape(pkgName); err == nil {
-			return decoded
-		}
-		return pkgName
-	}
-	// Also handle .init.N suffixes (e.g., "github.com/user/pkg.init.0.func1")
-	if idx := strings.LastIndex(funcName, ".init."); idx != -1 {
-		pkgName := funcName[:idx]
-		if decoded, err := url.QueryUnescape(pkgName); err == nil {
-			return decoded
-		}
-		return pkgName
-	}
-
-	// For stdlib packages with Type.method patterns (e.g., "runtime.traceLocker.Lock"),
-	// we need to extract just the package name (e.g., "runtime")
-	// Only apply this if there's no slash AND the first component is a known stdlib package
-	if !strings.Contains(funcName, "/") {
-		parts := strings.Split(funcName, ".")
-		if len(parts) >= 3 {
-			firstPart := parts[0]
-			// Verify it's actually a stdlib package before assuming Type.method pattern
-			if stdlibPackages[firstPart] {
-				return firstPart
-			}
-		}
-	}
-	
-	// Split by last dot or slash to separate package from function/method
-	// For paths like "google.golang.org/protobuf/internal/detrand", we want
-	// "google.golang.org/protobuf/internal" (everything before the last component)
-	lastSlash := strings.LastIndex(funcName, "/")
-	lastDot := strings.LastIndex(funcName, ".")
-	
-	// Use whichever comes last (slash or dot) as the separator
-	separator := lastDot
-	if lastSlash > lastDot {
-		separator = lastSlash
-	}
-	
-	if separator == -1 {
-		return ""
-	}
-	
-	pkgName := funcName[:separator]
-
-	// URL decode the package name
-	if decoded, err := url.QueryUnescape(pkgName); err == nil {
-		return decoded
-	}
-	return pkgName
-}
-
-func isExternalDependency(pkgName string) bool {
-	// Skip only these special compiler-generated patterns
-	if strings.HasPrefix(pkgName, "go.shape") ||
-		strings.HasPrefix(pkgName, "weak.") ||
-		strings.HasPrefix(pkgName, "unique.") {
-		return false
-	}
-
-	// Include everything else: stdlib, external deps, golang.org/x, type info, etc.
-	return pkgName != ""
-}
-
-func getModuleName(pkgName string, modulePaths []string) string {
-	// Iterate through module dependencies in order (longest first) to find the module
-	// that each symbol can be attributed to
-	for _, modPath := range modulePaths {
-		// Check for exact match or if package is a subpackage of this module
-		if pkgName == modPath || strings.HasPrefix(pkgName, modPath+"/") {
-			return modPath
-		}
-	}
-
-	// If no module dependencies match, check if the symbol comes from stdlib
-	// Stdlib packages don't have a domain (no path separator, or path doesn't look like a domain)
-	parts := strings.Split(pkgName, "/")
-	if len(parts) == 0 {
-		if *verbose {
-			fmt.Fprintf(os.Stderr, "[verbose] Empty package name, attributing to 'other'\n")
-		}
-		return "other"
-	}
-
-	// If not in module dependencies, check if it's a standard library package
-	// or a local package (no domain in path)
-	firstPart := parts[0]
-	
-	// For single-component names with dots (e.g., "unicode.map"), extract base
-	if len(parts) == 1 && strings.Contains(firstPart, ".") {
-		firstPart = strings.Split(firstPart, ".")[0]
-	}
-	
-	// If first component has no dot, it's either stdlib or a local package
-	// Return the first component
-	if !strings.Contains(firstPart, ".") {
-		return firstPart
-	}
-
-	// First component contains a dot - it's a domain-based package not in BuildInfo
-	if *verbose {
-		fmt.Fprintf(os.Stderr, "[verbose] Package %q not in BuildInfo and not stdlib, attributing to 'other'\n", pkgName)
-	}
-	return "other"
-}
 
 func printReport(report *DependencyReport) {
 	if len(report.Packages) == 0 {
