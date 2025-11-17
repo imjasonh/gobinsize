@@ -743,6 +743,12 @@ func drawPackageRect(canvas *svg.SVG, pkg pkgSize, area rect) {
 	// Generate color based on package name hash
 	color := packageColor(pkg.name)
 
+	// Start a group for this package (allows tooltip to work on entire rect)
+	canvas.Group("")
+
+	// Add tooltip with full package name and size
+	canvas.Title(fmt.Sprintf("%s - %s", pkg.name, formatSize(pkg.size)))
+
 	// Draw rectangle with border
 	canvas.Rect(area.x, area.y, area.width, area.height,
 		fmt.Sprintf("fill:%s;stroke:white;stroke-width:2", color))
@@ -777,6 +783,9 @@ func drawPackageRect(canvas *svg.SVG, pkg pkgSize, area rect) {
 				fmt.Sprintf("text-anchor:middle;font-size:%dpx;font-family:Arial,sans-serif;fill:white;opacity:0.9", fontSize-2))
 		}
 	}
+
+	// End the group
+	canvas.Gend()
 }
 
 // packageColor generates a color for a package based on its name
