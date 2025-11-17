@@ -801,9 +801,9 @@ func isStdlibPackage(name string) bool {
 
 // packageColor generates a color for a package based on its name
 func packageColor(name string) string {
-	// Use a middle gray for all stdlib packages
-	if isStdlibPackage(name) {
-		return "#7f8c8d" // middle gray
+	// Use a light gray for stdlib packages and golang.org/x/... packages
+	if isStdlibPackage(name) || strings.HasPrefix(name, "golang.org/x/") {
+		return "#bdc3c7" // light gray
 	}
 
 	// Color scheme for non-stdlib packages - use different hues for variety
