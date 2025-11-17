@@ -40,6 +40,30 @@ func TestNotableBinaries(t *testing.T) {
 			buildCmd:  []string{"go", "build", "-o", "terraform"},
 			binaryLoc: "terraform",
 		},
+		{
+			name:      "cosign",
+			repo:      "https://github.com/sigstore/cosign.git",
+			buildCmd:  []string{"go", "build", "-o", "cosign", "./cmd/cosign"},
+			binaryLoc: "cosign",
+		},
+		{
+			name:      "gobinsize",
+			repo:      "https://github.com/imjasonh/gobinsize.git",
+			buildCmd:  []string{"go", "build", "-o", "gobinsize", "."},
+			binaryLoc: "gobinsize",
+		},
+		{
+			name:      "chainctl",
+			repo:      "https://github.com/chainguard-dev/chainctl.git",
+			buildCmd:  []string{"go", "build", "-o", "chainctl", "."},
+			binaryLoc: "chainctl",
+		},
+		{
+			name:      "docker",
+			repo:      "https://github.com/docker/cli.git",
+			buildCmd:  []string{"go", "build", "-o", "docker", "./cmd/docker"},
+			binaryLoc: "docker",
+		},
 	}
 
 	// GOOS values to test
@@ -108,6 +132,19 @@ func TestNotableBinaries(t *testing.T) {
 					outputStr := string(output)
 					if outputStr == "" {
 						t.Errorf("Empty output from gobinsize for %s (%s)", proj.name, goos)
+					}
+
+					// Generate SVG treemap for Linux binaries (emit into repo root)
+					if goos == "linux" {
+						svgPath := filepath.Join(".", proj.name+"-treemap.svg")
+						t.Logf("Generating SVG treemap for %s...", proj.name)
+						svgCmd := exec.Command("./gobinsize", "-svg", svgPath, binaryPath)
+						svgOutput, err := svgCmd.CombinedOutput()
+						if err != nil {
+							t.Logf("Failed to generate SVG for %s: %v\nOutput: %s", proj.name, err, svgOutput)
+						} else {
+							t.Logf("SVG treemap written to %s", svgPath)
+						}
 					}
 				})
 			}
