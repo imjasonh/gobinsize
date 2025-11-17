@@ -4,7 +4,7 @@
      xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink">
 <rect x="0" y="0" width="1200" height="800" style="fill:white" />
-<text x="600" y="30" style="text-anchor:middle;font-size:24px;font-family:Arial,sans-serif;font-weight:bold" >Dependency Size Treemap</text>
+<text x="600" y="30" style="text-anchor:middle;font-size:24px;font-family:Arial,sans-serif;font-weight:bold" >./gobinsize - 2.38 MB</text>
 <rect x="10" y="50" width="527" height="316" style="fill:#3498db;stroke:white;stroke-width:2" />
 <text x="273" y="203" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >go/types</text>
 <text x="273" y="218" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >467.62 KB</text>
@@ -117,11 +117,11 @@
 <rect x="1027" y="534" width="60" height="45" style="fill:#16a085;stroke:white;stroke-width:2" />
 <text x="1057" y="551" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >inter...</text>
 <text x="1057" y="566" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >7.75 KB</text>
-<rect x="1027" y="579" width="60" height="46" style="fill:#f39c12;stroke:white;stroke-width:2" />
-<text x="1057" y="597" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >debug...</text>
+<rect x="1027" y="579" width="60" height="46" style="fill:#2980b9;stroke:white;stroke-width:2" />
+<text x="1057" y="597" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >bytes</text>
 <text x="1057" y="612" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >7.66 KB</text>
-<rect x="1087" y="534" width="60" height="46" style="fill:#2980b9;stroke:white;stroke-width:2" />
-<text x="1117" y="552" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >bytes</text>
+<rect x="1087" y="534" width="60" height="46" style="fill:#f39c12;stroke:white;stroke-width:2" />
+<text x="1117" y="552" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >debug...</text>
 <text x="1117" y="567" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >7.66 KB</text>
 <rect x="1087" y="580" width="60" height="45" style="fill:#16a085;stroke:white;stroke-width:2" />
 <text x="1117" y="597" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >context</text>
@@ -137,11 +137,11 @@
 <text x="1059" y="768" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >other</text>
 <rect x="1092" y="688" width="55" height="34" style="fill:#f1c40f;stroke:white;stroke-width:2" />
 <text x="1119" y="700" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >runtim...</text>
-<rect x="1092" y="722" width="55" height="34" style="fill:#e67e22;stroke:white;stroke-width:2" />
-<text x="1119" y="734" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >io</text>
-<rect x="1092" y="756" width="55" height="34" style="fill:#d35400;stroke:white;stroke-width:2" />
-<text x="1119" y="768" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >intern...</text>
-<rect x="1147" y="50" width="43" height="42" style="fill:#2980b9;stroke:white;stroke-width:2" />
+<rect x="1092" y="722" width="55" height="34" style="fill:#d35400;stroke:white;stroke-width:2" />
+<text x="1119" y="734" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >intern...</text>
+<rect x="1092" y="756" width="55" height="34" style="fill:#2980b9;stroke:white;stroke-width:2" />
+<text x="1119" y="768" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >go/token</text>
+<rect x="1147" y="50" width="43" height="42" style="fill:#e67e22;stroke:white;stroke-width:2" />
 <rect x="1147" y="92" width="43" height="41" style="fill:#9b59b6;stroke:white;stroke-width:2" />
 <rect x="1147" y="133" width="43" height="38" style="fill:#34495e;stroke:white;stroke-width:2" />
 <rect x="1147" y="171" width="43" height="36" style="fill:#c0392b;stroke:white;stroke-width:2" />
@@ -172,8 +172,8 @@
 <rect x="1170" y="676" width="20" height="17" style="fill:#2ecc71;stroke:white;stroke-width:2" />
 <rect x="1170" y="693" width="20" height="18" style="fill:#16a085;stroke:white;stroke-width:2" />
 <rect x="1147" y="711" width="15" height="21" style="fill:#1abc9c;stroke:white;stroke-width:2" />
-<rect x="1162" y="711" width="14" height="21" style="fill:#9b59b6;stroke:white;stroke-width:2" />
-<rect x="1176" y="711" width="14" height="21" style="fill:#16a085;stroke:white;stroke-width:2" />
+<rect x="1162" y="711" width="14" height="21" style="fill:#16a085;stroke:white;stroke-width:2" />
+<rect x="1176" y="711" width="14" height="21" style="fill:#9b59b6;stroke:white;stroke-width:2" />
 <rect x="1147" y="732" width="12" height="22" style="fill:#3498db;stroke:white;stroke-width:2" />
 <rect x="1159" y="732" width="11" height="22" style="fill:#3498db;stroke:white;stroke-width:2" />
 <rect x="1147" y="754" width="23" height="10" style="fill:#1abc9c;stroke:white;stroke-width:2" />
@@ -187,10 +187,10 @@
 <rect x="1171" y="764" width="10" height="9" style="fill:#1abc9c;stroke:white;stroke-width:2" />
 <rect x="1171" y="773" width="10" height="8" style="fill:#c0392b;stroke:white;stroke-width:2" />
 <rect x="1171" y="781" width="10" height="9" style="fill:#27ae60;stroke:white;stroke-width:2" />
-<rect x="1181" y="764" width="9" height="5" style="fill:#f1c40f;stroke:white;stroke-width:2" />
-<rect x="1181" y="769" width="9" height="5" style="fill:#e67e22;stroke:white;stroke-width:2" />
-<rect x="1181" y="774" width="9" height="5" style="fill:#3498db;stroke:white;stroke-width:2" />
-<rect x="1181" y="779" width="4" height="8" style="fill:#f1c40f;stroke:white;stroke-width:2" />
-<rect x="1185" y="779" width="5" height="8" style="fill:#16a085;stroke:white;stroke-width:2" />
+<rect x="1181" y="764" width="9" height="5" style="fill:#e67e22;stroke:white;stroke-width:2" />
+<rect x="1181" y="769" width="9" height="5" style="fill:#f1c40f;stroke:white;stroke-width:2" />
+<rect x="1181" y="774" width="9" height="5" style="fill:#16a085;stroke:white;stroke-width:2" />
+<rect x="1181" y="779" width="4" height="8" style="fill:#3498db;stroke:white;stroke-width:2" />
+<rect x="1185" y="779" width="5" height="8" style="fill:#f1c40f;stroke:white;stroke-width:2" />
 <rect x="1181" y="787" width="9" height="3" style="fill:#2980b9;stroke:white;stroke-width:2" />
 </svg>

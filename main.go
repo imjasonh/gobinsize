@@ -77,7 +77,7 @@ func main() {
 
 	// Generate SVG treemap if requested
 	if *svgFile != "" {
-		if err := generateSVGTreemap(report, *svgFile); err != nil {
+		if err := generateSVGTreemap(report, *svgFile, binaryPath); err != nil {
 			fmt.Fprintf(os.Stderr, "Error generating SVG: %v\n", err)
 			os.Exit(1)
 		}
@@ -599,7 +599,7 @@ func formatSize(size int64) string {
 }
 
 // generateSVGTreemap creates a treemap visualization of the dependency report
-func generateSVGTreemap(report *DependencyReport, filename string) error {
+func generateSVGTreemap(report *DependencyReport, filename string, binaryPath string) error {
 	if len(report.Packages) == 0 {
 		return fmt.Errorf("no dependencies to visualize")
 	}
@@ -625,9 +625,10 @@ func generateSVGTreemap(report *DependencyReport, filename string) error {
 	canvas := svg.New(f)
 	canvas.Start(width, height)
 
-	// Title
+	// Title with binary name and total size
 	canvas.Rect(0, 0, width, height, "fill:white")
-	canvas.Text(width/2, 30, "Dependency Size Treemap", "text-anchor:middle;font-size:24px;font-family:Arial,sans-serif;font-weight:bold")
+	title := fmt.Sprintf("%s - %s", binaryPath, formatSize(report.TotalSize))
+	canvas.Text(width/2, 30, title, "text-anchor:middle;font-size:24px;font-family:Arial,sans-serif;font-weight:bold")
 
 	// Draw treemap
 	const margin = 10

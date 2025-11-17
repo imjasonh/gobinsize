@@ -120,7 +120,7 @@ func TestGenerateSVGTreemap(t *testing.T) {
 	tmpFile := t.TempDir() + "/test.svg"
 
 	// Generate SVG
-	err := generateSVGTreemap(report, tmpFile)
+	err := generateSVGTreemap(report, tmpFile, "./testbinary")
 	if err != nil {
 		t.Fatalf("generateSVGTreemap failed: %v", err)
 	}
@@ -149,9 +149,12 @@ func TestGenerateSVGTreemap(t *testing.T) {
 		t.Error("SVG file missing <svg> tag")
 	}
 
-	// Check for title
-	if !strings.Contains(contentStr, "Dependency Size Treemap") {
-		t.Error("SVG file missing title")
+	// Check for title with binary name and size
+	if !strings.Contains(contentStr, "./testbinary") {
+		t.Error("SVG file missing binary name in title")
+	}
+	if !strings.Contains(contentStr, "1.00 MB") {
+		t.Error("SVG file missing total size in title")
 	}
 }
 
@@ -162,7 +165,7 @@ func TestGenerateSVGTreemapEmptyReport(t *testing.T) {
 	}
 
 	tmpFile := t.TempDir() + "/empty.svg"
-	err := generateSVGTreemap(report, tmpFile)
+	err := generateSVGTreemap(report, tmpFile, "./emptybinary")
 
 	if err == nil {
 		t.Error("Expected error for empty report, got nil")
