@@ -14,10 +14,14 @@ import (
 	"strings"
 	"sync"
 
+	svg "github.com/ajstarks/svgo"
 	"golang.org/x/tools/go/packages"
 )
 
-var verbose = flag.Bool("verbose", false, "enable verbose logging for debugging attribution")
+var (
+	verbose = flag.Bool("verbose", false, "enable verbose logging for debugging attribution")
+	svgFile = flag.String("svg", "", "output SVG treemap to the specified file")
+)
 
 var (
 	stdlibPackages     []string
@@ -57,7 +61,7 @@ func main() {
 	flag.Parse()
 
 	if flag.NArg() < 1 {
-		fmt.Fprintf(os.Stderr, "Usage: %s [-verbose] <binary>\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Usage: %s [-verbose] [-svg output.svg] <binary>\n", os.Args[0])
 		os.Exit(1)
 	}
 
@@ -70,12 +74,26 @@ func main() {
 	}
 
 	printReport(report)
+
+	// Generate SVG treemap if requested
+	if *svgFile != "" {
+		if err := generateSVGTreemap(report, *svgFile); err != nil {
+			fmt.Fprintf(os.Stderr, "Error generating SVG: %v\n", err)
+			os.Exit(1)
+		}
+		fmt.Printf("SVG treemap written to %s\n", *svgFile)
+	}
 }
 
 type DependencyReport struct {
 	TotalSize   int64
 	Packages    map[string]int64
 	ModulePaths []string // sorted list of module paths (longest first)
+}
+
+type pkgSize struct {
+	name string
+	size int64
 }
 
 func analyzeBinary(path string) (*DependencyReport, error) {
@@ -523,11 +541,6 @@ func printReport(report *DependencyReport) {
 	}
 
 	// Sort packages by size (descending)
-	type pkgSize struct {
-		name string
-		size int64
-	}
-
 	packages := make([]pkgSize, 0, len(report.Packages))
 	for name, size := range report.Packages {
 		packages = append(packages, pkgSize{name, size})
@@ -585,4 +598,217 @@ func formatSize(size int64) string {
 		return fmt.Sprintf("%.2f KB", float64(size)/float64(KB))
 	}
 	return fmt.Sprintf("%d B", size)
+}
+
+// generateSVGTreemap creates a treemap visualization of the dependency report
+func generateSVGTreemap(report *DependencyReport, filename string) error {
+	if len(report.Packages) == 0 {
+		return fmt.Errorf("no dependencies to visualize")
+	}
+
+	// Create output file
+	f, err := os.Create(filename)
+	if err != nil {
+		return fmt.Errorf("failed to create file: %w", err)
+	}
+	defer f.Close()
+
+	// Sort packages by size (descending)
+	packages := make([]pkgSize, 0, len(report.Packages))
+	for name, size := range report.Packages {
+		packages = append(packages, pkgSize{name, size})
+	}
+	sort.Slice(packages, func(i, j int) bool {
+		return packages[i].size > packages[j].size
+	})
+
+	// Create SVG canvas
+	const width, height = 1200, 800
+	canvas := svg.New(f)
+	canvas.Start(width, height)
+	
+	// Title
+	canvas.Rect(0, 0, width, height, "fill:white")
+	canvas.Text(width/2, 30, "Dependency Size Treemap", "text-anchor:middle;font-size:24px;font-family:Arial,sans-serif;font-weight:bold")
+	
+	// Draw treemap
+	const margin = 10
+	const titleHeight = 50
+	treeRect := rect{
+		x:      margin,
+		y:      titleHeight,
+		width:  width - 2*margin,
+		height: height - titleHeight - margin,
+	}
+	
+	drawTreemap(canvas, packages, treeRect)
+	
+	canvas.End()
+	return nil
+}
+
+type rect struct {
+	x, y, width, height int
+}
+
+// drawTreemap recursively draws a treemap layout
+func drawTreemap(canvas *svg.SVG, packages []pkgSize, area rect) {
+	if len(packages) == 0 || area.width <= 0 || area.height <= 0 {
+		return
+	}
+
+	// Calculate total size
+	var total int64
+	for _, pkg := range packages {
+		total += pkg.size
+	}
+	
+	if total == 0 {
+		return
+	}
+
+	// Draw each package as a rectangle
+	if len(packages) == 1 {
+		drawPackageRect(canvas, packages[0], area)
+		return
+	}
+
+	// Squarified treemap algorithm - split packages based on aspect ratio
+	split := findBestSplit(packages, area)
+	
+	if split == 0 || split >= len(packages) {
+		// Can't split, just draw single package
+		drawPackageRect(canvas, packages[0], area)
+		return
+	}
+
+	// Calculate sizes for split
+	var firstGroupSize int64
+	for i := 0; i < split; i++ {
+		firstGroupSize += packages[i].size
+	}
+	
+	ratio := float64(firstGroupSize) / float64(total)
+	
+	// Determine split direction based on aspect ratio
+	if area.width >= area.height {
+		// Split vertically
+		splitWidth := int(float64(area.width) * ratio)
+		if splitWidth < 1 {
+			splitWidth = 1
+		}
+		if splitWidth >= area.width {
+			splitWidth = area.width - 1
+		}
+		
+		leftRect := rect{area.x, area.y, splitWidth, area.height}
+		rightRect := rect{area.x + splitWidth, area.y, area.width - splitWidth, area.height}
+		
+		drawTreemap(canvas, packages[:split], leftRect)
+		drawTreemap(canvas, packages[split:], rightRect)
+	} else {
+		// Split horizontally
+		splitHeight := int(float64(area.height) * ratio)
+		if splitHeight < 1 {
+			splitHeight = 1
+		}
+		if splitHeight >= area.height {
+			splitHeight = area.height - 1
+		}
+		
+		topRect := rect{area.x, area.y, area.width, splitHeight}
+		bottomRect := rect{area.x, area.y + splitHeight, area.width, area.height - splitHeight}
+		
+		drawTreemap(canvas, packages[:split], topRect)
+		drawTreemap(canvas, packages[split:], bottomRect)
+	}
+}
+
+// findBestSplit finds the best split point for squarified treemap
+func findBestSplit(packages []pkgSize, area rect) int {
+	if len(packages) <= 1 {
+		return 0
+	}
+	
+	// Simple heuristic: split at halfway point by count for now
+	// A more sophisticated algorithm would minimize aspect ratios
+	return (len(packages) + 1) / 2
+}
+
+// drawPackageRect draws a single package rectangle with color and label
+func drawPackageRect(canvas *svg.SVG, pkg pkgSize, area rect) {
+	if area.width <= 2 || area.height <= 2 {
+		return // Too small to draw
+	}
+	
+	// Generate color based on package name hash
+	color := packageColor(pkg.name)
+	
+	// Draw rectangle with border
+	canvas.Rect(area.x, area.y, area.width, area.height, 
+		fmt.Sprintf("fill:%s;stroke:white;stroke-width:2", color))
+	
+	// Add text label if there's enough space
+	const minWidthForText = 50
+	const minHeightForText = 25
+	
+	if area.width >= minWidthForText && area.height >= minHeightForText {
+		centerX := area.x + area.width/2
+		centerY := area.y + area.height/2
+		
+		// Package name
+		fontSize := 12
+		if area.height < 40 {
+			fontSize = 10
+		}
+		
+		// Truncate long names
+		displayName := pkg.name
+		maxNameLen := (area.width - 10) / (fontSize / 2)
+		if len(displayName) > maxNameLen && maxNameLen > 3 {
+			displayName = displayName[:maxNameLen-3] + "..."
+		}
+		
+		canvas.Text(centerX, centerY-5, displayName, 
+			fmt.Sprintf("text-anchor:middle;font-size:%dpx;font-family:Arial,sans-serif;fill:white", fontSize))
+		
+		// Size
+		if area.height >= 45 {
+			canvas.Text(centerX, centerY+10, formatSize(pkg.size), 
+				fmt.Sprintf("text-anchor:middle;font-size:%dpx;font-family:Arial,sans-serif;fill:white;opacity:0.9", fontSize-2))
+		}
+	}
+}
+
+// packageColor generates a color for a package based on its name
+func packageColor(name string) string {
+	// Color scheme - use different hues for variety
+	colors := []string{
+		"#e74c3c", // red
+		"#3498db", // blue
+		"#2ecc71", // green
+		"#f39c12", // orange
+		"#9b59b6", // purple
+		"#1abc9c", // turquoise
+		"#e67e22", // carrot
+		"#34495e", // dark blue-grey
+		"#16a085", // green sea
+		"#c0392b", // darker red
+		"#8e44ad", // wisteria
+		"#2980b9", // belize blue
+		"#27ae60", // nephritis
+		"#f1c40f", // sun flower
+		"#d35400", // pumpkin
+	}
+	
+	// Hash the package name to pick a color
+	hash := 0
+	for _, c := range name {
+		hash = hash*31 + int(c)
+	}
+	if hash < 0 {
+		hash = -hash
+	}
+	
+	return colors[hash%len(colors)]
 }

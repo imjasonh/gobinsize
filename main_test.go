@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+	"strings"
 	"testing"
 )
 
@@ -99,6 +101,71 @@ func TestTruncatePackageName(t *testing.T) {
 		if result != tt.expected {
 			t.Errorf("truncatePackageName(%q, %d) = %q, want %q", tt.name, tt.maxLen, result, tt.expected)
 		}
+	}
+}
+
+func TestGenerateSVGTreemap(t *testing.T) {
+	// Create a sample report
+	report := &DependencyReport{
+		TotalSize: 1024 * 1024, // 1 MB
+		Packages: map[string]int64{
+			"github.com/user/repo":  512 * 1024, // 512 KB
+			"stdlib/package":        256 * 1024, // 256 KB
+			"another/package":       256 * 1024, // 256 KB
+		},
+		ModulePaths: []string{"github.com/user/repo"},
+	}
+
+	// Create a temporary file
+	tmpFile := t.TempDir() + "/test.svg"
+
+	// Generate SVG
+	err := generateSVGTreemap(report, tmpFile)
+	if err != nil {
+		t.Fatalf("generateSVGTreemap failed: %v", err)
+	}
+
+	// Verify file was created
+	info, err := os.Stat(tmpFile)
+	if err != nil {
+		t.Fatalf("SVG file not created: %v", err)
+	}
+
+	// Verify file has content
+	if info.Size() == 0 {
+		t.Error("SVG file is empty")
+	}
+
+	// Read and verify basic SVG structure
+	content, err := os.ReadFile(tmpFile)
+	if err != nil {
+		t.Fatalf("Failed to read SVG file: %v", err)
+	}
+
+	contentStr := string(content)
+	
+	// Check for SVG tag
+	if !strings.Contains(contentStr, "<svg") {
+		t.Error("SVG file missing <svg> tag")
+	}
+	
+	// Check for title
+	if !strings.Contains(contentStr, "Dependency Size Treemap") {
+		t.Error("SVG file missing title")
+	}
+}
+
+func TestGenerateSVGTreemapEmptyReport(t *testing.T) {
+	report := &DependencyReport{
+		TotalSize: 0,
+		Packages: map[string]int64{},
+	}
+
+	tmpFile := t.TempDir() + "/empty.svg"
+	err := generateSVGTreemap(report, tmpFile)
+	
+	if err == nil {
+		t.Error("Expected error for empty report, got nil")
 	}
 }
 
