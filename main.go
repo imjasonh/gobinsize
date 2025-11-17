@@ -9,17 +9,55 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"net/url"
 	"os"
 	"sort"
 	"strings"
+	"sync"
+
+	"golang.org/x/tools/go/packages"
 )
+
+var verbose = flag.Bool("verbose", false, "enable verbose logging for debugging attribution")
+
+var (
+	stdlibPackages     []string
+	stdlibPackagesOnce sync.Once
+)
+
+// getStdlibPackages returns the list of standard library packages
+// Source - https://stackoverflow.com/a/53541580
+// Posted by Martin Tournoij, modified by community. See post 'Timeline' for change history
+// Retrieved 2025-11-17, License - CC BY-SA 4.0
+func getStdlibPackages() []string {
+	stdlibPackagesOnce.Do(func() {
+		pkgs, err := packages.Load(nil, "std")
+		if err != nil {
+			// Fallback to empty list if loading fails
+			fmt.Fprintf(os.Stderr, "Warning: failed to get stdlib packages: %v\n", err)
+			stdlibPackages = []string{}
+			return
+		}
+		
+		stdlibPackages = make([]string, 0, len(pkgs))
+		for _, pkg := range pkgs {
+			if pkg.PkgPath != "" && pkg.PkgPath != "main" {
+				stdlibPackages = append(stdlibPackages, pkg.PkgPath)
+			}
+		}
+		
+		// Sort by length (longest first) for better matching
+		sort.Slice(stdlibPackages, func(i, j int) bool {
+			return len(stdlibPackages[i]) > len(stdlibPackages[j])
+		})
+	})
+	return stdlibPackages
+}
 
 func main() {
 	flag.Parse()
 
 	if flag.NArg() < 1 {
-		fmt.Fprintf(os.Stderr, "Usage: %s <binary>\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Usage: %s [-verbose] <binary>\n", os.Args[0])
 		os.Exit(1)
 	}
 
@@ -35,9 +73,9 @@ func main() {
 }
 
 type DependencyReport struct {
-	TotalSize int64
-	Packages  map[string]int64
-	Modules   map[string]string // map from package path to module path
+	TotalSize   int64
+	Packages    map[string]int64
+	ModulePaths []string // sorted list of module paths (longest first)
 }
 
 func analyzeBinary(path string) (*DependencyReport, error) {
@@ -49,29 +87,38 @@ func analyzeBinary(path string) (*DependencyReport, error) {
 
 	// Extract BuildInfo to get module dependencies
 	buildInfo, err := buildinfo.ReadFile(path)
-	moduleMap := make(map[string]string)
+	var modulePaths []string
 	if err == nil && buildInfo != nil {
-		// Map package paths to their module paths
+		// Add the main module path first
+		if buildInfo.Main.Path != "" {
+			modulePaths = append(modulePaths, buildInfo.Main.Path)
+		}
+		// Collect module paths from dependencies
 		for _, dep := range buildInfo.Deps {
 			if dep != nil {
-				moduleMap[dep.Path] = dep.Path
+				modulePaths = append(modulePaths, dep.Path)
 			}
 		}
 	}
 
+	// Sort module paths by length (longest first) to ensure we match the most specific module
+	sort.Slice(modulePaths, func(i, j int) bool {
+		return len(modulePaths[i]) > len(modulePaths[j])
+	})
+
 	// Try all supported binary formats in order
-	return tryParsers(f, moduleMap)
+	return tryParsers(f, modulePaths)
 }
 
 // tryParsers attempts to analyze the binary using all supported formats in order.
-func tryParsers(r io.ReaderAt, moduleMap map[string]string) (*DependencyReport, error) {
-	parsers := []func(io.ReaderAt, map[string]string) (*DependencyReport, error){
+func tryParsers(r io.ReaderAt, modulePaths []string) (*DependencyReport, error) {
+	parsers := []func(io.ReaderAt, []string) (*DependencyReport, error){
 		analyzeELF,
 		analyzeMachO,
 		analyzePE,
 	}
 	for _, parser := range parsers {
-		report, err := parser(r, moduleMap)
+		report, err := parser(r, modulePaths)
 		if err == nil {
 			return report, nil
 		}
@@ -79,40 +126,40 @@ func tryParsers(r io.ReaderAt, moduleMap map[string]string) (*DependencyReport, 
 	return nil, fmt.Errorf("unsupported binary format (not ELF, Mach-O, or PE)")
 }
 
-func analyzeELF(r io.ReaderAt, moduleMap map[string]string) (*DependencyReport, error) {
+func analyzeELF(r io.ReaderAt, modulePaths []string) (*DependencyReport, error) {
 	elfFile, err := elf.NewFile(r)
 	if err != nil {
 		return nil, err
 	}
 	defer elfFile.Close()
 
-	return analyzeSymbols(elfFile, moduleMap)
+	return analyzeSymbols(elfFile, modulePaths)
 }
 
-func analyzeMachO(r io.ReaderAt, moduleMap map[string]string) (*DependencyReport, error) {
+func analyzeMachO(r io.ReaderAt, modulePaths []string) (*DependencyReport, error) {
 	machoFile, err := macho.NewFile(r)
 	if err != nil {
 		return nil, err
 	}
 	defer machoFile.Close()
 
-	return analyzeSymbolsMachO(machoFile, moduleMap)
+	return analyzeSymbolsMachO(machoFile, modulePaths)
 }
 
-func analyzePE(r io.ReaderAt, moduleMap map[string]string) (*DependencyReport, error) {
+func analyzePE(r io.ReaderAt, modulePaths []string) (*DependencyReport, error) {
 	peFile, err := pe.NewFile(r)
 	if err != nil {
 		return nil, err
 	}
 	defer peFile.Close()
 
-	return analyzeSymbolsPE(peFile, moduleMap)
+	return analyzeSymbolsPE(peFile, modulePaths)
 }
 
-func analyzeSymbols(elfFile *elf.File, moduleMap map[string]string) (*DependencyReport, error) {
+func analyzeSymbols(elfFile *elf.File, modulePaths []string) (*DependencyReport, error) {
 	report := &DependencyReport{
-		Packages: make(map[string]int64),
-		Modules:  moduleMap,
+		Packages:    make(map[string]int64),
+		ModulePaths: modulePaths,
 	}
 
 	// Get the Go symbol table
@@ -151,7 +198,7 @@ func analyzeSymbols(elfFile *elf.File, moduleMap map[string]string) (*Dependency
 	}
 
 	// Analyze functions and their sizes
-	processSymbolTable(table, moduleMap, report)
+	processSymbolTable(table, modulePaths, report)
 
 	return report, nil
 }
@@ -163,21 +210,21 @@ func analyzeLineTable(pcln *gosym.LineTable, report *DependencyReport) (*Depende
 }
 
 // processSymbolTable analyzes function symbols and attributes their sizes to modules
-func processSymbolTable(table *gosym.Table, moduleMap map[string]string, report *DependencyReport) {
+func processSymbolTable(table *gosym.Table, modulePaths []string, report *DependencyReport) {
 	for _, fn := range table.Funcs {
-		pkgName := getPackageName(fn.Name)
-		if pkgName != "" && isExternalDependency(pkgName) {
-			moduleName := getModuleName(pkgName, moduleMap)
+		// Find which module/package this symbol belongs to
+		moduleName := findModuleForSymbol(fn.Name, modulePaths)
+		if moduleName != "" && moduleName != "main" {
 			report.Packages[moduleName] += int64(fn.End - fn.Entry)
 			report.TotalSize += int64(fn.End - fn.Entry)
 		}
 	}
 }
 
-func analyzeSymbolsMachO(machoFile *macho.File, moduleMap map[string]string) (*DependencyReport, error) {
+func analyzeSymbolsMachO(machoFile *macho.File, modulePaths []string) (*DependencyReport, error) {
 	report := &DependencyReport{
-		Packages: make(map[string]int64),
-		Modules:  moduleMap,
+		Packages:    make(map[string]int64),
+		ModulePaths: modulePaths,
 	}
 
 	// Find the __gopclntab section
@@ -221,16 +268,16 @@ func analyzeSymbolsMachO(machoFile *macho.File, moduleMap map[string]string) (*D
 
 	table, err := gosym.NewTable(symtabData, pcln)
 	if err == nil {
-		processSymbolTable(table, moduleMap, report)
+		processSymbolTable(table, modulePaths, report)
 	}
 
 	return report, nil
 }
 
-func analyzeSymbolsPE(peFile *pe.File, moduleMap map[string]string) (*DependencyReport, error) {
+func analyzeSymbolsPE(peFile *pe.File, modulePaths []string) (*DependencyReport, error) {
 	report := &DependencyReport{
-		Packages: make(map[string]int64),
-		Modules:  moduleMap,
+		Packages:    make(map[string]int64),
+		ModulePaths: modulePaths,
 	}
 
 	// Get the image base from the PE optional header
@@ -296,7 +343,7 @@ func analyzeSymbolsPE(peFile *pe.File, moduleMap map[string]string) (*Dependency
 		return nil, fmt.Errorf("failed to create symbol table: %w", err)
 	}
 
-	processSymbolTable(table, moduleMap, report)
+	processSymbolTable(table, modulePaths, report)
 	return report, nil
 }
 
@@ -431,106 +478,43 @@ func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err erro
 	return pclntab, symtab, nil
 }
 
-func getPackageName(funcName string) string {
-	// Function names in Go are typically in the form "package/path.FuncName"
-	// or "package/path.(*Type).Method"
-
-	// Skip type information completely
-	if strings.HasPrefix(funcName, "type:") {
+// findModuleForSymbol finds which module or stdlib package a symbol belongs to
+// by checking if any module path or stdlib package is contained in the symbol name
+func findModuleForSymbol(symbolName string, modulePaths []string) string {
+	// Skip compiler-generated symbols
+	if strings.HasPrefix(symbolName, "type:") || strings.HasPrefix(symbolName, "go.") {
 		return ""
 	}
-
-	// Handle method receivers like "pkg.(*Type).Method"
-	if strings.Contains(funcName, "(*") {
-		// Find the package path before (*Type)
-		idx := strings.Index(funcName, ".(")
-		if idx != -1 {
-			pkgName := funcName[:idx]
-			// URL decode the package name
-			if decoded, err := url.QueryUnescape(pkgName); err == nil {
-				return decoded
-			}
-			return pkgName
+	
+	// Check BuildInfo modules first (longest match wins due to pre-sorted order)
+	for _, modPath := range modulePaths {
+		if strings.Contains(symbolName, modPath) {
+			return modPath
 		}
 	}
-
-	// Split by last dot to separate package from function/method
-	lastDot := strings.LastIndex(funcName, ".")
-	if lastDot == -1 {
-		return ""
-	}
-
-	pkgName := funcName[:lastDot]
-
-	// Remove .init suffix if present (e.g., "github.com/user/pkg.init" -> "github.com/user/pkg")
-	if strings.HasSuffix(pkgName, ".init") {
-		pkgName = strings.TrimSuffix(pkgName, ".init")
-	}
-	// Also handle .init.N suffixes (e.g., "github.com/user/pkg.init.0")
-	if idx := strings.LastIndex(pkgName, ".init."); idx != -1 {
-		pkgName = pkgName[:idx]
-	}
-
-	// URL decode the package name
-	if decoded, err := url.QueryUnescape(pkgName); err == nil {
-		return decoded
-	}
-	return pkgName
-}
-
-func isExternalDependency(pkgName string) bool {
-	// Skip only these special compiler-generated patterns
-	if strings.HasPrefix(pkgName, "go.shape") ||
-		strings.HasPrefix(pkgName, "weak.") ||
-		strings.HasPrefix(pkgName, "unique.") {
-		return false
-	}
-
-	// Include everything else: stdlib, external deps, golang.org/x, type info, etc.
-	return pkgName != ""
-}
-
-func getModuleName(pkgName string, moduleMap map[string]string) string {
-	// First, try to find an exact match in the module map
-	if modulePath, ok := moduleMap[pkgName]; ok {
-		return modulePath
-	}
-
-	// Try to find the longest prefix match in the module map
-	longestMatch := ""
-	for modPath := range moduleMap {
-		if strings.HasPrefix(pkgName, modPath+"/") && len(modPath) > len(longestMatch) {
-			longestMatch = modPath
+	
+	// Check stdlib packages (sorted by length, longest first)
+	// Stdlib packages can include slashes (e.g., encoding/json)
+	for _, stdPkg := range getStdlibPackages() {
+		// Check if the symbol starts with the package name followed by .
+		if strings.HasPrefix(symbolName, stdPkg+".") {
+			return stdPkg
 		}
 	}
-	if longestMatch != "" {
-		return longestMatch
+	
+	// Check for "main" package
+	if strings.HasPrefix(symbolName, "main.") {
+		return "main"
 	}
-
-	// Fallback to heuristic approach for packages not in module map
-	// For standard library packages (no dots in first component), keep only first path component
-	// For external modules (domain-like), keep first 3 components for typical github.com/user/repo pattern
-
-	parts := strings.Split(pkgName, "/")
-	if len(parts) == 0 {
-		return pkgName
+	
+	// Not recognized - group as "other"
+	if *verbose {
+		fmt.Fprintf(os.Stderr, "[verbose] Symbol %q not attributed to any module, grouping as 'other'\n", symbolName)
 	}
-
-	firstPart := parts[0]
-
-	// Check if it's a domain-based module (contains a dot)
-	if strings.Contains(firstPart, ".") {
-		// For github.com/user/repo/..., golang.org/x/package/..., etc.
-		// Keep first 3 parts: github.com/user/repo or golang.org/x/package
-		if len(parts) >= 3 {
-			return strings.Join(parts[:3], "/")
-		}
-		return pkgName
-	}
-
-	// For stdlib or simple packages, return just the first component
-	return firstPart
+	return "other"
 }
+
+
 
 func printReport(report *DependencyReport) {
 	if len(report.Packages) == 0 {

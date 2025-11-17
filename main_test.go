@@ -4,67 +4,58 @@ import (
 	"testing"
 )
 
-func TestGetPackageName(t *testing.T) {
+func TestFindModuleForSymbol(t *testing.T) {
 	tests := []struct {
-		input    string
-		expected string
+		symbol      string
+		modules     []string
+		expected    string
+		description string
 	}{
-		{"github.com/gorilla/mux.NewRouter", "github.com/gorilla/mux"},
-		{"github.com/gorilla/mux.(*Router).Handle", "github.com/gorilla/mux"},
-		{"runtime.main", "runtime"},
-		{"type:.eq.debug/elf", ""},
-		{"main.main", "main"},
-		{"github.com/user/pkg/subpkg.Function", "github.com/user/pkg/subpkg"},
-		{"go.shape.string", "go.shape"},
-		// Test .init suffix removal
-		{"github.com/gohugoio/localescompressed.init", "github.com/gohugoio/localescompressed"},
-		{"github.com/gohugoio/localescompressed.init.0", "github.com/gohugoio/localescompressed"},
-		{"github.com/gohugoio/localescompressed.init.1", "github.com/gohugoio/localescompressed"},
-		{"some/package.init", "some/package"},
+		// Test module matching (longest first)
+		{"github.com/gorilla/mux.NewRouter", []string{"github.com/gorilla/mux"}, "github.com/gorilla/mux", "exact module match"},
+		{"github.com/gorilla/mux.(*Router).Handle", []string{"github.com/gorilla/mux"}, "github.com/gorilla/mux", "module with method receiver"},
+		{"github.com/user/pkg/subpkg.Function", []string{"github.com/user/pkg"}, "github.com/user/pkg", "module with subpackage"},
+		
+		// Test main module subpackages
+		{"github.com/gohugoio/hugo/common/hstrings.Truncate", []string{"github.com/gohugoio/hugo", "github.com/spf13/cobra"}, "github.com/gohugoio/hugo", "main module subpackage"},
+		
+		// Test stdlib packages
+		{"runtime.main", []string{}, "runtime", "stdlib package"},
+		{"encoding/json.Marshal", []string{}, "encoding/json", "stdlib package with slash"},
+		{"strings.Builder.grow", []string{}, "strings", "stdlib with type method"},
+		{"bytes.Buffer.WriteByte", []string{}, "bytes", "stdlib with type method"},
+		
+		// Test main package
+		{"main.main", []string{}, "main", "main package"},
+		
+		// Test compiler-generated patterns to skip
+		{"type:.eq.debug/elf", []string{}, "", "type: prefix skipped"},
+		{"go.shape.string", []string{}, "", "go. prefix skipped"},
+		
+		// Test generic instantiations - stdlib
+		{"slices.partitionCmpFunc[go.shape", []string{}, "slices", "stdlib with generic suffix"},
+		{"maps.Clone[go.shape.int,go.shape.string]", []string{}, "maps", "stdlib with multiple generic params"},
+		
+		// Test generic instantiations - external
+		{"github.com/spf13/cast.toUnsignedNumberE[go.shape", []string{"github.com/spf13/cast"}, "github.com/spf13/cast", "external module with generic suffix"},
+		
+		// Test domain-based packages with dots
+		{"google.golang.org/protobuf/internal/detrand.init", []string{"google.golang.org/protobuf"}, "google.golang.org/protobuf", "domain with dots"},
+		
+		// Test .init functions
+		{"github.com/gohugoio/localescompressed.init", []string{"github.com/gohugoio/localescompressed"}, "github.com/gohugoio/localescompressed", "module with .init"},
+		{"github.com/gohugoio/localescompressed.init.0.func1", []string{"github.com/gohugoio/localescompressed"}, "github.com/gohugoio/localescompressed", "module with .init.0.func1"},
+		
+		// Test other (unrecognized)
+		{"unicode.map", []string{}, "unicode", "stdlib base package"},
+		{"unknown/package.Function", []string{}, "other", "unrecognized package"},
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.input, func(t *testing.T) {
-			result := getPackageName(tt.input)
+		t.Run(tt.description, func(t *testing.T) {
+			result := findModuleForSymbol(tt.symbol, tt.modules)
 			if result != tt.expected {
-				t.Errorf("getPackageName(%q) = %q, want %q", tt.input, result, tt.expected)
-			}
-		})
-	}
-}
-
-func TestIsExternalDependency(t *testing.T) {
-	tests := []struct {
-		pkgName  string
-		expected bool
-	}{
-		{"github.com/gorilla/mux", true},
-		{"github.com/user/repo", true},
-		{"golang.org/x/crypto", true},
-		{"gopkg.in/yaml.v2", true},
-		{"go.uber.org/zap", true},
-		{"runtime", true},
-		{"main", true},
-		{"sync", true},
-		{"internal/cpu", true},
-		{"debug/elf", true},
-		{"net/http", true},
-		{"crypto/tls", true},
-		{"encoding/json", true},
-		{"type:.eq.net/http", true},
-		{"go.shape.string", false}, // Filtered out
-		{"vendor/golang.org/x/sys/cpu", true},
-		{"slices", true},
-		{"weak.pointer", false},  // Filtered out
-		{"unique.handle", false}, // Filtered out
-		{"", false},              // Empty string
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.pkgName, func(t *testing.T) {
-			result := isExternalDependency(tt.pkgName)
-			if result != tt.expected {
-				t.Errorf("isExternalDependency(%q) = %v, want %v", tt.pkgName, result, tt.expected)
+				t.Errorf("findModuleForSymbol(%q, %v) = %q, want %q", tt.symbol, tt.modules, result, tt.expected)
 			}
 		})
 	}
@@ -91,68 +82,6 @@ func TestFormatSize(t *testing.T) {
 	}
 }
 
-func TestGetModuleName(t *testing.T) {
-	// Test without module map (heuristic-based)
-	t.Run("without module map", func(t *testing.T) {
-		tests := []struct {
-			pkgName  string
-			expected string
-		}{
-			{"github.com/gorilla/mux", "github.com/gorilla/mux"},
-			{"github.com/gorilla/mux/subpkg", "github.com/gorilla/mux"},
-			{"github.com/user/repo/internal/pkg", "github.com/user/repo"},
-			{"golang.org/x/crypto", "golang.org/x/crypto"},
-			{"golang.org/x/crypto/ssh", "golang.org/x/crypto"},
-			{"gopkg.in/yaml.v2", "gopkg.in/yaml.v2"},
-			{"runtime", "runtime"},
-			{"net/http", "net"},
-			{"crypto/tls", "crypto"},
-			{"encoding/json", "encoding"},
-			{"type:.eq.net/http", "type:.eq.net/http"}, // type info keeps full name
-			{"main", "main"},
-		}
-
-		emptyModuleMap := make(map[string]string)
-		for _, tt := range tests {
-			t.Run(tt.pkgName, func(t *testing.T) {
-				result := getModuleName(tt.pkgName, emptyModuleMap)
-				if result != tt.expected {
-					t.Errorf("getModuleName(%q, emptyMap) = %q, want %q", tt.pkgName, result, tt.expected)
-				}
-			})
-		}
-	})
-
-	// Test with module map (BuildInfo-based)
-	t.Run("with module map", func(t *testing.T) {
-		moduleMap := map[string]string{
-			"github.com/gohugoio/localescompressed": "github.com/gohugoio/localescompressed",
-			"github.com/evanw/esbuild":              "github.com/evanw/esbuild",
-			"golang.org/x/text":                     "golang.org/x/text",
-		}
-
-		tests := []struct {
-			pkgName  string
-			expected string
-		}{
-			{"github.com/gohugoio/localescompressed", "github.com/gohugoio/localescompressed"},
-			{"github.com/gohugoio/localescompressed/internal", "github.com/gohugoio/localescompressed"},
-			{"github.com/evanw/esbuild/pkg/api", "github.com/evanw/esbuild"},
-			{"golang.org/x/text/unicode", "golang.org/x/text"},
-			{"unknown/package", "unknown"},
-		}
-
-		for _, tt := range tests {
-			t.Run(tt.pkgName, func(t *testing.T) {
-				result := getModuleName(tt.pkgName, moduleMap)
-				if result != tt.expected {
-					t.Errorf("getModuleName(%q, moduleMap) = %q, want %q", tt.pkgName, result, tt.expected)
-				}
-			})
-		}
-	})
-}
-
 func TestTruncatePackageName(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -172,3 +101,5 @@ func TestTruncatePackageName(t *testing.T) {
 		}
 	}
 }
+
+
