@@ -236,3 +236,23 @@ t.Errorf("getPackageName(%q) = %q, want %q", tt.input, result, tt.expected)
 })
 }
 }
+
+func TestGetPackageNameGoogleGolang(t *testing.T) {
+tests := []struct {
+funcName string
+expected string
+}{
+{"google.golang.org/protobuf/internal/detrand.init", "google.golang.org/protobuf/internal/detrand"},
+{"google.golang.org/protobuf/proto.Marshal", "google.golang.org/protobuf/proto"},
+{"google.golang.org/genproto/googleapis/api.Something", "google.golang.org/genproto/googleapis/api"},
+}
+
+for _, tt := range tests {
+t.Run(tt.funcName, func(t *testing.T) {
+result := getPackageName(tt.funcName)
+if result != tt.expected {
+t.Errorf("getPackageName(%q) = %q, want %q", tt.funcName, result, tt.expected)
+}
+})
+}
+}

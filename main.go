@@ -17,6 +17,19 @@ import (
 
 var verbose = flag.Bool("verbose", false, "enable verbose logging for debugging attribution")
 
+var stdlibPackages = map[string]bool{
+	// Common stdlib top-level packages
+	"archive": true, "bufio": true, "bytes": true, "cmp": true, "compress": true,
+	"container": true, "context": true, "crypto": true, "database": true, "debug": true,
+	"embed": true, "encoding": true, "errors": true, "expvar": true, "flag": true,
+	"fmt": true, "go": true, "hash": true, "html": true, "image": true, "index": true,
+	"internal": true, "io": true, "log": true, "maps": true, "math": true, "mime": true,
+	"net": true, "os": true, "path": true, "plugin": true, "reflect": true, "regexp": true,
+	"runtime": true, "slices": true, "sort": true, "strconv": true, "strings": true,
+	"sync": true, "syscall": true, "testing": true, "text": true, "time": true,
+	"unicode": true, "unique": true, "unsafe": true, "vendor": true, "main": true,
+}
+
 func main() {
 	flag.Parse()
 
@@ -176,9 +189,9 @@ func analyzeLineTable(pcln *gosym.LineTable, report *DependencyReport) (*Depende
 // processSymbolTable analyzes function symbols and attributes their sizes to modules
 func processSymbolTable(table *gosym.Table, modulePaths []string, report *DependencyReport) {
 	for _, fn := range table.Funcs {
-		pkgName := getPackageName(fn.Name)
-		if pkgName != "" && isExternalDependency(pkgName) {
-			moduleName := getModuleName(pkgName, modulePaths)
+		// Find which module/package this symbol belongs to
+		moduleName := findModuleForSymbol(fn.Name, modulePaths)
+		if moduleName != "" && moduleName != "main" {
 			report.Packages[moduleName] += int64(fn.End - fn.Entry)
 			report.TotalSize += int64(fn.End - fn.Entry)
 		}
@@ -442,6 +455,43 @@ func extractTablesFromSymbols(peFile *pe.File) (pclntab, symtab []byte, err erro
 	return pclntab, symtab, nil
 }
 
+// findModuleForSymbol finds which module or stdlib package a symbol belongs to
+// by checking if any module path or stdlib package is contained in the symbol name
+func findModuleForSymbol(symbolName string, modulePaths []string) string {
+	// Skip compiler-generated symbols
+	if strings.HasPrefix(symbolName, "type:") || strings.HasPrefix(symbolName, "go.") {
+		return ""
+	}
+	
+	// Check BuildInfo modules first (longest match wins due to pre-sorted order)
+	for _, modPath := range modulePaths {
+		if strings.Contains(symbolName, modPath) {
+			return modPath
+		}
+	}
+	
+	// Check stdlib packages
+	for stdPkg := range stdlibPackages {
+		// For stdlib, check if the symbol starts with the package name followed by . or /
+		if strings.HasPrefix(symbolName, stdPkg+".") || strings.HasPrefix(symbolName, stdPkg+"/") {
+			return stdPkg
+		}
+	}
+	
+	// Check for "main" package
+	if strings.HasPrefix(symbolName, "main.") {
+		return "main"
+	}
+	
+	// Not recognized - group as "other"
+	if *verbose {
+		fmt.Fprintf(os.Stderr, "[verbose] Symbol %q not attributed to any module, grouping as 'other'\n", symbolName)
+	}
+	return "other"
+}
+
+// getPackageName is kept for backward compatibility but is now deprecated
+// Use findModuleForSymbol instead
 func getPackageName(funcName string) string {
 	// Function names in Go are typically in the form "package/path.FuncName"
 	// or "package/path.(*Type).Method"
@@ -494,24 +544,22 @@ func getPackageName(funcName string) string {
 	}
 
 	// Handle method receivers like "pkg.(*Type).Method"
-	// First extract the part before (*Type) so we can process it further
-	hadMethodReceiver := false
+	// The part before (*Type) is the package path
 	if strings.Contains(funcName, "(*") {
-		// Find the package path before (*Type)
 		idx := strings.Index(funcName, ".(")
 		if idx != -1 {
-			funcName = funcName[:idx]
-			hadMethodReceiver = true
-			// Continue processing to handle Type.method patterns that might be before the (*Type)
-			// e.g., "pkg.type.method.(*Type).Method" should extract "pkg"
+			pkgName := funcName[:idx]
+			// URL decode and return immediately
+			if decoded, err := url.QueryUnescape(pkgName); err == nil {
+				return decoded
+			}
+			return pkgName
 		}
 	}
 
-	// Handle .init functions specially - they should be attributed to the package
-	// MUST be done BEFORE Type.method detection to avoid issues with .init.N.funcM patterns
-	// e.g., "github.com/user/pkg.init" or "github.com/user/pkg.init.0.func1"
+	// Handle .init functions specially - the package name is everything before .init
+	// e.g., "github.com/user/pkg.init" → "github.com/user/pkg"
 	if strings.HasSuffix(funcName, ".init") {
-		// Remove the .init suffix and return
 		pkgName := strings.TrimSuffix(funcName, ".init")
 		if decoded, err := url.QueryUnescape(pkgName); err == nil {
 			return decoded
@@ -527,70 +575,37 @@ func getPackageName(funcName string) string {
 		return pkgName
 	}
 
-	// Handle type methods like "pkg.Type.Method" or "strings.Builder.grow"
-	// We need to extract the package before the type name
-	// Split by dots and check if we have Type.Method pattern
-	parts := strings.Split(funcName, ".")
-	
-	// If we just processed a (*Type).Method and have only 2 parts like ["github", "com/user/pkg"],
-	// this is already a valid package path, so don't process it further
-	if hadMethodReceiver && len(parts) == 2 && strings.Contains(parts[1], "/") {
-		// URL decode the package name
-		if decoded, err := url.QueryUnescape(funcName); err == nil {
-			return decoded
-		}
-		return funcName
-	}
-	
-	if len(parts) >= 3 {
-		// For "strings.Builder.grow", we want "strings"
-		// For "github.com/user/pkg.MyType.Method", we want "github.com/user/pkg"
-		// For "runtime.traceLocker.Lock", we want "runtime"
-		// For "google.golang.org/protobuf/internal/detrand", we want the full path
-		
-		// Check if ANY part contains "/" to determine if this is a domain-based package
-		hasSlash := false
-		for _, part := range parts {
-			if strings.Contains(part, "/") {
-				hasSlash = true
-				break
-			}
-		}
-		
-		if !hasSlash {
-			// For stdlib packages with 3+ parts, assume pkg.type.method pattern
-			// and extract just the first part
+	// For stdlib packages with Type.method patterns (e.g., "runtime.traceLocker.Lock"),
+	// we need to extract just the package name (e.g., "runtime")
+	// Only apply this if there's no slash AND the first component is a known stdlib package
+	if !strings.Contains(funcName, "/") {
+		parts := strings.Split(funcName, ".")
+		if len(parts) >= 3 {
 			firstPart := parts[0]
-			pkgName := firstPart
-			// URL decode the package name
-			if decoded, err := url.QueryUnescape(pkgName); err == nil {
-				return decoded
+			// Verify it's actually a stdlib package before assuming Type.method pattern
+			if stdlibPackages[firstPart] {
+				return firstPart
 			}
-			return pkgName
-		}
-		
-		// For non-stdlib packages with domain paths (e.g., github.com/user/pkg.Type.Method)
-		// Check if we have at least 4 parts and the pattern looks like a Type.method
-		if len(parts) >= 4 {
-			// The second-to-last part should be the Type name
-			// Remove both the Type and method to get the package path
-			pkgParts := parts[:len(parts)-2]
-			pkgName := strings.Join(pkgParts, ".")
-			// URL decode the package name
-			if decoded, err := url.QueryUnescape(pkgName); err == nil {
-				return decoded
-			}
-			return pkgName
 		}
 	}
-
-	// Split by last dot to separate package from function/method
+	
+	// Split by last dot or slash to separate package from function/method
+	// For paths like "google.golang.org/protobuf/internal/detrand", we want
+	// "google.golang.org/protobuf/internal" (everything before the last component)
+	lastSlash := strings.LastIndex(funcName, "/")
 	lastDot := strings.LastIndex(funcName, ".")
-	if lastDot == -1 {
+	
+	// Use whichever comes last (slash or dot) as the separator
+	separator := lastDot
+	if lastSlash > lastDot {
+		separator = lastSlash
+	}
+	
+	if separator == -1 {
 		return ""
 	}
-
-	pkgName := funcName[:lastDot]
+	
+	pkgName := funcName[:separator]
 
 	// URL decode the package name
 	if decoded, err := url.QueryUnescape(pkgName); err == nil {
@@ -632,26 +647,21 @@ func getModuleName(pkgName string, modulePaths []string) string {
 	}
 
 	// If not in module dependencies, check if it's a standard library package
-	// Stdlib packages don't contain dots in the first path component
-	// (e.g., "runtime", "net/http", "encoding/json")
+	// or a local package (no domain in path)
 	firstPart := parts[0]
 	
+	// For single-component names with dots (e.g., "unicode.map"), extract base
+	if len(parts) == 1 && strings.Contains(firstPart, ".") {
+		firstPart = strings.Split(firstPart, ".")[0]
+	}
+	
+	// If first component has no dot, it's either stdlib or a local package
+	// Return the first component
 	if !strings.Contains(firstPart, ".") {
-		// No dot in first component - stdlib package
 		return firstPart
 	}
 
-	// First component contains a dot
-	// If it's a single component (no /), treat as stdlib with suffix and extract base
-	// (e.g., "unicode.map" → "unicode")
-	// If multiple components, it's a domain-based package not in BuildInfo
-	if len(parts) == 1 {
-		// Single component with dot - extract base before first dot
-		base := strings.Split(firstPart, ".")[0]
-		return base
-	}
-
-	// Multiple components with dot in first - not in BuildInfo
+	// First component contains a dot - it's a domain-based package not in BuildInfo
 	if *verbose {
 		fmt.Fprintf(os.Stderr, "[verbose] Package %q not in BuildInfo and not stdlib, attributing to 'other'\n", pkgName)
 	}
