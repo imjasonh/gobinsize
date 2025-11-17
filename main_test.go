@@ -123,13 +123,13 @@ func TestFormatSize(t *testing.T) {
 }
 
 func TestGetModuleName(t *testing.T) {
-	// Test without module map (should return first component for stdlib, "other" for unknown)
-	t.Run("without module map", func(t *testing.T) {
+	// Test without module paths (should return first component for stdlib, "other" for unknown)
+	t.Run("without module paths", func(t *testing.T) {
 		tests := []struct {
 			pkgName  string
 			expected string
 		}{
-			// Without moduleMap, domain-based packages go to "other"
+			// Without modulePaths, domain-based packages go to "other"
 			{"github.com/gorilla/mux", "other"},
 			{"github.com/gorilla/mux/subpkg", "other"},
 			{"github.com/user/repo/internal/pkg", "other"},
@@ -143,25 +143,30 @@ func TestGetModuleName(t *testing.T) {
 			{"encoding/json", "encoding"},
 			{"type:.eq.net/http", "other"}, // type info with domain
 			{"main", "main"},
+			// Stdlib packages with .map suffix should still return the base package
+			{"unicode.map", "unicode"},
 		}
 
-		emptyModuleMap := make(map[string]string)
+		emptyModulePaths := []string{}
 		for _, tt := range tests {
 			t.Run(tt.pkgName, func(t *testing.T) {
-				result := getModuleName(tt.pkgName, emptyModuleMap)
+				result := getModuleName(tt.pkgName, emptyModulePaths)
 				if result != tt.expected {
-					t.Errorf("getModuleName(%q, emptyMap) = %q, want %q", tt.pkgName, result, tt.expected)
+					t.Errorf("getModuleName(%q, emptyPaths) = %q, want %q", tt.pkgName, result, tt.expected)
 				}
 			})
 		}
 	})
 
-	// Test with module map (BuildInfo-based)
-	t.Run("with module map", func(t *testing.T) {
-		moduleMap := map[string]string{
-			"github.com/gohugoio/localescompressed": "github.com/gohugoio/localescompressed",
-			"github.com/evanw/esbuild":              "github.com/evanw/esbuild",
-			"golang.org/x/text":                     "golang.org/x/text",
+	// Test with module paths (BuildInfo-based)
+	t.Run("with module paths", func(t *testing.T) {
+		// Sorted by length (longest first) as would be done in analyzeBinary
+		modulePaths := []string{
+			"github.com/gohugoio/localescompressed",
+			"go.uber.org/automaxprocs",
+			"github.com/gohugoio/hugo",
+			"github.com/evanw/esbuild",
+			"golang.org/x/text",
 		}
 
 		tests := []struct {
@@ -170,16 +175,20 @@ func TestGetModuleName(t *testing.T) {
 		}{
 			{"github.com/gohugoio/localescompressed", "github.com/gohugoio/localescompressed"},
 			{"github.com/gohugoio/localescompressed/internal", "github.com/gohugoio/localescompressed"},
+			{"github.com/gohugoio/hugo/common/hstrings", "github.com/gohugoio/hugo"}, // Should match hugo module
 			{"github.com/evanw/esbuild/pkg/api", "github.com/evanw/esbuild"},
 			{"golang.org/x/text/unicode", "golang.org/x/text"},
-			{"unknown/package", "unknown"}, // Packages not in moduleMap and without domain return first component
+			{"go.uber.org/automaxprocs", "go.uber.org/automaxprocs"},
+			{"go.uber", "other"}, // Partial name, not in BuildInfo
+			{"unknown/package", "unknown"}, // Packages not in BuildInfo and without domain return first component
+			{"unicode.map", "unicode"}, // Stdlib with .map suffix
 		}
 
 		for _, tt := range tests {
 			t.Run(tt.pkgName, func(t *testing.T) {
-				result := getModuleName(tt.pkgName, moduleMap)
+				result := getModuleName(tt.pkgName, modulePaths)
 				if result != tt.expected {
-					t.Errorf("getModuleName(%q, moduleMap) = %q, want %q", tt.pkgName, result, tt.expected)
+					t.Errorf("getModuleName(%q, modulePaths) = %q, want %q", tt.pkgName, result, tt.expected)
 				}
 			})
 		}
