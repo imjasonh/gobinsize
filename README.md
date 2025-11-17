@@ -19,8 +19,13 @@ go build -o gobinsize .
 ## Usage
 
 ```bash
-gobinsize <path-to-binary>
+gobinsize [-verbose] [-svg output.svg] <path-to-binary>
 ```
+
+### Options
+
+- `-verbose`: Enable verbose logging for debugging symbol attribution
+- `-svg <file>`: Generate an SVG treemap visualization of dependencies
 
 ### Example
 
@@ -35,6 +40,20 @@ net                                                   6.59 KB (  9.1%)
 
 Total size: 72.59 KB
 ```
+
+### SVG Treemap Visualization
+
+Generate a visual treemap to see your dependencies at a glance:
+
+```bash
+$ gobinsize -svg dependencies.svg ./myapp
+Dependency Size Report
+======================
+...
+SVG treemap written to dependencies.svg
+```
+
+The treemap uses colors to distinguish packages and sizes rectangles proportionally to each dependency's contribution to the binary size.
 
 ## How It Works
 
