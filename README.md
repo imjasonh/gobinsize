@@ -2,6 +2,8 @@
 
 A Go program that analyzes Go binaries to determine how much of their size can be attributed to external dependencies.
 
+![](https://raw.githubusercontent.com/imjasonh/gobinsize/refs/heads/main/kubectl-treemap.svg)
+
 ## Installation
 
 ```bash
