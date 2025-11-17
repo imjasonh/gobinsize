@@ -4,508 +4,504 @@
      xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink">
 <rect x="0" y="0" width="1200" height="800" style="fill:white" />
-<text x="600" y="30" style="text-anchor:middle;font-size:24px;font-family:Arial,sans-serif;font-weight:bold" >./gobinsize - 2.38 MB</text>
+<text x="600" y="30" style="text-anchor:middle;font-size:24px;font-family:Arial,sans-serif;font-weight:bold" >gobinsize - 6.21 MB</text>
 <g  >
-<title>go/types - 467.62 KB</title>
-<rect x="10" y="50" width="527" height="316" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="273" y="203" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >go/types</text>
-<text x="273" y="218" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >467.62 KB</text>
+<title>runtime - 1.63 MB</title>
+<rect x="10" y="50" width="437" height="522" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="228" y="306" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >runtime</text>
+<text x="228" y="321" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >1.63 MB</text>
 </g>
 <g  >
-<title>runtime - 428.06 KB</title>
-<rect x="10" y="366" width="527" height="290" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="273" y="506" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >runtime</text>
-<text x="273" y="521" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >428.06 KB</text>
+<title>other - 1.00 MB</title>
+<rect x="447" y="50" width="269" height="522" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="581" y="306" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >other</text>
+<text x="581" y="321" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >1.00 MB</text>
 </g>
 <g  >
-<title>golang.org/x/tools - 180.97 KB</title>
-<rect x="537" y="50" width="174" height="372" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="624" y="231" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >golang.org/x/tools</text>
-<text x="624" y="246" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >180.97 KB</text>
+<title>go/types - 628.99 KB</title>
+<rect x="10" y="572" width="396" height="218" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="208" y="676" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >go/types</text>
+<text x="208" y="691" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >628.99 KB</text>
 </g>
 <g  >
-<title>math/big - 113.44 KB</title>
-<rect x="537" y="422" width="174" height="234" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="624" y="534" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >math/big</text>
-<text x="624" y="549" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >113.44 KB</text>
+<title>internal - 491.93 KB</title>
+<rect x="406" y="572" width="310" height="218" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="561" y="676" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >internal</text>
+<text x="561" y="691" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >491.93 KB</text>
 </g>
 <g  >
-<title>go/parser - 107.47 KB</title>
-<rect x="10" y="656" width="285" height="134" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="152" y="718" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >go/parser</text>
-<text x="152" y="733" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >107.47 KB</text>
+<title>golang.org/x/tools - 447.57 KB</title>
+<rect x="716" y="50" width="141" height="435" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="786" y="262" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >golang.org/x/tools</text>
+<text x="786" y="277" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >447.57 KB</text>
 </g>
 <g  >
-<title>encoding/json - 84.62 KB</title>
-<rect x="295" y="656" width="226" height="134" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="408" y="718" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >encoding/json</text>
-<text x="408" y="733" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >84.62 KB</text>
+<title>math/big - 163.05 KB</title>
+<rect x="716" y="485" width="141" height="159" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="786" y="559" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >math/big</text>
+<text x="786" y="574" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >163.05 KB</text>
 </g>
 <g  >
-<title>time - 71.00 KB</title>
-<rect x="521" y="656" width="190" height="134" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="616" y="718" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >time</text>
-<text x="616" y="733" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >71.00 KB</text>
+<title>go/parser - 149.07 KB</title>
+<rect x="716" y="644" width="141" height="146" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="786" y="712" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >go/parser</text>
+<text x="786" y="727" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >149.07 KB</text>
 </g>
 <g  >
-<title>slices - 64.91 KB</title>
-<rect x="711" y="50" width="182" height="127" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="802" y="108" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >slices</text>
-<text x="802" y="123" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >64.91 KB</text>
+<title>encoding/json - 124.73 KB</title>
+<rect x="857" y="50" width="118" height="145" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="916" y="117" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >encoding/json</text>
+<text x="916" y="132" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >124.73 KB</text>
 </g>
 <g  >
-<title>reflect - 64.78 KB</title>
-<rect x="711" y="177" width="182" height="128" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="802" y="236" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >reflect</text>
-<text x="802" y="251" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >64.78 KB</text>
+<title>reflect - 101.89 KB</title>
+<rect x="857" y="195" width="118" height="120" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="916" y="250" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >reflect</text>
+<text x="916" y="265" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >101.89 KB</text>
 </g>
 <g  >
-<title>regexp/syntax - 62.34 KB</title>
-<rect x="711" y="305" width="182" height="123" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="802" y="361" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >regexp/syntax</text>
-<text x="802" y="376" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >62.34 KB</text>
+<title>time - 97.83 KB</title>
+<rect x="857" y="315" width="118" height="114" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="916" y="367" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >time</text>
+<text x="916" y="382" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >97.83 KB</text>
 </g>
 <g  >
-<title>fmt - 60.69 KB</title>
-<rect x="711" y="428" width="182" height="120" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="802" y="483" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >fmt</text>
-<text x="802" y="498" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >60.69 KB</text>
+<title>fmt - 85.73 KB</title>
+<rect x="857" y="429" width="118" height="101" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="916" y="474" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >fmt</text>
+<text x="916" y="489" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >85.73 KB</text>
 </g>
 <g  >
-<title>internal/zstd - 44.72 KB</title>
-<rect x="711" y="548" width="97" height="165" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="759" y="625" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >internal/zstd</text>
-<text x="759" y="640" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >44.72 KB</text>
+<title>regexp/syntax - 83.01 KB</title>
+<rect x="857" y="530" width="118" height="97" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="916" y="573" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >regexp/syntax</text>
+<text x="916" y="588" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >83.01 KB</text>
 </g>
 <g  >
-<title>os - 39.06 KB</title>
-<rect x="808" y="548" width="85" height="165" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="850" y="625" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >os</text>
-<text x="850" y="640" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >39.06 KB</text>
+<title>slices - 71.88 KB</title>
+<rect x="857" y="627" width="118" height="84" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="916" y="664" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >slices</text>
+<text x="916" y="679" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >71.88 KB</text>
 </g>
 <g  >
-<title>strconv - 38.78 KB</title>
-<rect x="711" y="713" width="182" height="77" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="802" y="746" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >strconv</text>
-<text x="802" y="761" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >38.78 KB</text>
+<title>strconv - 66.65 KB</title>
+<rect x="857" y="711" width="118" height="79" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="916" y="745" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >strconv</text>
+<text x="916" y="760" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >66.65 KB</text>
 </g>
 <g  >
-<title>regexp - 30.69 KB</title>
-<rect x="893" y="50" width="134" height="81" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="960" y="85" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >regexp</text>
-<text x="960" y="100" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >30.69 KB</text>
+<title>os - 64.45 KB</title>
+<rect x="975" y="50" width="104" height="84" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1027" y="87" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >os</text>
+<text x="1027" y="102" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >64.45 KB</text>
 </g>
 <g  >
-<title>syscall - 23.91 KB</title>
-<rect x="893" y="131" width="134" height="64" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="960" y="158" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >syscall</text>
-<text x="960" y="173" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >23.91 KB</text>
+<title>syscall - 59.99 KB</title>
+<rect x="975" y="134" width="104" height="80" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1027" y="169" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >syscall</text>
+<text x="1027" y="184" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >59.99 KB</text>
 </g>
 <g  >
-<title>debug/elf - 23.72 KB</title>
-<rect x="893" y="195" width="67" height="126" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="926" y="253" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >debug/elf</text>
-<text x="926" y="268" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >23.72 KB</text>
+<title>go/ast - 56.87 KB</title>
+<rect x="975" y="214" width="104" height="75" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1027" y="246" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >go/ast</text>
+<text x="1027" y="261" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >56.87 KB</text>
 </g>
 <g  >
-<title>crypto/internal/fips140/sha3 - 23.59 KB</title>
-<rect x="960" y="195" width="67" height="126" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="993" y="253" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >crypto...</text>
-<text x="993" y="268" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >23.59 KB</text>
+<title>internal/zstd - 50.75 KB</title>
+<rect x="975" y="289" width="104" height="67" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1027" y="317" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >internal/zstd</text>
+<text x="1027" y="332" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >50.75 KB</text>
 </g>
 <g  >
-<title>go/constant - 23.25 KB</title>
-<rect x="893" y="321" width="68" height="121" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="927" y="376" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >go/con...</text>
-<text x="927" y="391" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >23.25 KB</text>
+<title>debug/elf - 49.24 KB</title>
+<rect x="975" y="356" width="104" height="64" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1027" y="383" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >debug/elf</text>
+<text x="1027" y="398" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >49.24 KB</text>
 </g>
 <g  >
-<title>crypto/internal/fips140/sha512 - 22.28 KB</title>
-<rect x="961" y="321" width="66" height="121" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="994" y="376" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >crypto...</text>
-<text x="994" y="391" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >22.28 KB</text>
+<title>go/constant - 41.73 KB</title>
+<rect x="975" y="420" width="104" height="55" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1027" y="442" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >go/constant</text>
+<text x="1027" y="457" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >41.73 KB</text>
 </g>
 <g  >
-<title>go/ast - 22.16 KB</title>
-<rect x="893" y="442" width="134" height="60" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="960" y="467" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >go/ast</text>
-<text x="960" y="482" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >22.16 KB</text>
+<title>regexp - 40.97 KB</title>
+<rect x="975" y="475" width="104" height="55" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1027" y="497" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >regexp</text>
+<text x="1027" y="512" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >40.97 KB</text>
 </g>
 <g  >
-<title>crypto/internal/fips140/sha256 - 19.25 KB</title>
-<rect x="893" y="502" width="68" height="100" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="927" y="547" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >crypto...</text>
-<text x="927" y="562" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >19.25 KB</text>
+<title>crypto/internal/fips140/aes - 31.83 KB</title>
+<rect x="975" y="530" width="52" height="83" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1001" y="566" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >cryp...</text>
+<text x="1001" y="581" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >31.83 KB</text>
 </g>
 <g  >
-<title>debug/pe - 18.66 KB</title>
-<rect x="961" y="502" width="66" height="100" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="994" y="547" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >debug/pe</text>
-<text x="994" y="562" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >18.66 KB</text>
+<title>compress/flate - 31.09 KB</title>
+<rect x="1027" y="530" width="52" height="83" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1053" y="566" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >comp...</text>
+<text x="1053" y="581" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >31.09 KB</text>
 </g>
 <g  >
-<title>strings - 18.06 KB</title>
-<rect x="893" y="602" width="134" height="49" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="960" y="621" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >strings</text>
-<text x="960" y="636" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >18.06 KB</text>
+<title>internal/reflectlite - 31.05 KB</title>
+<rect x="975" y="613" width="52" height="81" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1001" y="648" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >inte...</text>
+<text x="1001" y="663" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >31.05 KB</text>
 </g>
 <g  >
-<title>internal/poll - 18.00 KB</title>
-<rect x="893" y="651" width="67" height="95" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="926" y="693" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >intern...</text>
-<text x="926" y="708" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >18.00 KB</text>
+<title>strings - 30.12 KB</title>
+<rect x="1027" y="613" width="52" height="81" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1053" y="648" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >strings</text>
+<text x="1053" y="663" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >30.12 KB</text>
 </g>
 <g  >
-<title>compress/flate - 17.72 KB</title>
-<rect x="960" y="651" width="67" height="95" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="993" y="693" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >compre...</text>
-<text x="993" y="708" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >17.72 KB</text>
+<title>internal/runtime/maps - 24.68 KB</title>
+<rect x="975" y="694" width="69" height="48" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1009" y="713" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >intern...</text>
+<text x="1009" y="728" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >24.68 KB</text>
 </g>
 <g  >
-<title>debug/gosym - 16.09 KB</title>
-<rect x="893" y="746" width="134" height="44" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="960" y="763" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >debug/gosym</text>
+<title>os/exec - 24.10 KB</title>
+<rect x="975" y="742" width="69" height="48" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1009" y="761" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >os/exec</text>
+<text x="1009" y="776" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >24.10 KB</text>
 </g>
 <g  >
-<title>os/exec - 15.84 KB</title>
-<rect x="1027" y="50" width="60" height="93" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1057" y="91" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >os/exec</text>
-<text x="1057" y="106" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >15.84 KB</text>
+<title>go/scanner - 23.83 KB</title>
+<rect x="1044" y="694" width="35" height="96" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>debug/macho - 15.81 KB</title>
-<rect x="1087" y="50" width="60" height="93" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1117" y="91" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >debug...</text>
-<text x="1117" y="106" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >15.81 KB</text>
+<title>unicode - 23.70 KB</title>
+<rect x="1079" y="50" width="41" height="79" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>unicode - 15.53 KB</title>
-<rect x="1027" y="143" width="62" height="89" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1058" y="182" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >unicode</text>
-<text x="1058" y="197" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >15.53 KB</text>
+<title>debug/pe - 23.48 KB</title>
+<rect x="1120" y="50" width="41" height="79" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>go/scanner - 14.12 KB</title>
-<rect x="1089" y="143" width="58" height="89" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1118" y="182" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >go/sc...</text>
-<text x="1118" y="197" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >14.12 KB</text>
+<title>internal/poll - 22.30 KB</title>
+<rect x="1079" y="129" width="41" height="74" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/aes - 13.62 KB</title>
-<rect x="1027" y="232" width="82" height="59" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1068" y="256" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >crypto/in...</text>
-<text x="1068" y="271" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >13.62 KB</text>
+<title>encoding/binary - 21.71 KB</title>
+<rect x="1120" y="129" width="41" height="74" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/reflectlite - 13.03 KB</title>
-<rect x="1027" y="291" width="82" height="58" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1068" y="315" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >internal/...</text>
-<text x="1068" y="330" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >13.03 KB</text>
+<title>debug/macho - 20.83 KB</title>
+<rect x="1079" y="203" width="41" height="70" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>encoding/binary - 12.25 KB</title>
-<rect x="1109" y="232" width="38" height="117" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>debug/gosym - 20.48 KB</title>
+<rect x="1120" y="203" width="41" height="70" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/runtime/maps - 11.97 KB</title>
-<rect x="1027" y="349" width="82" height="52" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1068" y="370" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >internal/...</text>
-<text x="1068" y="385" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >11.97 KB</text>
+<title>context - 20.07 KB</title>
+<rect x="1079" y="273" width="82" height="34" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1120" y="285" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >context</text>
 </g>
 <g  >
-<title>internal/buildcfg - 11.88 KB</title>
-<rect x="1027" y="401" width="82" height="52" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1068" y="422" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >internal/...</text>
-<text x="1068" y="437" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >11.88 KB</text>
+<title>sync - 18.37 KB</title>
+<rect x="1079" y="307" width="41" height="60" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>flag - 10.91 KB</title>
-<rect x="1109" y="349" width="38" height="104" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>go/token - 17.82 KB</title>
+<rect x="1120" y="307" width="41" height="60" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>sort - 9.34 KB</title>
-<rect x="1027" y="453" width="41" height="81" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>flag - 17.61 KB</title>
+<rect x="1079" y="367" width="41" height="60" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>log - 9.16 KB</title>
-<rect x="1068" y="453" width="41" height="81" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/buildcfg - 17.43 KB</title>
+<rect x="1120" y="367" width="41" height="60" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>debug/buildinfo - 8.47 KB</title>
-<rect x="1109" y="453" width="38" height="81" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/ajstarks/svgo - 16.58 KB</title>
+<rect x="1079" y="427" width="55" height="41" style="fill:#f39c12;stroke:white;stroke-width:2" />
+<text x="1106" y="442" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >gith...</text>
 </g>
 <g  >
-<title>internal/bisect - 7.75 KB</title>
-<rect x="1027" y="534" width="60" height="45" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1057" y="551" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >inter...</text>
-<text x="1057" y="566" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >7.75 KB</text>
+<title>bytes - 16.02 KB</title>
+<rect x="1079" y="468" width="55" height="41" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1106" y="483" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >bytes</text>
 </g>
 <g  >
-<title>debug/dwarf - 7.66 KB</title>
-<rect x="1027" y="579" width="60" height="46" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1057" y="597" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >debug...</text>
-<text x="1057" y="612" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >7.66 KB</text>
+<title>sort - 15.86 KB</title>
+<rect x="1134" y="427" width="27" height="82" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>bytes - 7.66 KB</title>
-<rect x="1087" y="534" width="60" height="46" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1117" y="552" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >bytes</text>
-<text x="1117" y="567" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >7.66 KB</text>
+<title>io - 15.77 KB</title>
+<rect x="1079" y="509" width="42" height="51" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>context - 7.41 KB</title>
-<rect x="1087" y="580" width="60" height="45" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1117" y="597" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >context</text>
-<text x="1117" y="612" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >7.41 KB</text>
+<title>golang.org/x/sync - 14.91 KB</title>
+<rect x="1121" y="509" width="40" height="51" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>go/build/constraint - 7.25 KB</title>
-<rect x="1027" y="625" width="41" height="63" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>debug/buildinfo - 14.73 KB</title>
+<rect x="1079" y="560" width="41" height="49" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/sync - 7.00 KB</title>
-<rect x="1068" y="625" width="40" height="63" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>go/build/constraint - 14.45 KB</title>
+<rect x="1120" y="560" width="41" height="49" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/xcoff - 6.84 KB</title>
-<rect x="1108" y="625" width="39" height="63" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>log - 13.91 KB</title>
+<rect x="1079" y="609" width="56" height="34" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1107" y="621" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >log</text>
 </g>
 <g  >
-<title>bufio - 6.69 KB</title>
-<rect x="1027" y="688" width="65" height="36" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1059" y="701" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >bufio</text>
+<title>internal/sync - 13.06 KB</title>
+<rect x="1079" y="643" width="56" height="33" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1107" y="654" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >intern...</text>
 </g>
 <g  >
-<title>sync - 6.09 KB</title>
-<rect x="1027" y="724" width="65" height="33" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1059" y="735" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >sync</text>
+<title>crypto/internal/fips140/sha3 - 12.19 KB</title>
+<rect x="1135" y="609" width="26" height="67" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>other - 5.95 KB</title>
-<rect x="1027" y="757" width="65" height="33" style="fill:#e67e22;stroke:white;stroke-width:2" />
-<text x="1059" y="768" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >other</text>
+<title>bufio - 10.93 KB</title>
+<rect x="1079" y="676" width="42" height="35" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>runtime/debug - 5.16 KB</title>
-<rect x="1092" y="688" width="55" height="34" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1119" y="700" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >runtim...</text>
+<title>crypto/internal/fips140/sha256 - 10.27 KB</title>
+<rect x="1079" y="711" width="42" height="33" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>go/token - 5.09 KB</title>
-<rect x="1092" y="722" width="55" height="34" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1119" y="734" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >go/token</text>
+<title>internal/godebug - 9.95 KB</title>
+<rect x="1121" y="676" width="40" height="34" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/fmtsort - 5.09 KB</title>
-<rect x="1092" y="756" width="55" height="34" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1119" y="768" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >intern...</text>
+<title>internal/bisect - 9.57 KB</title>
+<rect x="1121" y="710" width="40" height="34" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>io - 5.09 KB</title>
-<rect x="1147" y="50" width="43" height="42" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/internal/fips140/sha512 - 9.13 KB</title>
+<rect x="1079" y="744" width="27" height="46" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>encoding/base64 - 4.78 KB</title>
-<rect x="1147" y="92" width="43" height="40" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/abi - 8.93 KB</title>
+<rect x="1106" y="744" width="28" height="46" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/md5 - 4.53 KB</title>
-<rect x="1147" y="132" width="43" height="38" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/md5 - 8.50 KB</title>
+<rect x="1134" y="744" width="27" height="46" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/godebug - 4.22 KB</title>
-<rect x="1147" y="170" width="43" height="36" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>debug/dwarf - 8.01 KB</title>
+<rect x="1161" y="50" width="29" height="37" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>compress/zlib - 3.72 KB</title>
-<rect x="1147" y="206" width="43" height="31" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/xcoff - 7.45 KB</title>
+<rect x="1161" y="87" width="29" height="35" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/cpu - 3.66 KB</title>
-<rect x="1147" y="237" width="43" height="31" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>encoding/base64 - 6.66 KB</title>
+<rect x="1161" y="122" width="29" height="31" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>math - 3.16 KB</title>
-<rect x="1147" y="268" width="43" height="27" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/internal/fips140/hmac - 5.79 KB</title>
+<rect x="1161" y="153" width="29" height="28" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/filepathlite - 3.09 KB</title>
-<rect x="1147" y="295" width="43" height="26" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/fmtsort - 5.61 KB</title>
+<rect x="1161" y="181" width="29" height="26" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/hmac - 2.97 KB</title>
-<rect x="1147" y="321" width="43" height="25" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>encoding/xml - 5.52 KB</title>
+<rect x="1161" y="207" width="29" height="26" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>encoding/xml - 2.97 KB</title>
-<rect x="1147" y="346" width="43" height="25" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/bytealg - 5.29 KB</title>
+<rect x="1161" y="233" width="29" height="26" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/gover - 2.94 KB</title>
-<rect x="1147" y="371" width="43" height="24" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>unicode/utf8 - 5.25 KB</title>
+<rect x="1161" y="259" width="29" height="24" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/ajstarks/svgo - 2.91 KB</title>
-<rect x="1147" y="395" width="43" height="25" style="fill:#f39c12;stroke:white;stroke-width:2" />
+<title>io/fs - 5.11 KB</title>
+<rect x="1161" y="283" width="29" height="25" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>errors - 2.75 KB</title>
-<rect x="1147" y="420" width="43" height="24" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>compress/zlib - 5.07 KB</title>
+<rect x="1161" y="308" width="29" height="24" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/abi - 2.62 KB</title>
-<rect x="1147" y="444" width="21" height="43" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/internal/fips140/drbg - 5.06 KB</title>
+<rect x="1161" y="332" width="29" height="24" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/drbg - 2.53 KB</title>
-<rect x="1168" y="444" width="22" height="43" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>math - 4.85 KB</title>
+<rect x="1161" y="356" width="29" height="22" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>path - 2.53 KB</title>
-<rect x="1147" y="487" width="21" height="42" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>runtime/debug - 4.75 KB</title>
+<rect x="1161" y="378" width="29" height="23" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>unicode/utf8 - 2.50 KB</title>
-<rect x="1168" y="487" width="22" height="42" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>errors - 4.39 KB</title>
+<rect x="1161" y="401" width="29" height="22" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>path/filepath - 2.25 KB</title>
-<rect x="1147" y="529" width="21" height="38" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>sync/atomic - 4.37 KB</title>
+<rect x="1161" y="423" width="29" height="20" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>debug/plan9obj - 2.22 KB</title>
-<rect x="1168" y="529" width="22" height="38" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/types/errors - 4.16 KB</title>
+<rect x="1161" y="443" width="29" height="20" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/bytealg - 2.08 KB</title>
-<rect x="1147" y="567" width="43" height="18" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/gover - 3.78 KB</title>
+<rect x="1161" y="463" width="29" height="18" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/chacha8rand - 2.06 KB</title>
-<rect x="1147" y="585" width="21" height="34" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/cpu - 3.76 KB</title>
+<rect x="1161" y="481" width="29" height="18" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>go/build - 2.03 KB</title>
-<rect x="1168" y="585" width="22" height="34" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>path/filepath - 3.65 KB</title>
+<rect x="1161" y="499" width="29" height="17" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/stringslite - 1.78 KB</title>
-<rect x="1147" y="619" width="43" height="16" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/runtime/gc - 3.62 KB</title>
+<rect x="1161" y="516" width="29" height="17" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>io/fs - 1.72 KB</title>
-<rect x="1147" y="635" width="30" height="20" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>debug/plan9obj - 3.40 KB</title>
+<rect x="1161" y="533" width="29" height="17" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/syscall/unix - 1.69 KB</title>
-<rect x="1147" y="655" width="30" height="21" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/filepathlite - 3.37 KB</title>
+<rect x="1161" y="550" width="29" height="15" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/sysrand - 1.38 KB</title>
-<rect x="1177" y="635" width="13" height="41" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>hash/adler32 - 3.34 KB</title>
+<rect x="1161" y="565" width="29" height="16" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/saferio - 1.34 KB</title>
-<rect x="1147" y="676" width="23" height="19" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>go/build - 3.32 KB</title>
+<rect x="1161" y="581" width="29" height="16" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140 - 1.03 KB</title>
-<rect x="1147" y="695" width="23" height="16" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/internal/fips140 - 3.22 KB</title>
+<rect x="1161" y="597" width="29" height="16" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>container/heap - 992 B</title>
-<rect x="1170" y="676" width="20" height="17" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/syscall/unix - 2.97 KB</title>
+<rect x="1161" y="613" width="14" height="28" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>hash/adler32 - 960 B</title>
-<rect x="1170" y="693" width="20" height="18" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>path - 2.95 KB</title>
+<rect x="1175" y="613" width="15" height="28" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/check - 928 B</title>
-<rect x="1147" y="711" width="15" height="21" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/chacha8rand - 2.41 KB</title>
+<rect x="1161" y="641" width="29" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>sync/atomic - 800 B</title>
-<rect x="1162" y="711" width="14" height="21" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>container/heap - 2.37 KB</title>
+<rect x="1161" y="653" width="14" height="21" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>golang.org/x/sync - 800 B</title>
-<rect x="1176" y="711" width="14" height="21" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/testlog - 2.30 KB</title>
+<rect x="1175" y="653" width="15" height="21" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/types/errors - 768 B</title>
-<rect x="1147" y="732" width="12" height="22" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/stringslite - 2.04 KB</title>
+<rect x="1161" y="674" width="15" height="19" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/testlog - 672 B</title>
-<rect x="1159" y="732" width="11" height="22" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/runtime/exithook - 1.89 KB</title>
+<rect x="1176" y="674" width="14" height="19" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/runtime/exithook - 640 B</title>
-<rect x="1147" y="754" width="23" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/internal/sysrand - 1.88 KB</title>
+<rect x="1161" y="693" width="20" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/subtle - 576 B</title>
-<rect x="1170" y="732" width="20" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/saferio - 1.84 KB</title>
+<rect x="1161" y="705" width="20" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>go/version - 576 B</title>
-<rect x="1170" y="742" width="20" height="11" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/lazyregexp - 1.45 KB</title>
+<rect x="1181" y="693" width="9" height="25" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/lazyregexp - 544 B</title>
-<rect x="1170" y="753" width="20" height="11" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/synctest - 1.44 KB</title>
+<rect x="1161" y="718" width="15" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/itoa - 480 B</title>
-<rect x="1147" y="764" width="12" height="14" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>go/version - 1.44 KB</title>
+<rect x="1161" y="731" width="15" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/impl - 480 B</title>
-<rect x="1159" y="764" width="12" height="14" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/runtime/atomic - 1.43 KB</title>
+<rect x="1176" y="718" width="14" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>go/doc - 448 B</title>
-<rect x="1147" y="778" width="14" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/internal/fips140/check - 1.22 KB</title>
+<rect x="1176" y="731" width="14" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140deps/cpu - 288 B</title>
-<rect x="1161" y="778" width="10" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/internal/fips140/subtle - 1.15 KB</title>
+<rect x="1161" y="744" width="11" height="14" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/platform - 256 B</title>
-<rect x="1171" y="764" width="10" height="9" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/platform - 930 B</title>
+<rect x="1172" y="744" width="9" height="14" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/runtime/atomic - 224 B</title>
-<rect x="1171" y="773" width="10" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/itoa - 837 B</title>
+<rect x="1181" y="744" width="9" height="14" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/runtime/syscall - 224 B</title>
-<rect x="1171" y="781" width="10" height="9" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>go/doc - 837 B</title>
+<rect x="1161" y="758" width="9" height="11" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/runtime/sys - 128 B</title>
-<rect x="1181" y="764" width="9" height="5" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/internal/fips140deps/cpu - 741 B</title>
+<rect x="1170" y="758" width="9" height="11" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto - 128 B</title>
-<rect x="1181" y="769" width="9" height="5" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/internal/impl - 725 B</title>
+<rect x="1161" y="769" width="9" height="11" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140only - 96 B</title>
-<rect x="1181" y="774" width="9" height="5" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/runtime/sys - 698 B</title>
+<rect x="1170" y="769" width="9" height="11" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/entropy - 96 B</title>
-<rect x="1181" y="779" width="4" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>math/bits - 677 B</title>
+<rect x="1179" y="758" width="11" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>iter - 96 B</title>
-<rect x="1185" y="779" width="5" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/runtime/strconv - 581 B</title>
+<rect x="1179" y="766" width="11" height="7" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/syslist - 64 B</title>
-<rect x="1181" y="787" width="9" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto - 485 B</title>
+<rect x="1179" y="773" width="11" height="7" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+</g>
+<g  >
+<title>crypto/internal/fips140only - 453 B</title>
+<rect x="1161" y="780" width="6" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+</g>
+<g  >
+<title>iter - 437 B</title>
+<rect x="1167" y="780" width="7" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+</g>
+<g  >
+<title>crypto/internal/entropy - 421 B</title>
+<rect x="1174" y="780" width="6" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+</g>
+<g  >
+<title>internal/syslist - 389 B</title>
+<rect x="1180" y="780" width="6" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+</g>
+<g  >
+<title>internal/oserror - 160 B</title>
+<rect x="1186" y="780" width="4" height="7" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 </svg>

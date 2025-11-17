@@ -2,6 +2,7 @@ package main
 
 import (
 	"debug/buildinfo"
+	"debug/dwarf"
 	"debug/elf"
 	"debug/gosym"
 	"debug/macho"
@@ -86,9 +87,20 @@ func main() {
 }
 
 type DependencyReport struct {
-	TotalSize   int64
-	Packages    map[string]int64
-	ModulePaths []string // sorted list of module paths (longest first)
+	TotalSize    int64
+	TotalCode    int64
+	TotalData    int64
+	TotalDebug   int64
+	TotalSymbols int64
+	Packages     map[string]*PackageSize
+	ModulePaths  []string // sorted list of module paths (longest first)
+}
+
+type PackageSize struct {
+	Code    int64
+	Data    int64
+	Debug   int64
+	Symbols int64
 }
 
 type pkgSize struct {
@@ -176,7 +188,7 @@ func analyzePE(r io.ReaderAt, modulePaths []string) (*DependencyReport, error) {
 
 func analyzeSymbols(elfFile *elf.File, modulePaths []string) (*DependencyReport, error) {
 	report := &DependencyReport{
-		Packages:    make(map[string]int64),
+		Packages:    make(map[string]*PackageSize),
 		ModulePaths: modulePaths,
 	}
 
@@ -218,6 +230,15 @@ func analyzeSymbols(elfFile *elf.File, modulePaths []string) (*DependencyReport,
 	// Analyze functions and their sizes
 	processSymbolTable(table, modulePaths, report)
 
+	// Analyze data symbols from ELF symbol table
+	analyzeELFDataSymbols(elfFile, modulePaths, report)
+
+	// Analyze debug info
+	analyzeDWARF(elfFile, modulePaths, report)
+
+	// Analyze symbol tables
+	analyzeSymbolTables(elfFile, modulePaths, report)
+
 	return report, nil
 }
 
@@ -233,15 +254,80 @@ func processSymbolTable(table *gosym.Table, modulePaths []string, report *Depend
 		// Find which module/package this symbol belongs to
 		moduleName := findModuleForSymbol(fn.Name, modulePaths)
 		if moduleName != "" && moduleName != "main" {
-			report.Packages[moduleName] += int64(fn.End - fn.Entry)
-			report.TotalSize += int64(fn.End - fn.Entry)
+			size := int64(fn.End - fn.Entry)
+			if report.Packages[moduleName] == nil {
+				report.Packages[moduleName] = &PackageSize{}
+			}
+			report.Packages[moduleName].Code += size
+			report.TotalCode += size
+			report.TotalSize += size
+		}
+	}
+}
+
+// analyzeELFDataSymbols analyzes data symbols from the ELF symbol table
+func analyzeELFDataSymbols(elfFile *elf.File, modulePaths []string, report *DependencyReport) {
+	symbols, err := elfFile.Symbols()
+	if err != nil {
+		// Symbols may not be available in stripped binaries
+		return
+	}
+
+	// Sort symbols by address to calculate sizes
+	sort.Slice(symbols, func(i, j int) bool {
+		return symbols[i].Value < symbols[j].Value
+	})
+
+	// Get data section boundaries
+	dataSections := make(map[string]*elf.Section)
+	for _, name := range []string{".rodata", ".data", ".bss", ".noptrdata", ".typelink"} {
+		if sec := elfFile.Section(name); sec != nil {
+			dataSections[name] = sec
+		}
+	}
+
+	for i := 0; i < len(symbols); i++ {
+		sym := symbols[i]
+
+		// Check if this is a data symbol (in data sections)
+		isData := false
+		for _, sec := range dataSections {
+			if sym.Value >= sec.Addr && sym.Value < sec.Addr+sec.Size {
+				isData = true
+				break
+			}
+		}
+
+		if !isData {
+			continue
+		}
+
+		// Calculate symbol size
+		var size uint64
+		if i+1 < len(symbols) && symbols[i+1].Value > sym.Value {
+			// Use next symbol's address to calculate size
+			size = symbols[i+1].Value - sym.Value
+		} else {
+			// Last symbol or no next symbol - use a default small size
+			size = 8
+		}
+
+		// Attribute to module
+		moduleName := findModuleForSymbol(sym.Name, modulePaths)
+		if moduleName != "" && moduleName != "main" {
+			if report.Packages[moduleName] == nil {
+				report.Packages[moduleName] = &PackageSize{}
+			}
+			report.Packages[moduleName].Data += int64(size)
+			report.TotalData += int64(size)
+			report.TotalSize += int64(size)
 		}
 	}
 }
 
 func analyzeSymbolsMachO(machoFile *macho.File, modulePaths []string) (*DependencyReport, error) {
 	report := &DependencyReport{
-		Packages:    make(map[string]int64),
+		Packages:    make(map[string]*PackageSize),
 		ModulePaths: modulePaths,
 	}
 
@@ -289,12 +375,83 @@ func analyzeSymbolsMachO(machoFile *macho.File, modulePaths []string) (*Dependen
 		processSymbolTable(table, modulePaths, report)
 	}
 
+	// Analyze data symbols from Mach-O symbol table
+	analyzeMachODataSymbols(machoFile, modulePaths, report)
+
+	// Analyze debug info
+	analyzeDWARF(machoFile, modulePaths, report)
+
+	// Analyze symbol tables
+	analyzeSymbolTables(machoFile, modulePaths, report)
+
 	return report, nil
+}
+
+// analyzeMachODataSymbols analyzes data symbols from the Mach-O symbol table
+func analyzeMachODataSymbols(machoFile *macho.File, modulePaths []string, report *DependencyReport) {
+	if machoFile.Symtab == nil {
+		return
+	}
+
+	// Sort symbols by address to calculate sizes
+	syms := machoFile.Symtab.Syms
+	sort.Slice(syms, func(i, j int) bool {
+		return syms[i].Value < syms[j].Value
+	})
+
+	// Get data section boundaries
+	dataSections := make(map[string]*macho.Section)
+	for _, name := range []string{"__rodata", "__data", "__bss", "__noptrdata", "__typelink", "__const", "__go_buildinfo"} {
+		for _, sec := range machoFile.Sections {
+			if sec.Name == name {
+				dataSections[name] = sec
+				break
+			}
+		}
+	}
+
+	for i := 0; i < len(syms); i++ {
+		sym := syms[i]
+
+		// Check if this is a data symbol (in data sections)
+		isData := false
+		for _, sec := range dataSections {
+			if sym.Value >= sec.Addr && sym.Value < sec.Addr+sec.Size {
+				isData = true
+				break
+			}
+		}
+
+		if !isData {
+			continue
+		}
+
+		// Calculate symbol size
+		var size uint64
+		if i+1 < len(syms) && syms[i+1].Value > sym.Value {
+			// Use next symbol's address to calculate size
+			size = syms[i+1].Value - sym.Value
+		} else {
+			// Last symbol or no next symbol - use a default small size
+			size = 8
+		}
+
+		// Attribute to module
+		moduleName := findModuleForSymbol(sym.Name, modulePaths)
+		if moduleName != "" && moduleName != "main" {
+			if report.Packages[moduleName] == nil {
+				report.Packages[moduleName] = &PackageSize{}
+			}
+			report.Packages[moduleName].Data += int64(size)
+			report.TotalData += int64(size)
+			report.TotalSize += int64(size)
+		}
+	}
 }
 
 func analyzeSymbolsPE(peFile *pe.File, modulePaths []string) (*DependencyReport, error) {
 	report := &DependencyReport{
-		Packages:    make(map[string]int64),
+		Packages:    make(map[string]*PackageSize),
 		ModulePaths: modulePaths,
 	}
 
@@ -362,7 +519,397 @@ func analyzeSymbolsPE(peFile *pe.File, modulePaths []string) (*DependencyReport,
 	}
 
 	processSymbolTable(table, modulePaths, report)
+
+	// Analyze data symbols from PE symbol table
+	analyzePEDataSymbols(peFile, modulePaths, report)
+
+	// Analyze debug info
+	analyzeDWARF(peFile, modulePaths, report)
+
+	// Analyze symbol tables
+	analyzeSymbolTables(peFile, modulePaths, report)
+
 	return report, nil
+}
+
+// analyzePEDataSymbols analyzes data symbols from the PE symbol table
+func analyzePEDataSymbols(peFile *pe.File, modulePaths []string, report *DependencyReport) {
+	if peFile.Symbols == nil || len(peFile.Symbols) == 0 {
+		return
+	}
+
+	// Sort symbols by section and value to calculate sizes
+	symbols := make([]*pe.Symbol, len(peFile.Symbols))
+	copy(symbols, peFile.Symbols)
+	sort.Slice(symbols, func(i, j int) bool {
+		if symbols[i].SectionNumber != symbols[j].SectionNumber {
+			return symbols[i].SectionNumber < symbols[j].SectionNumber
+		}
+		return symbols[i].Value < symbols[j].Value
+	})
+
+	// Identify data sections
+	dataSectionNames := map[string]bool{
+		".rdata": true, ".data": true, ".bss": true,
+	}
+
+	for i := 0; i < len(symbols); i++ {
+		sym := symbols[i]
+
+		// Skip invalid section numbers
+		if sym.SectionNumber < 1 || int(sym.SectionNumber) > len(peFile.Sections) {
+			continue
+		}
+
+		section := peFile.Sections[sym.SectionNumber-1]
+
+		// Check if this is a data section
+		if !dataSectionNames[section.Name] {
+			continue
+		}
+
+		// Calculate symbol size
+		var size uint32
+		if i+1 < len(symbols) && symbols[i+1].SectionNumber == sym.SectionNumber && symbols[i+1].Value > sym.Value {
+			// Use next symbol's address to calculate size
+			size = symbols[i+1].Value - sym.Value
+		} else {
+			// Last symbol or no next symbol - use a default small size
+			size = 8
+		}
+
+		// Attribute to module
+		moduleName := findModuleForSymbol(sym.Name, modulePaths)
+		if moduleName != "" && moduleName != "main" {
+			if report.Packages[moduleName] == nil {
+				report.Packages[moduleName] = &PackageSize{}
+			}
+			report.Packages[moduleName].Data += int64(size)
+			report.TotalData += int64(size)
+			report.TotalSize += int64(size)
+		}
+	}
+}
+
+// dwarfReader is an interface for types that can provide DWARF data
+type dwarfReader interface {
+	DWARF() (*dwarf.Data, error)
+}
+
+// analyzeDWARF analyzes debug info and attributes it to modules based on compile units
+func analyzeDWARF(file dwarfReader, modulePaths []string, report *DependencyReport) {
+	dwarfData, err := file.DWARF()
+	if err != nil {
+		// No DWARF data or error reading it - this is okay
+		return
+	}
+
+	// Get total debug section sizes by type of file
+	var debugSectionSizes map[string]uint64
+	switch f := file.(type) {
+	case *elf.File:
+		debugSectionSizes = getELFDebugSectionSizes(f)
+	case *macho.File:
+		debugSectionSizes = getMachODebugSectionSizes(f)
+	case *pe.File:
+		debugSectionSizes = getPEDebugSectionSizes(f)
+	}
+
+	var totalDebugSize uint64
+	for _, size := range debugSectionSizes {
+		totalDebugSize += size
+	}
+
+	if totalDebugSize == 0 {
+		return
+	}
+
+	// Count compile units per package to calculate proportional sizes
+	packageCUCounts := make(map[string]int)
+	totalCUs := 0
+
+	reader := dwarfData.Reader()
+	for {
+		entry, err := reader.Next()
+		if err != nil || entry == nil {
+			break
+		}
+
+		if entry.Tag == dwarf.TagCompileUnit {
+			totalCUs++
+			// Get the package name from the compile unit
+			nameVal := entry.Val(dwarf.AttrName)
+			if nameVal == nil {
+				continue
+			}
+
+			packageName, ok := nameVal.(string)
+			if !ok {
+				continue
+			}
+
+			// Find which module this package belongs to
+			moduleName := findModuleForSymbol(packageName, modulePaths)
+			if moduleName != "" && moduleName != "main" {
+				packageCUCounts[moduleName]++
+			}
+		}
+	}
+
+	// Distribute debug info size proportionally based on compile unit count
+	if totalCUs > 0 {
+		for moduleName, cuCount := range packageCUCounts {
+			// Calculate proportional debug size for this module
+			debugSize := int64(float64(totalDebugSize) * float64(cuCount) / float64(totalCUs))
+
+			if report.Packages[moduleName] == nil {
+				report.Packages[moduleName] = &PackageSize{}
+			}
+			report.Packages[moduleName].Debug += debugSize
+			report.TotalDebug += debugSize
+			report.TotalSize += debugSize
+		}
+	}
+}
+
+// getELFDebugSectionSizes returns the sizes of debug sections in an ELF file
+func getELFDebugSectionSizes(f *elf.File) map[string]uint64 {
+	sizes := make(map[string]uint64)
+	debugSectionPrefixes := []string{".debug_", ".zdebug_"}
+
+	for _, section := range f.Sections {
+		for _, prefix := range debugSectionPrefixes {
+			if strings.HasPrefix(section.Name, prefix) {
+				sizes[section.Name] = section.Size
+				break
+			}
+		}
+	}
+	return sizes
+}
+
+// getMachODebugSectionSizes returns the sizes of debug sections in a Mach-O file
+func getMachODebugSectionSizes(f *macho.File) map[string]uint64 {
+	sizes := make(map[string]uint64)
+	debugSectionPrefixes := []string{"__debug_", "__zdebug_"}
+
+	for _, section := range f.Sections {
+		for _, prefix := range debugSectionPrefixes {
+			if strings.HasPrefix(section.Name, prefix) {
+				sizes[section.Name] = section.Size
+				break
+			}
+		}
+	}
+	return sizes
+}
+
+// getPEDebugSectionSizes returns the sizes of debug sections in a PE file
+func getPEDebugSectionSizes(f *pe.File) map[string]uint64 {
+	sizes := make(map[string]uint64)
+	debugSectionPrefixes := []string{".debug_", ".zdebug_"}
+
+	for _, section := range f.Sections {
+		for _, prefix := range debugSectionPrefixes {
+			if strings.HasPrefix(section.Name, prefix) {
+				sizes[section.Name] = uint64(section.Size)
+				break
+			}
+		}
+	}
+	return sizes
+}
+
+// symbolTableReader is an interface for types that can provide symbol table info
+type symbolTableReader interface{}
+
+// analyzeSymbolTables analyzes symbol table sections and attributes them to modules
+func analyzeSymbolTables(file interface{}, modulePaths []string, report *DependencyReport) {
+	switch f := file.(type) {
+	case *elf.File:
+		analyzeELFSymbolTables(f, modulePaths, report)
+	case *macho.File:
+		analyzeMachOSymbolTables(f, modulePaths, report)
+	case *pe.File:
+		analyzePESymbolTables(f, modulePaths, report)
+	}
+}
+
+// analyzeELFSymbolTables analyzes symbol table sections in ELF files
+func analyzeELFSymbolTables(f *elf.File, modulePaths []string, report *DependencyReport) {
+	// Get symbol table related sections
+	symtabSections := []string{".symtab", ".strtab", ".gosymtab", ".gopclntab"}
+
+	// Count symbols per package
+	packageSymbolCounts := make(map[string]int)
+	totalSymbols := 0
+
+	symbols, err := f.Symbols()
+	if err == nil {
+		for _, sym := range symbols {
+			moduleName := findModuleForSymbol(sym.Name, modulePaths)
+			if moduleName != "" && moduleName != "main" {
+				packageSymbolCounts[moduleName]++
+				totalSymbols++
+			}
+		}
+	}
+
+	// Get total size of symbol table sections
+	var totalSymbolTableSize uint64
+	for _, secName := range symtabSections {
+		if sec := f.Section(secName); sec != nil {
+			totalSymbolTableSize += sec.Size
+		}
+	}
+
+	// Distribute proportionally
+	if totalSymbols > 0 && totalSymbolTableSize > 0 {
+		for moduleName, count := range packageSymbolCounts {
+			symbolSize := int64(float64(totalSymbolTableSize) * float64(count) / float64(totalSymbols))
+			if report.Packages[moduleName] == nil {
+				report.Packages[moduleName] = &PackageSize{}
+			}
+			report.Packages[moduleName].Symbols += symbolSize
+			report.TotalSymbols += symbolSize
+			report.TotalSize += symbolSize
+		}
+	}
+}
+
+// analyzeMachOSymbolTables analyzes symbol table sections in Mach-O files
+func analyzeMachOSymbolTables(f *macho.File, modulePaths []string, report *DependencyReport) {
+	// Get symbol table related sections
+	symtabSections := []string{"__gosymtab", "__gopclntab", "__symbol_stub1"}
+
+	// Count symbols per package using Go symbol table
+	packageSymbolCounts := make(map[string]int)
+	totalSymbols := 0
+
+	// Try to get Go function symbols from gosym table
+	var pclntabData []byte
+	var textAddr uint64
+	for _, section := range f.Sections {
+		if section.Name == "__gopclntab" {
+			data, err := section.Data()
+			if err == nil {
+				pclntabData = data
+			}
+		}
+		if section.Name == "__text" {
+			textAddr = section.Addr
+		}
+	}
+
+	if pclntabData != nil {
+		var symtabData []byte
+		for _, section := range f.Sections {
+			if section.Name == "__gosymtab" {
+				data, err := section.Data()
+				if err == nil {
+					symtabData = data
+				}
+				break
+			}
+		}
+
+		pcln := gosym.NewLineTable(pclntabData, textAddr)
+		table, err := gosym.NewTable(symtabData, pcln)
+		if err == nil && len(table.Funcs) > 0 {
+			// Use Go functions from gosym table
+			for _, fn := range table.Funcs {
+				moduleName := findModuleForSymbol(fn.Name, modulePaths)
+				if moduleName != "" && moduleName != "main" {
+					packageSymbolCounts[moduleName]++
+					totalSymbols++
+				}
+			}
+		} else if f.Symtab != nil {
+			// Fallback to Mach-O symtab if gosym fails
+			for _, sym := range f.Symtab.Syms {
+				moduleName := findModuleForSymbol(sym.Name, modulePaths)
+				if moduleName != "" && moduleName != "main" {
+					packageSymbolCounts[moduleName]++
+					totalSymbols++
+				}
+			}
+		}
+	}
+
+	// Get total size of symbol table sections
+	var totalSymbolTableSize uint64
+	for _, sec := range f.Sections {
+		for _, secName := range symtabSections {
+			if sec.Name == secName {
+				totalSymbolTableSize += sec.Size
+				break
+			}
+		}
+	}
+
+	// The Mach-O symtab command also has size info
+	// We need to account for the actual symbol table data stored in the file
+	if f.Symtab != nil {
+		// Approximate: each symbol ~16 bytes + string table
+		totalSymbolTableSize += uint64(len(f.Symtab.Syms) * 16)
+	}
+
+	// Distribute proportionally
+	if totalSymbols > 0 && totalSymbolTableSize > 0 {
+		for moduleName, count := range packageSymbolCounts {
+			symbolSize := int64(float64(totalSymbolTableSize) * float64(count) / float64(totalSymbols))
+			if report.Packages[moduleName] == nil {
+				report.Packages[moduleName] = &PackageSize{}
+			}
+			report.Packages[moduleName].Symbols += symbolSize
+			report.TotalSymbols += symbolSize
+			report.TotalSize += symbolSize
+		}
+	}
+}
+
+// analyzePESymbolTables analyzes symbol table sections in PE files
+func analyzePESymbolTables(f *pe.File, modulePaths []string, report *DependencyReport) {
+	// Count symbols per package
+	packageSymbolCounts := make(map[string]int)
+	totalSymbols := 0
+
+	if f.Symbols != nil {
+		for _, sym := range f.Symbols {
+			moduleName := findModuleForSymbol(sym.Name, modulePaths)
+			if moduleName != "" && moduleName != "main" {
+				packageSymbolCounts[moduleName]++
+				totalSymbols++
+			}
+		}
+	}
+
+	// Get gopclntab and gosymtab sections
+	var totalSymbolTableSize uint64
+	for _, sec := range f.Sections {
+		if sec.Name == ".gopclntab" || sec.Name == "gopclntab" ||
+			sec.Name == ".gosymtab" || sec.Name == "gosymtab" {
+			totalSymbolTableSize += uint64(sec.Size)
+		}
+	}
+
+	// Add approximate symbol table size
+	if f.Symbols != nil {
+		totalSymbolTableSize += uint64(len(f.Symbols) * 18) // PE COFF symbol size
+	}
+
+	// Distribute proportionally
+	if totalSymbols > 0 && totalSymbolTableSize > 0 {
+		for moduleName, count := range packageSymbolCounts {
+			symbolSize := int64(float64(totalSymbolTableSize) * float64(count) / float64(totalSymbols))
+			if report.Packages[moduleName] == nil {
+				report.Packages[moduleName] = &PackageSize{}
+			}
+			report.Packages[moduleName].Symbols += symbolSize
+			report.TotalSymbols += symbolSize
+			report.TotalSize += symbolSize
+		}
+	}
 }
 
 const (
@@ -525,6 +1072,19 @@ func findModuleForSymbol(symbolName string, modulePaths []string) string {
 		return "main"
 	}
 
+	// Check for internal runtime packages (not in stdlib)
+	if strings.HasPrefix(symbolName, "internal/") {
+		return "internal"
+	}
+
+	// Check for runtime-related symbols without package prefix
+	// These are typically assembly functions or compiler-generated code
+	if symbolName == "go:buildid" ||
+		!strings.Contains(symbolName, ".") && !strings.Contains(symbolName, "/") {
+		// Low-level runtime functions, assembly stubs, etc.
+		return "runtime"
+	}
+
 	// Not recognized - group as "other"
 	if *verbose {
 		fmt.Fprintf(os.Stderr, "[verbose] Symbol %q not attributed to any module, grouping as 'other'\n", symbolName)
@@ -538,10 +1098,11 @@ func printReport(report *DependencyReport) {
 		return
 	}
 
-	// Sort packages by size (descending)
+	// Sort packages by total size (descending)
 	packages := make([]pkgSize, 0, len(report.Packages))
-	for name, size := range report.Packages {
-		packages = append(packages, pkgSize{name, size})
+	for name, ps := range report.Packages {
+		totalSize := ps.Code + ps.Data + ps.Debug + ps.Symbols
+		packages = append(packages, pkgSize{name, totalSize})
 	}
 
 	sort.Slice(packages, func(i, j int) bool {
@@ -559,14 +1120,25 @@ func printReport(report *DependencyReport) {
 		} else {
 			percentage = float64(pkg.size) / float64(report.TotalSize) * 100
 		}
-		fmt.Printf("%-50s %10s (%5.1f%%)\n",
-			truncatePackageName(pkg.name, 50),
+
+		pkgData := report.Packages[pkg.name]
+		fmt.Printf("%-40s %10s (%5.1f%%)  [code: %8s, data: %8s, debug: %8s, syms: %8s]\n",
+			truncatePackageName(pkg.name, 40),
 			formatSize(pkg.size),
-			percentage)
+			percentage,
+			formatSize(pkgData.Code),
+			formatSize(pkgData.Data),
+			formatSize(pkgData.Debug),
+			formatSize(pkgData.Symbols))
 	}
 
 	fmt.Println()
-	fmt.Printf("Total size: %s\n", formatSize(report.TotalSize))
+	fmt.Printf("Total size: %s  [code: %s, data: %s, debug: %s, syms: %s]\n",
+		formatSize(report.TotalSize),
+		formatSize(report.TotalCode),
+		formatSize(report.TotalData),
+		formatSize(report.TotalDebug),
+		formatSize(report.TotalSymbols))
 }
 
 const (
@@ -613,8 +1185,9 @@ func generateSVGTreemap(report *DependencyReport, filename string, binaryPath st
 
 	// Sort packages by size (descending)
 	packages := make([]pkgSize, 0, len(report.Packages))
-	for name, size := range report.Packages {
-		packages = append(packages, pkgSize{name, size})
+	for name, ps := range report.Packages {
+		totalSize := ps.Code + ps.Data + ps.Debug + ps.Symbols
+		packages = append(packages, pkgSize{name, totalSize})
 	}
 	sort.Slice(packages, func(i, j int) bool {
 		return packages[i].size > packages[j].size
@@ -801,8 +1374,8 @@ func isStdlibPackage(name string) bool {
 
 // packageColor generates a color for a package based on its name
 func packageColor(name string) string {
-	// Use a light gray for stdlib packages and golang.org/x/... packages
-	if isStdlibPackage(name) || strings.HasPrefix(name, "golang.org/x/") {
+	// Use a light gray for stdlib packages, golang.org/x/..., internal packages, and other
+	if isStdlibPackage(name) || strings.HasPrefix(name, "golang.org/x/") || strings.HasPrefix(name, "internal/") || name == "internal" || name == "other" {
 		return "#bdc3c7" // light gray
 	}
 

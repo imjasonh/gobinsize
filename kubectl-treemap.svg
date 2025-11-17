@@ -4,944 +4,890 @@
      xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink">
 <rect x="0" y="0" width="1200" height="800" style="fill:white" />
-<text x="600" y="30" style="text-anchor:middle;font-size:24px;font-family:Arial,sans-serif;font-weight:bold" >/usr/bin/kubectl - 25.75 MB</text>
+<text x="600" y="30" style="text-anchor:middle;font-size:24px;font-family:Arial,sans-serif;font-weight:bold" >/usr/local/bin/kubectl - 41.00 MB</text>
 <g  >
-<title>k8s.io/api - 8.42 MB</title>
-<rect x="10" y="50" width="472" height="602" style="fill:#3498db;stroke:white;stroke-width:2" />
-<text x="246" y="346" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >k8s.io/api</text>
-<text x="246" y="361" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >8.42 MB</text>
+<title>k8s.io/api - 13.23 MB</title>
+<rect x="10" y="50" width="460" height="609" style="fill:#3498db;stroke:white;stroke-width:2" />
+<text x="240" y="349" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >k8s.io/api</text>
+<text x="240" y="364" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >13.23 MB</text>
 </g>
 <g  >
-<title>k8s.io/client-go - 4.42 MB</title>
-<rect x="482" y="50" width="249" height="602" style="fill:#16a085;stroke:white;stroke-width:2" />
-<text x="606" y="346" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >k8s.io/client-go</text>
-<text x="606" y="361" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >4.42 MB</text>
+<title>k8s.io/client-go - 7.67 MB</title>
+<rect x="470" y="50" width="268" height="609" style="fill:#16a085;stroke:white;stroke-width:2" />
+<text x="604" y="349" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >k8s.io/client-go</text>
+<text x="604" y="364" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >7.67 MB</text>
 </g>
 <g  >
-<title>k8s.io/kubectl - 1.85 MB</title>
-<rect x="10" y="652" width="454" height="138" style="fill:#9b59b6;stroke:white;stroke-width:2" />
-<text x="237" y="716" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >k8s.io/kubectl</text>
-<text x="237" y="731" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >1.85 MB</text>
+<title>k8s.io/kubectl - 2.76 MB</title>
+<rect x="10" y="659" width="447" height="131" style="fill:#9b59b6;stroke:white;stroke-width:2" />
+<text x="233" y="719" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >k8s.io/kubectl</text>
+<text x="233" y="734" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >2.76 MB</text>
 </g>
 <g  >
-<title>k8s.io/apimachinery - 1.08 MB</title>
-<rect x="464" y="652" width="267" height="138" style="fill:#e67e22;stroke:white;stroke-width:2" />
-<text x="597" y="716" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >k8s.io/apimachinery</text>
-<text x="597" y="731" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >1.08 MB</text>
+<title>k8s.io/apimachinery - 1.73 MB</title>
+<rect x="457" y="659" width="281" height="131" style="fill:#e67e22;stroke:white;stroke-width:2" />
+<text x="597" y="719" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >k8s.io/apimachinery</text>
+<text x="597" y="734" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >1.73 MB</text>
 </g>
 <g  >
-<title>github.com/google/gnostic-models - 920.47 KB</title>
-<rect x="731" y="50" width="121" height="250" style="fill:#e74c3c;stroke:white;stroke-width:2" />
-<text x="791" y="170" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >github.com/goog...</text>
-<text x="791" y="185" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >920.47 KB</text>
+<title>google.golang.org/protobuf - 1.24 MB</title>
+<rect x="738" y="50" width="93" height="282" style="fill:#f39c12;stroke:white;stroke-width:2" />
+<text x="784" y="186" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >google.gol...</text>
+<text x="784" y="201" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >1.24 MB</text>
 </g>
 <g  >
-<title>google.golang.org/protobuf - 789.28 KB</title>
-<rect x="731" y="300" width="121" height="216" style="fill:#f39c12;stroke:white;stroke-width:2" />
-<text x="791" y="403" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >google.golang.o...</text>
-<text x="791" y="418" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >789.28 KB</text>
+<title>github.com/google/gnostic-models - 1.21 MB</title>
+<rect x="738" y="332" width="93" height="277" style="fill:#e74c3c;stroke:white;stroke-width:2" />
+<text x="784" y="465" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >github.com...</text>
+<text x="784" y="480" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >1.21 MB</text>
 </g>
 <g  >
-<title>net/http - 513.34 KB</title>
-<rect x="731" y="516" width="121" height="140" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="791" y="581" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >net/http</text>
-<text x="791" y="596" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >513.34 KB</text>
+<title>runtime - 806.90 KB</title>
+<rect x="738" y="609" width="93" height="181" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="784" y="694" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >runtime</text>
+<text x="784" y="709" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >806.90 KB</text>
 </g>
 <g  >
-<title>k8s.io/kube-openapi - 488.34 KB</title>
-<rect x="731" y="656" width="121" height="134" style="fill:#9b59b6;stroke:white;stroke-width:2" />
-<text x="791" y="718" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >k8s.io/kube-ope...</text>
-<text x="791" y="733" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >488.34 KB</text>
+<title>k8s.io/kube-openapi - 763.64 KB</title>
+<rect x="831" y="50" width="109" height="145" style="fill:#9b59b6;stroke:white;stroke-width:2" />
+<text x="885" y="117" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >k8s.io/kube-o...</text>
+<text x="885" y="132" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >763.64 KB</text>
 </g>
 <g  >
-<title>runtime - 451.69 KB</title>
-<rect x="852" y="50" width="109" height="137" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="906" y="113" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >runtime</text>
-<text x="906" y="128" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >451.69 KB</text>
+<title>net/http - 762.75 KB</title>
+<rect x="831" y="195" width="109" height="145" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="885" y="262" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >net/http</text>
+<text x="885" y="277" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >762.75 KB</text>
 </g>
 <g  >
-<title>crypto/tls - 340.53 KB</title>
-<rect x="852" y="187" width="109" height="104" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="906" y="234" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >crypto/tls</text>
-<text x="906" y="249" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >340.53 KB</text>
+<title>sigs.k8s.io/kustomize/api - 523.91 KB</title>
+<rect x="831" y="340" width="109" height="100" style="fill:#3498db;stroke:white;stroke-width:2" />
+<text x="885" y="385" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >sigs.k8s.io/k...</text>
+<text x="885" y="400" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >523.91 KB</text>
 </g>
 <g  >
-<title>sigs.k8s.io/kustomize/api - 340.28 KB</title>
-<rect x="852" y="291" width="109" height="104" style="fill:#3498db;stroke:white;stroke-width:2" />
-<text x="906" y="338" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >sigs.k8s.io/k...</text>
-<text x="906" y="353" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >340.28 KB</text>
+<title>other - 500.45 KB</title>
+<rect x="831" y="440" width="109" height="96" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="885" y="483" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >other</text>
+<text x="885" y="498" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >500.45 KB</text>
 </g>
 <g  >
-<title>github.com/gogo/protobuf - 289.44 KB</title>
-<rect x="852" y="395" width="109" height="89" style="fill:#34495e;stroke:white;stroke-width:2" />
-<text x="906" y="434" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >github.com/go...</text>
-<text x="906" y="449" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >289.44 KB</text>
+<title>golang.org/x/net - 468.00 KB</title>
+<rect x="831" y="536" width="109" height="89" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="885" y="575" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >golang.org/x/net</text>
+<text x="885" y="590" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >468.00 KB</text>
 </g>
 <g  >
-<title>sigs.k8s.io/kustomize/kyaml - 275.56 KB</title>
-<rect x="852" y="484" width="109" height="84" style="fill:#f1c40f;stroke:white;stroke-width:2" />
-<text x="906" y="521" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >sigs.k8s.io/k...</text>
-<text x="906" y="536" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >275.56 KB</text>
+<title>sigs.k8s.io/yaml - 439.15 KB</title>
+<rect x="831" y="625" width="109" height="84" style="fill:#1abc9c;stroke:white;stroke-width:2" />
+<text x="885" y="662" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >sigs.k8s.io/yaml</text>
+<text x="885" y="677" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >439.15 KB</text>
 </g>
 <g  >
-<title>golang.org/x/net - 264.84 KB</title>
-<rect x="852" y="568" width="109" height="81" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="906" y="603" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >golang.org/x/net</text>
-<text x="906" y="618" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >264.84 KB</text>
+<title>github.com/gogo/protobuf - 419.26 KB</title>
+<rect x="831" y="709" width="109" height="81" style="fill:#34495e;stroke:white;stroke-width:2" />
+<text x="885" y="744" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >github.com/go...</text>
+<text x="885" y="759" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >419.26 KB</text>
 </g>
 <g  >
-<title>other - 248.30 KB</title>
-<rect x="852" y="649" width="109" height="76" style="fill:#e67e22;stroke:white;stroke-width:2" />
-<text x="906" y="682" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >other</text>
-<text x="906" y="697" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >248.30 KB</text>
+<title>github.com/modern-go/reflect2 - 415.68 KB</title>
+<rect x="940" y="50" width="110" height="78" style="fill:#f39c12;stroke:white;stroke-width:2" />
+<text x="995" y="84" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >github.com/mo...</text>
+<text x="995" y="99" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >415.68 KB</text>
 </g>
 <g  >
-<title>github.com/json-iterator/go - 209.12 KB</title>
-<rect x="852" y="725" width="109" height="65" style="fill:#1abc9c;stroke:white;stroke-width:2" />
-<text x="906" y="752" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >github.com/js...</text>
-<text x="906" y="767" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >209.12 KB</text>
+<title>sigs.k8s.io/kustomize/kyaml - 414.47 KB</title>
+<rect x="940" y="128" width="110" height="79" style="fill:#f1c40f;stroke:white;stroke-width:2" />
+<text x="995" y="162" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >sigs.k8s.io/k...</text>
+<text x="995" y="177" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >414.47 KB</text>
 </g>
 <g  >
-<title>net - 206.84 KB</title>
-<rect x="961" y="50" width="92" height="74" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1007" y="82" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >net</text>
-<text x="1007" y="97" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >206.84 KB</text>
+<title>crypto/tls - 401.31 KB</title>
+<rect x="940" y="207" width="110" height="76" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="995" y="240" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >crypto/tls</text>
+<text x="995" y="255" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >401.31 KB</text>
 </g>
 <g  >
-<title>slices - 168.59 KB</title>
-<rect x="961" y="124" width="92" height="61" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1007" y="149" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >slices</text>
-<text x="1007" y="164" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >168.59 KB</text>
+<title>github.com/json-iterator/go - 379.01 KB</title>
+<rect x="940" y="283" width="110" height="72" style="fill:#1abc9c;stroke:white;stroke-width:2" />
+<text x="995" y="314" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >github.com/js...</text>
+<text x="995" y="329" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >379.01 KB</text>
 </g>
 <g  >
-<title>github.com/fxamacker/cbor/v2 - 160.84 KB</title>
-<rect x="961" y="185" width="92" height="58" style="fill:#f39c12;stroke:white;stroke-width:2" />
-<text x="1007" y="209" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >github.com...</text>
-<text x="1007" y="224" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >160.84 KB</text>
+<title>net - 373.69 KB</title>
+<rect x="940" y="355" width="110" height="71" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="995" y="385" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >net</text>
+<text x="995" y="400" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >373.69 KB</text>
 </g>
 <g  >
-<title>reflect - 160.75 KB</title>
-<rect x="961" y="243" width="92" height="58" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1007" y="267" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >reflect</text>
-<text x="1007" y="282" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >160.75 KB</text>
+<title>github.com/prometheus/client_golang - 309.95 KB</title>
+<rect x="940" y="426" width="110" height="59" style="fill:#e67e22;stroke:white;stroke-width:2" />
+<text x="995" y="450" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >github.com/pr...</text>
+<text x="995" y="465" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >309.95 KB</text>
 </g>
 <g  >
-<title>github.com/prometheus/client_golang - 159.28 KB</title>
-<rect x="961" y="301" width="92" height="57" style="fill:#e67e22;stroke:white;stroke-width:2" />
-<text x="1007" y="324" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >github.com...</text>
-<text x="1007" y="339" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >159.28 KB</text>
+<title>k8s.io/metrics - 288.87 KB</title>
+<rect x="940" y="485" width="110" height="55" style="fill:#2ecc71;stroke:white;stroke-width:2" />
+<text x="995" y="507" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >k8s.io/metrics</text>
+<text x="995" y="522" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >288.87 KB</text>
 </g>
 <g  >
-<title>k8s.io/cli-runtime - 157.25 KB</title>
-<rect x="961" y="358" width="92" height="57" style="fill:#3498db;stroke:white;stroke-width:2" />
-<text x="1007" y="381" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >k8s.io/cli...</text>
-<text x="1007" y="396" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >157.25 KB</text>
+<title>reflect - 260.79 KB</title>
+<rect x="940" y="540" width="58" height="92" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="969" y="581" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >reflect</text>
+<text x="969" y="596" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >260.79 KB</text>
 </g>
 <g  >
-<title>k8s.io/metrics - 152.66 KB</title>
-<rect x="961" y="415" width="92" height="55" style="fill:#2ecc71;stroke:white;stroke-width:2" />
-<text x="1007" y="437" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >k8s.io/met...</text>
-<text x="1007" y="452" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >152.66 KB</text>
+<title>sigs.k8s.io/structured-merge-diff/v4 - 227.94 KB</title>
+<rect x="998" y="540" width="52" height="92" style="fill:#e67e22;stroke:white;stroke-width:2" />
+<text x="1024" y="581" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >sigs...</text>
+<text x="1024" y="596" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >227.94 KB</text>
 </g>
 <g  >
-<title>math/big - 151.00 KB</title>
-<rect x="961" y="470" width="92" height="55" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1007" y="492" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >math/big</text>
-<text x="1007" y="507" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >151.00 KB</text>
+<title>github.com/google/go-cmp - 219.46 KB</title>
+<rect x="940" y="632" width="110" height="42" style="fill:#9b59b6;stroke:white;stroke-width:2" />
+<text x="995" y="648" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >github.com/go...</text>
 </g>
 <g  >
-<title>sigs.k8s.io/structured-merge-diff/v6 - 133.75 KB</title>
-<rect x="961" y="525" width="50" height="88" style="fill:#9b59b6;stroke:white;stroke-width:2" />
-<text x="986" y="564" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >sig...</text>
-<text x="986" y="579" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >133.75 KB</text>
+<title>k8s.io/cli-runtime - 214.78 KB</title>
+<rect x="940" y="674" width="57" height="79" style="fill:#3498db;stroke:white;stroke-width:2" />
+<text x="968" y="708" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >k8s....</text>
+<text x="968" y="723" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >214.78 KB</text>
 </g>
 <g  >
-<title>github.com/spf13/pflag - 111.62 KB</title>
-<rect x="1011" y="525" width="42" height="88" style="fill:#8e44ad;stroke:white;stroke-width:2" />
+<title>github.com/spf13/pflag - 197.72 KB</title>
+<rect x="997" y="674" width="53" height="79" style="fill:#8e44ad;stroke:white;stroke-width:2" />
+<text x="1023" y="708" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >gith...</text>
+<text x="1023" y="723" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >197.72 KB</text>
 </g>
 <g  >
-<title>crypto/x509 - 108.38 KB</title>
-<rect x="961" y="613" width="46" height="77" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>math/big - 192.93 KB</title>
+<rect x="940" y="753" width="110" height="37" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="995" y="766" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >math/big</text>
 </g>
 <g  >
-<title>sigs.k8s.io/json - 105.22 KB</title>
-<rect x="1007" y="613" width="46" height="77" style="fill:#27ae60;stroke:white;stroke-width:2" />
+<title>github.com/fxamacker/cbor/v2 - 185.37 KB</title>
+<rect x="1050" y="50" width="77" height="50" style="fill:#f39c12;stroke:white;stroke-width:2" />
+<text x="1088" y="70" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >github.c...</text>
+<text x="1088" y="85" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >185.37 KB</text>
 </g>
 <g  >
-<title>encoding/json - 94.06 KB</title>
-<rect x="961" y="690" width="46" height="67" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>slices - 173.83 KB</title>
+<rect x="1050" y="100" width="77" height="47" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1088" y="118" style="text-anchor:middle;font-size:12px;font-family:Arial,sans-serif;fill:white" >slices</text>
+<text x="1088" y="133" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white;opacity:0.9" >173.83 KB</text>
 </g>
 <g  >
-<title>github.com/spf13/cobra - 91.56 KB</title>
-<rect x="1007" y="690" width="46" height="67" style="fill:#34495e;stroke:white;stroke-width:2" />
+<title>k8s.io/component-base - 148.72 KB</title>
+<rect x="1050" y="147" width="40" height="77" style="fill:#2980b9;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>time - 88.53 KB</title>
-<rect x="961" y="757" width="92" height="33" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-<text x="1007" y="768" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >time</text>
+<title>github.com/spf13/cobra - 133.90 KB</title>
+<rect x="1090" y="147" width="37" height="77" style="fill:#34495e;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>encoding/xml - 80.88 KB</title>
-<rect x="1053" y="50" width="36" height="72" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>time - 129.38 KB</title>
+<rect x="1050" y="224" width="38" height="70" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/russross/blackfriday/v2 - 79.06 KB</title>
-<rect x="1089" y="50" width="37" height="72" style="fill:#f1c40f;stroke:white;stroke-width:2" />
+<title>sigs.k8s.io/json - 128.73 KB</title>
+<rect x="1088" y="224" width="39" height="70" style="fill:#27ae60;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>text/template - 71.38 KB</title>
-<rect x="1053" y="122" width="36" height="65" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>encoding/json - 126.37 KB</title>
+<rect x="1050" y="294" width="77" height="35" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1088" y="306" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >encoding/json</text>
 </g>
 <g  >
-<title>text/template/parse - 70.53 KB</title>
-<rect x="1089" y="122" width="37" height="65" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>text/template/parse - 123.18 KB</title>
+<rect x="1050" y="329" width="39" height="65" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/nistec - 69.97 KB</title>
-<rect x="1053" y="187" width="37" height="62" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>k8s.io/klog/v2 - 118.23 KB</title>
+<rect x="1089" y="329" width="38" height="65" style="fill:#34495e;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>k8s.io/klog/v2 - 66.94 KB</title>
-<rect x="1090" y="187" width="36" height="62" style="fill:#34495e;stroke:white;stroke-width:2" />
+<title>crypto/x509 - 109.36 KB</title>
+<rect x="1050" y="394" width="77" height="30" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1088" y="404" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >crypto/x509</text>
 </g>
 <g  >
-<title>k8s.io/component-base - 65.97 KB</title>
-<rect x="1053" y="249" width="37" height="59" style="fill:#2980b9;stroke:white;stroke-width:2" />
+<title>github.com/russross/blackfriday/v2 - 106.10 KB</title>
+<rect x="1050" y="424" width="38" height="58" style="fill:#f1c40f;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>regexp/syntax - 62.97 KB</title>
-<rect x="1090" y="249" width="36" height="59" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/emicklei/go-restful/v3 - 104.93 KB</title>
+<rect x="1088" y="424" width="39" height="58" style="fill:#2980b9;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>fmt - 62.81 KB</title>
-<rect x="1053" y="308" width="36" height="56" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>os - 96.01 KB</title>
+<rect x="1050" y="482" width="77" height="27" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1088" y="490" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >os</text>
 </g>
 <g  >
-<title>runtime/pprof - 61.53 KB</title>
-<rect x="1089" y="308" width="37" height="56" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>regexp/syntax - 92.97 KB</title>
+<rect x="1050" y="509" width="38" height="49" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/emicklei/go-restful/v3 - 57.31 KB</title>
-<rect x="1053" y="364" width="37" height="51" style="fill:#2980b9;stroke:white;stroke-width:2" />
+<title>text/template - 91.67 KB</title>
+<rect x="1088" y="509" width="39" height="49" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>golang.org/x/text - 54.56 KB</title>
-<rect x="1090" y="364" width="36" height="51" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>encoding/xml - 90.85 KB</title>
+<rect x="1050" y="558" width="38" height="50" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/nistec/fiat - 54.44 KB</title>
-<rect x="1053" y="415" width="49" height="36" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>syscall - 90.55 KB</title>
+<rect x="1088" y="558" width="39" height="50" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>os - 53.56 KB</title>
-<rect x="1053" y="451" width="49" height="37" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>fmt - 83.75 KB</title>
+<rect x="1050" y="608" width="52" height="34" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1076" y="620" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >fmt</text>
 </g>
 <g  >
-<title>regexp - 51.28 KB</title>
-<rect x="1102" y="415" width="24" height="73" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>golang.org/x/text - 80.95 KB</title>
+<rect x="1050" y="642" width="52" height="33" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1076" y="653" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >golan...</text>
 </g>
 <g  >
-<title>log/slog - 49.75 KB</title>
-<rect x="1053" y="488" width="37" height="43" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/moby/spdystream - 77.69 KB</title>
+<rect x="1102" y="608" width="25" height="67" style="fill:#8e44ad;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/chai2010/gettext-go - 47.84 KB</title>
-<rect x="1090" y="488" width="36" height="43" style="fill:#f39c12;stroke:white;stroke-width:2" />
+<title>github.com/chai2010/gettext-go - 72.83 KB</title>
+<rect x="1050" y="675" width="51" height="29" style="fill:#f39c12;stroke:white;stroke-width:2" />
+<text x="1075" y="684" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >githu...</text>
 </g>
 <g  >
-<title>archive/tar - 46.72 KB</title>
-<rect x="1053" y="531" width="36" height="43" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/gorilla/websocket - 70.54 KB</title>
+<rect x="1050" y="704" width="51" height="29" style="fill:#e74c3c;stroke:white;stroke-width:2" />
+<text x="1075" y="713" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >githu...</text>
 </g>
 <g  >
-<title>crypto/internal/fips140/ecdsa - 46.59 KB</title>
-<rect x="1089" y="531" width="37" height="43" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>regexp - 70.39 KB</title>
+<rect x="1101" y="675" width="26" height="58" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/poll - 46.50 KB</title>
-<rect x="1053" y="574" width="36" height="42" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>runtime/pprof - 69.61 KB</title>
+<rect x="1050" y="733" width="51" height="28" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1075" y="742" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >runti...</text>
 </g>
 <g  >
-<title>vendor/golang.org/x/crypto/chacha20poly1305 - 45.69 KB</title>
-<rect x="1089" y="574" width="37" height="42" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>archive/zip - 68.65 KB</title>
+<rect x="1050" y="761" width="51" height="29" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<text x="1075" y="770" style="text-anchor:middle;font-size:10px;font-family:Arial,sans-serif;fill:white" >archi...</text>
 </g>
 <g  >
-<title>github.com/gorilla/websocket - 44.16 KB</title>
-<rect x="1053" y="616" width="36" height="41" style="fill:#e74c3c;stroke:white;stroke-width:2" />
+<title>k8s.io/component-helpers - 67.88 KB</title>
+<rect x="1101" y="733" width="26" height="57" style="fill:#c0392b;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>syscall - 44.12 KB</title>
-<rect x="1089" y="616" width="37" height="41" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/poll - 66.91 KB</title>
+<rect x="1127" y="50" width="48" height="29" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/sync - 43.91 KB</title>
-<rect x="1053" y="657" width="37" height="38" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>log/slog - 66.55 KB</title>
+<rect x="1127" y="79" width="48" height="29" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>archive/zip - 42.06 KB</title>
-<rect x="1090" y="657" width="36" height="38" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>archive/tar - 65.38 KB</title>
+<rect x="1127" y="108" width="48" height="28" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>encoding/asn1 - 42.03 KB</title>
-<rect x="1053" y="695" width="36" height="39" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>net/netip - 58.82 KB</title>
+<rect x="1127" y="136" width="48" height="26" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/modern-go/reflect2 - 41.84 KB</title>
-<rect x="1089" y="695" width="37" height="39" style="fill:#f39c12;stroke:white;stroke-width:2" />
+<title>encoding/asn1 - 56.01 KB</title>
+<rect x="1127" y="162" width="48" height="24" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/moby/spdystream - 41.22 KB</title>
-<rect x="1053" y="734" width="49" height="28" style="fill:#8e44ad;stroke:white;stroke-width:2" />
+<title>compress/flate - 55.98 KB</title>
+<rect x="1127" y="186" width="48" height="25" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>compress/flate - 39.72 KB</title>
-<rect x="1053" y="762" width="49" height="28" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/abi - 55.33 KB</title>
+<rect x="1127" y="211" width="48" height="25" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>strconv - 38.84 KB</title>
-<rect x="1102" y="734" width="24" height="56" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>strconv - 51.21 KB</title>
+<rect x="1127" y="236" width="24" height="43" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>k8s.io/component-helpers - 36.38 KB</title>
-<rect x="1126" y="50" width="25" height="48" style="fill:#c0392b;stroke:white;stroke-width:2" />
+<title>strings - 48.67 KB</title>
+<rect x="1151" y="236" width="24" height="43" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>net/netip - 34.41 KB</title>
-<rect x="1151" y="50" width="24" height="48" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>flag - 41.90 KB</title>
+<rect x="1127" y="279" width="48" height="19" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/rsa - 33.09 KB</title>
-<rect x="1126" y="98" width="24" height="45" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/elliptic - 41.55 KB</title>
+<rect x="1127" y="298" width="24" height="36" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>strings - 32.81 KB</title>
-<rect x="1150" y="98" width="25" height="45" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>k8s.io/utils - 41.50 KB</title>
+<rect x="1151" y="298" width="24" height="36" style="fill:#16a085;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>sigs.k8s.io/yaml - 32.78 KB</title>
-<rect x="1126" y="143" width="24" height="44" style="fill:#1abc9c;stroke:white;stroke-width:2" />
+<title>github.com/davecgh/go-spew - 40.97 KB</title>
+<rect x="1127" y="334" width="48" height="19" style="fill:#3498db;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/davecgh/go-spew - 32.16 KB</title>
-<rect x="1150" y="143" width="25" height="44" style="fill:#3498db;stroke:white;stroke-width:2" />
+<title>net/http/httputil - 40.90 KB</title>
+<rect x="1127" y="353" width="24" height="35" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>net/http/httputil - 27.19 KB</title>
-<rect x="1126" y="187" width="24" height="38" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/prometheus/client_model - 40.66 KB</title>
+<rect x="1151" y="353" width="24" height="35" style="fill:#34495e;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/bigmod - 27.12 KB</title>
-<rect x="1150" y="187" width="25" height="38" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/reflectlite - 40.61 KB</title>
+<rect x="1127" y="388" width="24" height="35" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/prometheus/procfs - 26.62 KB</title>
-<rect x="1126" y="225" width="24" height="35" style="fill:#2ecc71;stroke:white;stroke-width:2" />
+<title>context - 37.83 KB</title>
+<rect x="1151" y="388" width="24" height="35" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/elliptic - 26.00 KB</title>
-<rect x="1150" y="225" width="25" height="35" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>sync - 37.80 KB</title>
+<rect x="1127" y="423" width="32" height="24" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/sha3 - 25.53 KB</title>
-<rect x="1126" y="260" width="24" height="35" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/ecdsa - 36.12 KB</title>
+<rect x="1127" y="447" width="32" height="24" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>mime - 24.88 KB</title>
-<rect x="1150" y="260" width="25" height="35" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>bufio - 35.07 KB</title>
+<rect x="1159" y="423" width="16" height="48" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>net/url - 24.75 KB</title>
-<rect x="1126" y="295" width="24" height="34" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>net/url - 34.73 KB</title>
+<rect x="1127" y="471" width="32" height="22" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/sha512 - 24.62 KB</title>
-<rect x="1150" y="295" width="25" height="34" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>bytes - 34.22 KB</title>
+<rect x="1127" y="493" width="32" height="23" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/ecdsa - 24.06 KB</title>
-<rect x="1126" y="329" width="49" height="17" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>os/exec - 33.20 KB</title>
+<rect x="1159" y="471" width="16" height="45" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/aes/gcm - 23.38 KB</title>
-<rect x="1126" y="346" width="25" height="30" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>encoding/binary - 32.96 KB</title>
+<rect x="1127" y="516" width="33" height="21" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>golang.org/x/oauth2 - 21.59 KB</title>
-<rect x="1151" y="346" width="24" height="30" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>golang.org/x/oauth2 - 29.56 KB</title>
+<rect x="1127" y="537" width="33" height="20" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>os/exec - 21.53 KB</title>
-<rect x="1126" y="376" width="24" height="29" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>sync/atomic - 28.14 KB</title>
+<rect x="1160" y="516" width="15" height="41" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>bytes - 21.25 KB</title>
-<rect x="1150" y="376" width="25" height="29" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/blang/semver/v4 - 28.10 KB</title>
+<rect x="1127" y="557" width="24" height="24" style="fill:#f1c40f;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>flag - 20.81 KB</title>
-<rect x="1126" y="405" width="24" height="28" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>mime/multipart - 27.93 KB</title>
+<rect x="1127" y="581" width="24" height="24" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>encoding/binary - 20.06 KB</title>
-<rect x="1150" y="405" width="25" height="28" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>mime - 27.45 KB</title>
+<rect x="1151" y="557" width="24" height="24" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/rsa - 19.84 KB</title>
-<rect x="1126" y="433" width="24" height="28" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>sort - 27.29 KB</title>
+<rect x="1151" y="581" width="24" height="24" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/edwards25519 - 19.81 KB</title>
-<rect x="1150" y="433" width="25" height="28" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/rsa - 24.93 KB</title>
+<rect x="1127" y="605" width="16" height="32" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/blang/semver/v4 - 19.47 KB</title>
-<rect x="1126" y="461" width="24" height="26" style="fill:#f1c40f;stroke:white;stroke-width:2" />
+<title>io - 24.91 KB</title>
+<rect x="1143" y="605" width="17" height="32" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/sha256 - 19.28 KB</title>
-<rect x="1150" y="461" width="25" height="26" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>net/textproto - 22.06 KB</title>
+<rect x="1160" y="605" width="15" height="32" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>mime/multipart - 18.22 KB</title>
-<rect x="1126" y="487" width="24" height="26" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/aes - 22.05 KB</title>
+<rect x="1127" y="637" width="16" height="29" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>k8s.io/utils - 18.16 KB</title>
-<rect x="1150" y="487" width="25" height="26" style="fill:#16a085;stroke:white;stroke-width:2" />
+<title>github.com/mxk/go-flowrate - 21.81 KB</title>
+<rect x="1143" y="637" width="16" height="29" style="fill:#27ae60;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>bufio - 17.34 KB</title>
-<rect x="1126" y="513" width="32" height="18" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/peterbourgon/diskv - 21.57 KB</title>
+<rect x="1159" y="637" width="16" height="29" style="fill:#f1c40f;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/reflectlite - 17.09 KB</title>
-<rect x="1126" y="531" width="32" height="18" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>unicode - 21.19 KB</title>
+<rect x="1127" y="666" width="16" height="27" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/sha1 - 17.06 KB</title>
-<rect x="1158" y="513" width="17" height="36" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>vendor/golang.org/x/crypto/cryptobyte - 20.11 KB</title>
+<rect x="1143" y="666" width="16" height="27" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/mlkem - 16.66 KB</title>
-<rect x="1126" y="549" width="25" height="21" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>log - 19.53 KB</title>
+<rect x="1159" y="666" width="16" height="27" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/runtime/maps - 16.34 KB</title>
-<rect x="1126" y="570" width="25" height="22" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>io/fs - 19.14 KB</title>
+<rect x="1127" y="693" width="24" height="16" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>unicode - 15.75 KB</title>
-<rect x="1151" y="549" width="24" height="21" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal - 19.07 KB</title>
+<rect x="1127" y="709" width="24" height="17" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>sort - 15.41 KB</title>
-<rect x="1151" y="570" width="24" height="22" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/prometheus/procfs - 18.75 KB</title>
+<rect x="1151" y="693" width="24" height="16" style="fill:#2ecc71;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/aes - 14.69 KB</title>
-<rect x="1126" y="592" width="24" height="19" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/go-logr/logr - 18.46 KB</title>
+<rect x="1151" y="709" width="24" height="17" style="fill:#2ecc71;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>context - 14.28 KB</title>
-<rect x="1126" y="611" width="24" height="20" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/go-openapi/swag - 18.43 KB</title>
+<rect x="1127" y="726" width="16" height="24" style="fill:#1abc9c;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/abi - 14.19 KB</title>
-<rect x="1150" y="592" width="25" height="19" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/ecdh - 18.22 KB</title>
+<rect x="1143" y="726" width="16" height="24" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>net/textproto - 13.94 KB</title>
-<rect x="1150" y="611" width="25" height="20" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/x509/internal/macos - 16.92 KB</title>
+<rect x="1159" y="726" width="16" height="24" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/peterbourgon/diskv - 13.59 KB</title>
-<rect x="1126" y="631" width="25" height="17" style="fill:#f1c40f;stroke:white;stroke-width:2" />
+<title>math/rand - 15.90 KB</title>
+<rect x="1127" y="750" width="25" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>go.opentelemetry.io/otel/trace - 13.38 KB</title>
-<rect x="1126" y="648" width="25" height="18" style="fill:#9b59b6;stroke:white;stroke-width:2" />
+<title>crypto/cipher - 15.80 KB</title>
+<rect x="1127" y="763" width="25" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>vendor/golang.org/x/crypto/cryptobyte - 12.97 KB</title>
-<rect x="1151" y="631" width="24" height="18" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/pkg/errors - 15.35 KB</title>
+<rect x="1127" y="776" width="25" height="14" style="fill:#f39c12;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>log - 11.44 KB</title>
-<rect x="1151" y="649" width="24" height="17" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>golang.org/x/time - 14.69 KB</title>
+<rect x="1152" y="750" width="23" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/prometheus/client_model - 11.28 KB</title>
-<rect x="1126" y="666" width="16" height="24" style="fill:#34495e;stroke:white;stroke-width:2" />
+<title>github.com/monochromegane/go-gitignore - 14.25 KB</title>
+<rect x="1152" y="763" width="23" height="14" style="fill:#8e44ad;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/cipher - 11.22 KB</title>
-<rect x="1142" y="666" width="16" height="24" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/go-openapi/jsonpointer - 13.30 KB</title>
+<rect x="1152" y="777" width="23" height="13" style="fill:#34495e;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/pmezard/go-difflib - 11.12 KB</title>
-<rect x="1158" y="666" width="17" height="24" style="fill:#e74c3c;stroke:white;stroke-width:2" />
+<title>internal/runtime/atomic - 12.96 KB</title>
+<rect x="1175" y="50" width="15" height="18" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/go-openapi/swag - 10.91 KB</title>
-<rect x="1126" y="690" width="24" height="14" style="fill:#1abc9c;stroke:white;stroke-width:2" />
+<title>github.com/gregjones/httpcache - 12.84 KB</title>
+<rect x="1175" y="68" width="15" height="18" style="fill:#8e44ad;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>io - 10.75 KB</title>
-<rect x="1126" y="704" width="24" height="15" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>path/filepath - 12.52 KB</title>
+<rect x="1175" y="86" width="15" height="18" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/gregjones/httpcache - 10.59 KB</title>
-<rect x="1150" y="690" width="25" height="14" style="fill:#8e44ad;stroke:white;stroke-width:2" />
+<title>internal/bisect - 12.49 KB</title>
+<rect x="1175" y="104" width="15" height="18" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>io/fs - 10.59 KB</title>
-<rect x="1150" y="704" width="25" height="15" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>net/http/internal - 12.36 KB</title>
+<rect x="1175" y="122" width="15" height="17" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/go-openapi/jsonpointer - 10.19 KB</title>
-<rect x="1126" y="719" width="24" height="14" style="fill:#34495e;stroke:white;stroke-width:2" />
+<title>embed - 11.76 KB</title>
+<rect x="1175" y="139" width="15" height="17" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/ecdh - 10.06 KB</title>
-<rect x="1126" y="733" width="24" height="14" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/liggitt/tabwriter - 11.54 KB</title>
+<rect x="1175" y="156" width="15" height="17" style="fill:#3498db;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>sync - 9.91 KB</title>
-<rect x="1150" y="719" width="25" height="14" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>sigs.k8s.io/kustomize/kustomize/v5 - 11.40 KB</title>
+<rect x="1175" y="173" width="15" height="16" style="fill:#f39c12;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/bisect - 9.62 KB</title>
-<rect x="1150" y="733" width="25" height="14" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/sha512 - 11.33 KB</title>
+<rect x="1175" y="189" width="15" height="16" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>path/filepath - 9.00 KB</title>
-<rect x="1126" y="747" width="14" height="21" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>unique - 11.29 KB</title>
+<rect x="1175" y="205" width="15" height="16" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/mxk/go-flowrate - 9.00 KB</title>
-<rect x="1140" y="747" width="14" height="21" style="fill:#27ae60;stroke:white;stroke-width:2" />
+<title>compress/gzip - 11.21 KB</title>
+<rect x="1175" y="221" width="15" height="16" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/liggitt/tabwriter - 8.97 KB</title>
-<rect x="1126" y="768" width="14" height="22" style="fill:#3498db;stroke:white;stroke-width:2" />
+<title>text/tabwriter - 10.31 KB</title>
+<rect x="1175" y="237" width="15" height="15" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/hpke - 8.91 KB</title>
-<rect x="1140" y="768" width="14" height="22" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>os/user - 9.74 KB</title>
+<rect x="1175" y="252" width="15" height="15" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/ed25519 - 8.84 KB</title>
-<rect x="1154" y="747" width="21" height="14" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>encoding/csv - 9.36 KB</title>
+<rect x="1175" y="267" width="15" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>os/user - 8.72 KB</title>
-<rect x="1154" y="761" width="21" height="14" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/x509/pkix - 9.35 KB</title>
+<rect x="1175" y="280" width="15" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>encoding/csv - 8.62 KB</title>
-<rect x="1154" y="775" width="21" height="15" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/go-errors/errors - 9.22 KB</title>
+<rect x="1175" y="293" width="15" height="13" style="fill:#e74c3c;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/ecdh - 8.62 KB</title>
-<rect x="1175" y="50" width="15" height="19" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/ed25519 - 8.80 KB</title>
+<rect x="1175" y="306" width="15" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/go-logr/logr - 8.34 KB</title>
-<rect x="1175" y="69" width="15" height="19" style="fill:#2ecc71;stroke:white;stroke-width:2" />
+<title>expvar - 8.80 KB</title>
+<rect x="1175" y="319" width="15" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/pkg/errors - 8.22 KB</title>
-<rect x="1175" y="88" width="15" height="18" style="fill:#f39c12;stroke:white;stroke-width:2" />
+<title>internal/syscall/unix - 8.72 KB</title>
+<rect x="1175" y="331" width="15" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/monochromegane/go-gitignore - 8.09 KB</title>
-<rect x="1175" y="106" width="15" height="19" style="fill:#8e44ad;stroke:white;stroke-width:2" />
+<title>encoding/base64 - 8.69 KB</title>
+<rect x="1175" y="344" width="15" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>text/tabwriter - 8.03 KB</title>
-<rect x="1175" y="125" width="15" height="18" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/internal/hpke - 8.69 KB</title>
+<rect x="1175" y="357" width="15" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>compress/gzip - 8.03 KB</title>
-<rect x="1175" y="143" width="15" height="18" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/sha1 - 8.68 KB</title>
+<rect x="1175" y="369" width="15" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/edwards25519/field - 7.97 KB</title>
-<rect x="1175" y="161" width="15" height="18" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/sha256 - 8.31 KB</title>
+<rect x="1175" y="382" width="15" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/x509/pkix - 7.94 KB</title>
-<rect x="1175" y="179" width="15" height="19" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/des - 8.24 KB</title>
+<rect x="1175" y="394" width="15" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>golang.org/x/time - 7.78 KB</title>
-<rect x="1175" y="198" width="15" height="17" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>sigs.k8s.io/kustomize/kustomize/v5 - 7.69 KB</title>
-<rect x="1175" y="215" width="15" height="17" style="fill:#f39c12;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>sync/atomic - 7.09 KB</title>
-<rect x="1175" y="232" width="15" height="16" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>math/rand - 7.09 KB</title>
-<rect x="1175" y="248" width="15" height="17" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>hash/crc32 - 6.97 KB</title>
-<rect x="1175" y="265" width="15" height="16" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>runtime/debug - 6.97 KB</title>
-<rect x="1175" y="281" width="15" height="16" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>encoding/base64 - 6.00 KB</title>
-<rect x="1175" y="297" width="15" height="14" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>compress/zlib - 5.53 KB</title>
-<rect x="1175" y="311" width="15" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>crypto/md5 - 5.44 KB</title>
-<rect x="1175" y="324" width="15" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>golang.org/x/sys - 5.31 KB</title>
-<rect x="1175" y="336" width="15" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>github.com/go-errors/errors - 5.31 KB</title>
-<rect x="1175" y="348" width="15" height="12" style="fill:#e74c3c;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>unique - 5.28 KB</title>
-<rect x="1175" y="360" width="15" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>internal/fmtsort - 5.09 KB</title>
-<rect x="1175" y="372" width="15" height="11" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>embed - 5.00 KB</title>
-<rect x="1175" y="383" width="15" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>path - 4.94 KB</title>
-<rect x="1175" y="395" width="15" height="11" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>net/http/internal - 4.84 KB</title>
+<title>runtime/debug - 8.16 KB</title>
 <rect x="1175" y="406" width="15" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>expvar - 4.75 KB</title>
-<rect x="1175" y="418" width="15" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/godebug - 8.12 KB</title>
+<rect x="1175" y="418" width="15" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>html - 4.75 KB</title>
-<rect x="1175" y="428" width="15" height="11" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>container/list - 7.94 KB</title>
+<rect x="1175" y="430" width="15" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>vendor/golang.org/x/crypto/chacha20 - 4.62 KB</title>
-<rect x="1175" y="439" width="15" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/md5 - 7.76 KB</title>
+<rect x="1175" y="440" width="15" height="11" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/des - 4.59 KB</title>
-<rect x="1175" y="449" width="15" height="11" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>compress/zlib - 7.70 KB</title>
+<rect x="1175" y="451" width="15" height="11" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/hmac - 4.22 KB</title>
-<rect x="1175" y="460" width="15" height="9" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>hash/crc32 - 7.37 KB</title>
+<rect x="1175" y="462" width="15" height="11" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/godebug - 4.22 KB</title>
-<rect x="1175" y="469" width="15" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>os/signal - 7.26 KB</title>
+<rect x="1175" y="473" width="15" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/tls13 - 3.97 KB</title>
-<rect x="1175" y="479" width="15" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>path - 6.98 KB</title>
+<rect x="1175" y="483" width="15" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/drbg - 3.94 KB</title>
-<rect x="1175" y="489" width="15" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>vendor/golang.org/x/crypto/chacha20 - 6.44 KB</title>
+<rect x="1175" y="493" width="15" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>math - 3.91 KB</title>
-<rect x="1175" y="497" width="15" height="9" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>unicode/utf8 - 6.44 KB</title>
+<rect x="1175" y="503" width="15" height="9" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>encoding/base32 - 3.78 KB</title>
-<rect x="1175" y="506" width="15" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/jonboulle/clockwork - 6.10 KB</title>
+<rect x="1175" y="512" width="15" height="9" style="fill:#27ae60;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>container/list - 3.69 KB</title>
-<rect x="1175" y="514" width="15" height="9" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>encoding/base32 - 6.00 KB</title>
+<rect x="1175" y="521" width="15" height="9" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/cpu - 3.66 KB</title>
-<rect x="1175" y="523" width="15" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>errors - 5.68 KB</title>
+<rect x="1175" y="530" width="15" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>os/signal - 3.62 KB</title>
-<rect x="1175" y="531" width="15" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>golang.org/x/sys - 5.67 KB</title>
+<rect x="1175" y="538" width="15" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/filepathlite - 3.59 KB</title>
-<rect x="1175" y="539" width="15" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/google/gofuzz - 5.65 KB</title>
+<rect x="1175" y="546" width="15" height="9" style="fill:#27ae60;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/ed25519 - 3.56 KB</title>
-<rect x="1175" y="547" width="15" height="9" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/fmtsort - 5.62 KB</title>
+<rect x="1175" y="555" width="7" height="15" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/munnerz/goautoneg - 3.41 KB</title>
-<rect x="1175" y="556" width="7" height="15" style="fill:#f39c12;stroke:white;stroke-width:2" />
+<title>github.com/golang/protobuf - 5.51 KB</title>
+<rect x="1182" y="555" width="8" height="15" style="fill:#1abc9c;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>errors - 3.41 KB</title>
-<rect x="1182" y="556" width="8" height="15" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/google/shlex - 5.32 KB</title>
+<rect x="1175" y="570" width="15" height="8" style="fill:#2980b9;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/tls12 - 3.38 KB</title>
-<rect x="1175" y="571" width="15" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/bytealg - 5.26 KB</title>
+<rect x="1175" y="578" width="15" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/exponent-io/jsonpath - 3.25 KB</title>
-<rect x="1175" y="579" width="15" height="8" style="fill:#2ecc71;stroke:white;stroke-width:2" />
+<title>github.com/google/uuid - 5.14 KB</title>
+<rect x="1175" y="586" width="7" height="14" style="fill:#e74c3c;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/google/uuid - 3.22 KB</title>
-<rect x="1175" y="587" width="7" height="14" style="fill:#e74c3c;stroke:white;stroke-width:2" />
+<title>vendor/golang.org/x/crypto/chacha20poly1305 - 5.12 KB</title>
+<rect x="1182" y="586" width="8" height="14" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>encoding/pem - 3.19 KB</title>
-<rect x="1182" y="587" width="8" height="14" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/munnerz/goautoneg - 4.93 KB</title>
+<rect x="1175" y="600" width="15" height="8" style="fill:#f39c12;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/hkdf - 3.06 KB</title>
-<rect x="1175" y="601" width="15" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/go-openapi/jsonreference - 4.72 KB</title>
+<rect x="1175" y="608" width="7" height="13" style="fill:#c0392b;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/distribution/reference - 3.03 KB</title>
-<rect x="1175" y="609" width="7" height="13" style="fill:#27ae60;stroke:white;stroke-width:2" />
+<title>encoding/hex - 4.66 KB</title>
+<rect x="1182" y="608" width="8" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/bytealg - 2.95 KB</title>
-<rect x="1182" y="609" width="8" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>math - 4.63 KB</title>
+<rect x="1175" y="621" width="15" height="7" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>net/http/httptrace - 2.94 KB</title>
-<rect x="1175" y="622" width="7" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto - 4.62 KB</title>
+<rect x="1175" y="628" width="7" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>unicode/utf8 - 2.91 KB</title>
-<rect x="1182" y="622" width="8" height="13" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/modern-go/concurrent - 4.61 KB</title>
+<rect x="1182" y="628" width="8" height="13" style="fill:#27ae60;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>sigs.k8s.io/randfill - 2.88 KB</title>
-<rect x="1175" y="635" width="7" height="12" style="fill:#c0392b;stroke:white;stroke-width:2" />
+<title>crypto/hmac - 4.41 KB</title>
+<rect x="1175" y="641" width="15" height="7" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/chacha8rand - 2.59 KB</title>
-<rect x="1182" y="635" width="8" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>runtime/metrics - 4.37 KB</title>
+<rect x="1175" y="648" width="7" height="11" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/sha3 - 2.41 KB</title>
-<rect x="1175" y="647" width="7" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/filepathlite - 4.32 KB</title>
+<rect x="1182" y="648" width="8" height="11" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>encoding/hex - 2.41 KB</title>
-<rect x="1182" y="647" width="8" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/singleflight - 4.19 KB</title>
+<rect x="1175" y="659" width="7" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>mime/quotedprintable - 2.38 KB</title>
-<rect x="1175" y="659" width="7" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/rand - 4.08 KB</title>
+<rect x="1182" y="659" width="8" height="12" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/singleflight - 2.34 KB</title>
-<rect x="1182" y="659" width="8" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>html - 3.98 KB</title>
+<rect x="1175" y="671" width="7" height="10" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>runtime/metrics - 2.19 KB</title>
-<rect x="1175" y="669" width="7" height="11" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/exponent-io/jsonpath - 3.65 KB</title>
+<rect x="1182" y="671" width="8" height="10" style="fill:#2ecc71;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/fatih/camelcase - 2.12 KB</title>
-<rect x="1182" y="669" width="8" height="11" style="fill:#3498db;stroke:white;stroke-width:2" />
+<title>net/http/httptrace - 3.63 KB</title>
+<rect x="1175" y="681" width="15" height="6" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>math/rand/v2 - 2.09 KB</title>
-<rect x="1175" y="680" width="10" height="7" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>encoding/pem - 3.30 KB</title>
+<rect x="1175" y="687" width="10" height="7" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/go-openapi/jsonreference - 2.06 KB</title>
-<rect x="1175" y="687" width="10" height="8" style="fill:#c0392b;stroke:white;stroke-width:2" />
+<title>mime/quotedprintable - 3.30 KB</title>
+<rect x="1175" y="694" width="10" height="7" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/runtime/atomic - 2.00 KB</title>
-<rect x="1185" y="680" width="5" height="15" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>log/slog/internal/buffer - 3.21 KB</title>
+<rect x="1185" y="687" width="5" height="14" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/modern-go/concurrent - 1.91 KB</title>
-<rect x="1175" y="695" width="7" height="7" style="fill:#27ae60;stroke:white;stroke-width:2" />
+<title>internal/cpu - 3.18 KB</title>
+<rect x="1175" y="701" width="10" height="7" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/stringslite - 1.78 KB</title>
-<rect x="1175" y="702" width="7" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>golang.org/x/term - 3.10 KB</title>
+<rect x="1175" y="708" width="10" height="7" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/jonboulle/clockwork - 1.72 KB</title>
-<rect x="1182" y="695" width="8" height="7" style="fill:#27ae60;stroke:white;stroke-width:2" />
+<title>github.com/distribution/reference - 3.04 KB</title>
+<rect x="1185" y="701" width="5" height="14" style="fill:#27ae60;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/syscall/unix - 1.69 KB</title>
-<rect x="1182" y="702" width="8" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>hash/adler32 - 3.02 KB</title>
+<rect x="1175" y="715" width="7" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>golang.org/x/term - 1.62 KB</title>
-<rect x="1175" y="710" width="7" height="7" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>vendor/golang.org/x/crypto/internal/poly1305 - 2.82 KB</title>
+<rect x="1182" y="715" width="8" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto - 1.62 KB</title>
-<rect x="1175" y="717" width="7" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/moby/term - 2.76 KB</title>
+<rect x="1175" y="723" width="7" height="8" style="fill:#3498db;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140 - 1.59 KB</title>
-<rect x="1182" y="710" width="8" height="7" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>golang.org/x/sync - 2.71 KB</title>
+<rect x="1182" y="723" width="8" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/prometheus/common - 1.50 KB</title>
-<rect x="1182" y="717" width="8" height="8" style="fill:#e67e22;stroke:white;stroke-width:2" />
+<title>internal/chacha8rand - 2.69 KB</title>
+<rect x="1175" y="731" width="10" height="5" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>vendor/golang.org/x/crypto/internal/poly1305 - 1.44 KB</title>
-<rect x="1175" y="725" width="7" height="6" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>container/heap - 2.42 KB</title>
+<rect x="1175" y="736" width="10" height="6" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/sysrand - 1.38 KB</title>
-<rect x="1175" y="731" width="7" height="6" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/prometheus/common - 2.37 KB</title>
+<rect x="1185" y="731" width="5" height="11" style="fill:#e67e22;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/cespare/xxhash/v2 - 1.31 KB</title>
-<rect x="1182" y="725" width="8" height="6" style="fill:#9b59b6;stroke:white;stroke-width:2" />
+<title>internal/testlog - 2.26 KB</title>
+<rect x="1175" y="742" width="5" height="9" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/mitchellh/go-wordwrap - 1.28 KB</title>
-<rect x="1182" y="731" width="8" height="6" style="fill:#1abc9c;stroke:white;stroke-width:2" />
+<title>github.com/fatih/camelcase - 2.16 KB</title>
+<rect x="1180" y="742" width="5" height="9" style="fill:#3498db;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>hash/adler32 - 1.22 KB</title>
-<rect x="1175" y="737" width="5" height="9" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/cespare/xxhash/v2 - 2.08 KB</title>
+<rect x="1185" y="742" width="5" height="9" style="fill:#9b59b6;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>log/slog/internal/buffer - 1.12 KB</title>
-<rect x="1180" y="737" width="5" height="9" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/rc4 - 2.07 KB</title>
+<rect x="1175" y="751" width="5" height="9" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>container/heap - 1.12 KB</title>
-<rect x="1185" y="737" width="5" height="9" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/stringslite - 2.05 KB</title>
+<rect x="1180" y="751" width="5" height="9" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>golang.org/x/sync - 1.06 KB</title>
-<rect x="1175" y="746" width="7" height="4" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/runtime/exithook - 1.55 KB</title>
+<rect x="1185" y="751" width="5" height="9" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/sha512 - 1.06 KB</title>
-<rect x="1175" y="750" width="7" height="5" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/mailru/easyjson - 1.38 KB</title>
+<rect x="1175" y="760" width="4" height="6" style="fill:#e74c3c;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/moby/term - 1.03 KB</title>
-<rect x="1182" y="746" width="8" height="4" style="fill:#3498db;stroke:white;stroke-width:2" />
+<title>github.com/mitchellh/go-wordwrap - 1.29 KB</title>
+<rect x="1179" y="760" width="4" height="6" style="fill:#1abc9c;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/rc4 - 992 B</title>
-<rect x="1182" y="750" width="8" height="5" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/lazyregexp - 1.27 KB</title>
+<rect x="1175" y="766" width="4" height="6" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/sha256 - 992 B</title>
-<rect x="1175" y="755" width="7" height="4" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>io/ioutil - 1.24 KB</title>
+<rect x="1179" y="766" width="4" height="6" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/check - 928 B</title>
-<rect x="1175" y="759" width="7" height="4" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/MakeNowJust/heredoc - 1.19 KB</title>
+<rect x="1183" y="760" width="7" height="4" style="fill:#16a085;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/opencontainers/go-digest - 864 B</title>
-<rect x="1182" y="755" width="4" height="8" style="fill:#f1c40f;stroke:white;stroke-width:2" />
+<title>vendor/golang.org/x/crypto/cryptobyte/asn1 - 1.16 KB</title>
+<rect x="1183" y="764" width="7" height="4" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/MakeNowJust/heredoc - 864 B</title>
-<rect x="1186" y="755" width="4" height="8" style="fill:#16a085;stroke:white;stroke-width:2" />
+<title>github.com/opencontainers/go-digest - 1.12 KB</title>
+<rect x="1183" y="768" width="7" height="4" style="fill:#f1c40f;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>weak - 768 B</title>
-<rect x="1175" y="763" width="4" height="5" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/lithammer/dedent - 1.11 KB</title>
+<rect x="1175" y="772" width="5" height="4" style="fill:#2980b9;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/rand - 672 B</title>
-<rect x="1179" y="763" width="5" height="5" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/subtle - 959 B</title>
+<rect x="1175" y="776" width="5" height="4" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/testlog - 672 B</title>
-<rect x="1175" y="768" width="4" height="6" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>math/rand/v2 - 951 B</title>
+<rect x="1180" y="772" width="3" height="8" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/mailru/easyjson - 672 B</title>
-<rect x="1179" y="768" width="5" height="6" style="fill:#e74c3c;stroke:white;stroke-width:2" />
+<title>github.com/x448/float16 - 847 B</title>
+<rect x="1183" y="772" width="3" height="5" style="fill:#f1c40f;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/runtime/exithook - 640 B</title>
-<rect x="1184" y="763" width="6" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/internal/randutil - 815 B</title>
+<rect x="1186" y="772" width="4" height="5" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>github.com/lithammer/dedent - 640 B</title>
-<rect x="1184" y="766" width="6" height="4" style="fill:#2980b9;stroke:white;stroke-width:2" />
+<title>internal/itoa - 743 B</title>
+<rect x="1183" y="777" width="7" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/fips140/subtle - 576 B</title>
-<rect x="1184" y="770" width="6" height="4" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>go/parser - 743 B</title>
+<rect x="1175" y="780" width="4" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>io/ioutil - 544 B</title>
-<rect x="1175" y="774" width="5" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>go/doc - 711 B</title>
+<rect x="1175" y="783" width="4" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/lazyregexp - 544 B</title>
-<rect x="1175" y="777" width="5" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>math/bits - 647 B</title>
+<rect x="1179" y="780" width="5" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/hmac - 512 B</title>
-<rect x="1180" y="774" width="5" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>unicode/utf16 - 615 B</title>
+<rect x="1179" y="783" width="5" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>go/parser - 480 B</title>
-<rect x="1180" y="777" width="5" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>crypto/internal/boring - 591 B</title>
+<rect x="1175" y="786" width="3" height="4" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/internal/impl - 480 B</title>
-<rect x="1175" y="780" width="5" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>internal/profilerecord - 495 B</title>
+<rect x="1178" y="786" width="3" height="4" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/itoa - 480 B</title>
-<rect x="1175" y="783" width="5" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>github.com/google/btree - 439 B</title>
+<rect x="1181" y="786" width="3" height="4" style="fill:#16a085;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>go/doc - 448 B</title>
-<rect x="1180" y="780" width="5" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>database/sql - 391 B</title>
+<rect x="1184" y="782" width="4" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>crypto/aes - 416 B</title>
-<rect x="1180" y="783" width="5" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>unicode/utf16 - 352 B</title>
-<rect x="1187" y="774" width="3" height="4" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
-</g>
-<g  >
-<title>internal/runtime/syscall - 224 B</title>
-<rect x="1187" y="778" width="3" height="4" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
+<title>iter - 343 B</title>
+<rect x="1184" y="787" width="4" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 </svg>
