@@ -788,9 +788,25 @@ func drawPackageRect(canvas *svg.SVG, pkg pkgSize, area rect) {
 	canvas.Gend()
 }
 
+// isStdlibPackage checks if a package name is a standard library package
+func isStdlibPackage(name string) bool {
+	// Check if the package is in the stdlib list
+	for _, stdPkg := range getStdlibPackages() {
+		if name == stdPkg {
+			return true
+		}
+	}
+	return false
+}
+
 // packageColor generates a color for a package based on its name
 func packageColor(name string) string {
-	// Color scheme - use different hues for variety
+	// Use a middle gray for all stdlib packages
+	if isStdlibPackage(name) {
+		return "#7f8c8d" // middle gray
+	}
+
+	// Color scheme for non-stdlib packages - use different hues for variety
 	colors := []string{
 		"#e74c3c", // red
 		"#3498db", // blue
