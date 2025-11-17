@@ -41,14 +41,14 @@ func getStdlibPackages() []string {
 			stdlibPackages = []string{}
 			return
 		}
-		
+
 		stdlibPackages = make([]string, 0, len(pkgs))
 		for _, pkg := range pkgs {
 			if pkg.PkgPath != "" && pkg.PkgPath != "main" {
 				stdlibPackages = append(stdlibPackages, pkg.PkgPath)
 			}
 		}
-		
+
 		// Sort by length (longest first) for better matching
 		sort.Slice(stdlibPackages, func(i, j int) bool {
 			return len(stdlibPackages[i]) > len(stdlibPackages[j])
@@ -503,14 +503,14 @@ func findModuleForSymbol(symbolName string, modulePaths []string) string {
 	if strings.HasPrefix(symbolName, "type:") || strings.HasPrefix(symbolName, "go.") {
 		return ""
 	}
-	
+
 	// Check BuildInfo modules first (longest match wins due to pre-sorted order)
 	for _, modPath := range modulePaths {
 		if strings.Contains(symbolName, modPath) {
 			return modPath
 		}
 	}
-	
+
 	// Check stdlib packages (sorted by length, longest first)
 	// Stdlib packages can include slashes (e.g., encoding/json)
 	for _, stdPkg := range getStdlibPackages() {
@@ -519,20 +519,18 @@ func findModuleForSymbol(symbolName string, modulePaths []string) string {
 			return stdPkg
 		}
 	}
-	
+
 	// Check for "main" package
 	if strings.HasPrefix(symbolName, "main.") {
 		return "main"
 	}
-	
+
 	// Not recognized - group as "other"
 	if *verbose {
 		fmt.Fprintf(os.Stderr, "[verbose] Symbol %q not attributed to any module, grouping as 'other'\n", symbolName)
 	}
 	return "other"
 }
-
-
 
 func printReport(report *DependencyReport) {
 	if len(report.Packages) == 0 {
@@ -626,11 +624,11 @@ func generateSVGTreemap(report *DependencyReport, filename string) error {
 	const width, height = 1200, 800
 	canvas := svg.New(f)
 	canvas.Start(width, height)
-	
+
 	// Title
 	canvas.Rect(0, 0, width, height, "fill:white")
 	canvas.Text(width/2, 30, "Dependency Size Treemap", "text-anchor:middle;font-size:24px;font-family:Arial,sans-serif;font-weight:bold")
-	
+
 	// Draw treemap
 	const margin = 10
 	const titleHeight = 50
@@ -640,9 +638,9 @@ func generateSVGTreemap(report *DependencyReport, filename string) error {
 		width:  width - 2*margin,
 		height: height - titleHeight - margin,
 	}
-	
+
 	drawTreemap(canvas, packages, treeRect)
-	
+
 	canvas.End()
 	return nil
 }
@@ -662,7 +660,7 @@ func drawTreemap(canvas *svg.SVG, packages []pkgSize, area rect) {
 	for _, pkg := range packages {
 		total += pkg.size
 	}
-	
+
 	if total == 0 {
 		return
 	}
@@ -675,7 +673,7 @@ func drawTreemap(canvas *svg.SVG, packages []pkgSize, area rect) {
 
 	// Squarified treemap algorithm - split packages based on aspect ratio
 	split := findBestSplit(packages, area)
-	
+
 	if split == 0 || split >= len(packages) {
 		// Can't split, just draw single package
 		drawPackageRect(canvas, packages[0], area)
@@ -687,9 +685,9 @@ func drawTreemap(canvas *svg.SVG, packages []pkgSize, area rect) {
 	for i := 0; i < split; i++ {
 		firstGroupSize += packages[i].size
 	}
-	
+
 	ratio := float64(firstGroupSize) / float64(total)
-	
+
 	// Determine split direction based on aspect ratio
 	if area.width >= area.height {
 		// Split vertically
@@ -700,10 +698,10 @@ func drawTreemap(canvas *svg.SVG, packages []pkgSize, area rect) {
 		if splitWidth >= area.width {
 			splitWidth = area.width - 1
 		}
-		
+
 		leftRect := rect{area.x, area.y, splitWidth, area.height}
 		rightRect := rect{area.x + splitWidth, area.y, area.width - splitWidth, area.height}
-		
+
 		drawTreemap(canvas, packages[:split], leftRect)
 		drawTreemap(canvas, packages[split:], rightRect)
 	} else {
@@ -715,10 +713,10 @@ func drawTreemap(canvas *svg.SVG, packages []pkgSize, area rect) {
 		if splitHeight >= area.height {
 			splitHeight = area.height - 1
 		}
-		
+
 		topRect := rect{area.x, area.y, area.width, splitHeight}
 		bottomRect := rect{area.x, area.y + splitHeight, area.width, area.height - splitHeight}
-		
+
 		drawTreemap(canvas, packages[:split], topRect)
 		drawTreemap(canvas, packages[split:], bottomRect)
 	}
@@ -729,7 +727,7 @@ func findBestSplit(packages []pkgSize, area rect) int {
 	if len(packages) <= 1 {
 		return 0
 	}
-	
+
 	// Simple heuristic: split at halfway point by count for now
 	// A more sophisticated algorithm would minimize aspect ratios
 	return (len(packages) + 1) / 2
@@ -740,41 +738,41 @@ func drawPackageRect(canvas *svg.SVG, pkg pkgSize, area rect) {
 	if area.width <= 2 || area.height <= 2 {
 		return // Too small to draw
 	}
-	
+
 	// Generate color based on package name hash
 	color := packageColor(pkg.name)
-	
+
 	// Draw rectangle with border
-	canvas.Rect(area.x, area.y, area.width, area.height, 
+	canvas.Rect(area.x, area.y, area.width, area.height,
 		fmt.Sprintf("fill:%s;stroke:white;stroke-width:2", color))
-	
+
 	// Add text label if there's enough space
 	const minWidthForText = 50
 	const minHeightForText = 25
-	
+
 	if area.width >= minWidthForText && area.height >= minHeightForText {
 		centerX := area.x + area.width/2
 		centerY := area.y + area.height/2
-		
+
 		// Package name
 		fontSize := 12
 		if area.height < 40 {
 			fontSize = 10
 		}
-		
+
 		// Truncate long names
 		displayName := pkg.name
 		maxNameLen := (area.width - 10) / (fontSize / 2)
 		if len(displayName) > maxNameLen && maxNameLen > 3 {
 			displayName = displayName[:maxNameLen-3] + "..."
 		}
-		
-		canvas.Text(centerX, centerY-5, displayName, 
+
+		canvas.Text(centerX, centerY-5, displayName,
 			fmt.Sprintf("text-anchor:middle;font-size:%dpx;font-family:Arial,sans-serif;fill:white", fontSize))
-		
+
 		// Size
 		if area.height >= 45 {
-			canvas.Text(centerX, centerY+10, formatSize(pkg.size), 
+			canvas.Text(centerX, centerY+10, formatSize(pkg.size),
 				fmt.Sprintf("text-anchor:middle;font-size:%dpx;font-family:Arial,sans-serif;fill:white;opacity:0.9", fontSize-2))
 		}
 	}
@@ -800,7 +798,7 @@ func packageColor(name string) string {
 		"#f1c40f", // sun flower
 		"#d35400", // pumpkin
 	}
-	
+
 	// Hash the package name to pick a color
 	hash := 0
 	for _, c := range name {
@@ -809,6 +807,6 @@ func packageColor(name string) string {
 	if hash < 0 {
 		hash = -hash
 	}
-	
+
 	return colors[hash%len(colors)]
 }

@@ -17,37 +17,37 @@ func TestFindModuleForSymbol(t *testing.T) {
 		{"github.com/gorilla/mux.NewRouter", []string{"github.com/gorilla/mux"}, "github.com/gorilla/mux", "exact module match"},
 		{"github.com/gorilla/mux.(*Router).Handle", []string{"github.com/gorilla/mux"}, "github.com/gorilla/mux", "module with method receiver"},
 		{"github.com/user/pkg/subpkg.Function", []string{"github.com/user/pkg"}, "github.com/user/pkg", "module with subpackage"},
-		
+
 		// Test main module subpackages
 		{"github.com/gohugoio/hugo/common/hstrings.Truncate", []string{"github.com/gohugoio/hugo", "github.com/spf13/cobra"}, "github.com/gohugoio/hugo", "main module subpackage"},
-		
+
 		// Test stdlib packages
 		{"runtime.main", []string{}, "runtime", "stdlib package"},
 		{"encoding/json.Marshal", []string{}, "encoding/json", "stdlib package with slash"},
 		{"strings.Builder.grow", []string{}, "strings", "stdlib with type method"},
 		{"bytes.Buffer.WriteByte", []string{}, "bytes", "stdlib with type method"},
-		
+
 		// Test main package
 		{"main.main", []string{}, "main", "main package"},
-		
+
 		// Test compiler-generated patterns to skip
 		{"type:.eq.debug/elf", []string{}, "", "type: prefix skipped"},
 		{"go.shape.string", []string{}, "", "go. prefix skipped"},
-		
+
 		// Test generic instantiations - stdlib
 		{"slices.partitionCmpFunc[go.shape", []string{}, "slices", "stdlib with generic suffix"},
 		{"maps.Clone[go.shape.int,go.shape.string]", []string{}, "maps", "stdlib with multiple generic params"},
-		
+
 		// Test generic instantiations - external
 		{"github.com/spf13/cast.toUnsignedNumberE[go.shape", []string{"github.com/spf13/cast"}, "github.com/spf13/cast", "external module with generic suffix"},
-		
+
 		// Test domain-based packages with dots
 		{"google.golang.org/protobuf/internal/detrand.init", []string{"google.golang.org/protobuf"}, "google.golang.org/protobuf", "domain with dots"},
-		
+
 		// Test .init functions
 		{"github.com/gohugoio/localescompressed.init", []string{"github.com/gohugoio/localescompressed"}, "github.com/gohugoio/localescompressed", "module with .init"},
 		{"github.com/gohugoio/localescompressed.init.0.func1", []string{"github.com/gohugoio/localescompressed"}, "github.com/gohugoio/localescompressed", "module with .init.0.func1"},
-		
+
 		// Test other (unrecognized)
 		{"unicode.map", []string{}, "unicode", "stdlib base package"},
 		{"unknown/package.Function", []string{}, "other", "unrecognized package"},
@@ -109,9 +109,9 @@ func TestGenerateSVGTreemap(t *testing.T) {
 	report := &DependencyReport{
 		TotalSize: 1024 * 1024, // 1 MB
 		Packages: map[string]int64{
-			"github.com/user/repo":  512 * 1024, // 512 KB
-			"stdlib/package":        256 * 1024, // 256 KB
-			"another/package":       256 * 1024, // 256 KB
+			"github.com/user/repo": 512 * 1024, // 512 KB
+			"stdlib/package":       256 * 1024, // 256 KB
+			"another/package":      256 * 1024, // 256 KB
 		},
 		ModulePaths: []string{"github.com/user/repo"},
 	}
@@ -143,12 +143,12 @@ func TestGenerateSVGTreemap(t *testing.T) {
 	}
 
 	contentStr := string(content)
-	
+
 	// Check for SVG tag
 	if !strings.Contains(contentStr, "<svg") {
 		t.Error("SVG file missing <svg> tag")
 	}
-	
+
 	// Check for title
 	if !strings.Contains(contentStr, "Dependency Size Treemap") {
 		t.Error("SVG file missing title")
@@ -158,15 +158,13 @@ func TestGenerateSVGTreemap(t *testing.T) {
 func TestGenerateSVGTreemapEmptyReport(t *testing.T) {
 	report := &DependencyReport{
 		TotalSize: 0,
-		Packages: map[string]int64{},
+		Packages:  map[string]int64{},
 	}
 
 	tmpFile := t.TempDir() + "/empty.svg"
 	err := generateSVGTreemap(report, tmpFile)
-	
+
 	if err == nil {
 		t.Error("Expected error for empty report, got nil")
 	}
 }
-
-
