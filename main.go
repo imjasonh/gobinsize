@@ -10,10 +10,11 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"os/exec"
 	"sort"
 	"strings"
 	"sync"
+
+	"golang.org/x/tools/go/packages"
 )
 
 var verbose = flag.Bool("verbose", false, "enable verbose logging for debugging attribution")
@@ -24,24 +25,23 @@ var (
 )
 
 // getStdlibPackages returns the list of standard library packages
+// Source - https://stackoverflow.com/a/53541580
+// Posted by Martin Tournoij, modified by community. See post 'Timeline' for change history
+// Retrieved 2025-11-17, License - CC BY-SA 4.0
 func getStdlibPackages() []string {
 	stdlibPackagesOnce.Do(func() {
-		cmd := exec.Command("go", "list", "std")
-		output, err := cmd.Output()
+		pkgs, err := packages.Load(nil, "std")
 		if err != nil {
-			// Fallback to empty list if go list fails
+			// Fallback to empty list if loading fails
 			fmt.Fprintf(os.Stderr, "Warning: failed to get stdlib packages: %v\n", err)
 			stdlibPackages = []string{}
 			return
 		}
 		
-		// Parse the output - one package per line
-		lines := strings.Split(strings.TrimSpace(string(output)), "\n")
-		stdlibPackages = make([]string, 0, len(lines))
-		for _, line := range lines {
-			line = strings.TrimSpace(line)
-			if line != "" && line != "main" {
-				stdlibPackages = append(stdlibPackages, line)
+		stdlibPackages = make([]string, 0, len(pkgs))
+		for _, pkg := range pkgs {
+			if pkg.PkgPath != "" && pkg.PkgPath != "main" {
+				stdlibPackages = append(stdlibPackages, pkg.PkgPath)
 			}
 		}
 		
