@@ -108,10 +108,10 @@ func TestGenerateSVGTreemap(t *testing.T) {
 	// Create a sample report
 	report := &DependencyReport{
 		TotalSize: 1024 * 1024, // 1 MB
-		Packages: map[string]int64{
-			"github.com/user/repo": 512 * 1024, // 512 KB
-			"stdlib/package":       256 * 1024, // 256 KB
-			"another/package":      256 * 1024, // 256 KB
+		Packages: map[string]*PackageSize{
+			"github.com/user/repo": {Code: 512 * 1024}, // 512 KB
+			"stdlib/package":       {Code: 256 * 1024}, // 256 KB
+			"another/package":      {Code: 256 * 1024}, // 256 KB
 		},
 		ModulePaths: []string{"github.com/user/repo"},
 	}
@@ -161,7 +161,7 @@ func TestGenerateSVGTreemap(t *testing.T) {
 func TestGenerateSVGTreemapEmptyReport(t *testing.T) {
 	report := &DependencyReport{
 		TotalSize: 0,
-		Packages:  map[string]int64{},
+		Packages:  map[string]*PackageSize{},
 	}
 
 	tmpFile := t.TempDir() + "/empty.svg"

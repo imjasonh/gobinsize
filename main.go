@@ -367,11 +367,13 @@ func analyzeSymbolsMachO(machoFile *macho.File, modulePaths []string) (*Dependen
 	}
 
 	if symtabData == nil {
-		return nil, fmt.Errorf("no __gosymtab section found")
+		// Newer Go binaries don't have __gosymtab, only __gopclntab
+		// We can still parse the pclntab to get function information
+		symtabData = []byte{}
 	}
 
 	table, err := gosym.NewTable(symtabData, pcln)
-	if err == nil {
+	if err == nil && len(table.Funcs) > 0 {
 		processSymbolTable(table, modulePaths, report)
 	}
 
@@ -414,26 +416,32 @@ func analyzeMachODataSymbols(machoFile *macho.File, modulePaths []string, report
 		sym := syms[i]
 
 		// Check if this is a data symbol (in data sections)
-		isData := false
+		var containingSection *macho.Section
 		for _, sec := range dataSections {
 			if sym.Value >= sec.Addr && sym.Value < sec.Addr+sec.Size {
-				isData = true
+				containingSection = sec
 				break
 			}
 		}
 
-		if !isData {
+		if containingSection == nil {
 			continue
 		}
 
-		// Calculate symbol size
+		// Calculate symbol size, bounded by the containing section
 		var size uint64
-		if i+1 < len(syms) && syms[i+1].Value > sym.Value {
-			// Use next symbol's address to calculate size
+		sectionEnd := containingSection.Addr + containingSection.Size
+		if i+1 < len(syms) && syms[i+1].Value > sym.Value && syms[i+1].Value < sectionEnd {
+			// Use next symbol's address to calculate size, but only if it's in the same section
 			size = syms[i+1].Value - sym.Value
 		} else {
-			// Last symbol or no next symbol - use a default small size
-			size = 8
+			// Last symbol in section or no next symbol in section - use remaining space or default
+			remainingInSection := sectionEnd - sym.Value
+			if remainingInSection < 8 {
+				size = remainingInSection
+			} else {
+				size = 8
+			}
 		}
 
 		// Attribute to module

@@ -851,11 +851,11 @@
 <rect x="1186" y="772" width="4" height="5" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>internal/itoa - 743 B</title>
+<title>go/parser - 743 B</title>
 <rect x="1183" y="777" width="7" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>go/parser - 743 B</title>
+<title>internal/itoa - 743 B</title>
 <rect x="1175" y="780" width="4" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
@@ -887,7 +887,7 @@
 <rect x="1184" y="782" width="4" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 <g  >
-<title>iter - 343 B</title>
+<title>database/sql/driver - 343 B</title>
 <rect x="1184" y="787" width="4" height="3" style="fill:#bdc3c7;stroke:white;stroke-width:2" />
 </g>
 </svg>
